@@ -39,13 +39,15 @@ function toMember(r: MemberRow): Member {
     timezone: r.timezone ?? "UTC",
     onlineWindows: (r.onlineWindows ?? []) as OnlineWindow[],
     sandstormSquad: (r.sandstormSquad ?? null) as Squad,
-    power: r.power ?? 0,
+    // bigint columns arrive from the driver as strings; coerce so arithmetic
+    // (e.g. avg power) adds instead of concatenating.
+    power: Number(r.power ?? 0),
     level: r.level ?? 1,
     rosterStatus: r.rosterStatus,
     lastSeen: (r.lastSeenBucket ?? { kind: "over", days: 30 }) as LastSeenBucket,
     lastSeenObservedAt: (r.lastSeenObservedAt ?? new Date()).toISOString(),
-    donations: r.donations ?? 0,
-    kills: r.kills ?? 0,
+    donations: Number(r.donations ?? 0),
+    kills: Number(r.kills ?? 0),
     notes: r.notes ?? undefined,
   };
 }
@@ -135,11 +137,11 @@ export async function getWeeklySnapshots(): Promise<WeeklySnapshot[]> {
     .orderBy(asc(guildWeeklySnapshot.weekIndex));
   return rows.map((r) => ({
     week: r.week,
-    donations: r.donations ?? 0,
-    kills: r.kills ?? 0,
+    donations: Number(r.donations ?? 0),
+    kills: Number(r.kills ?? 0),
     rosterSize: r.rosterSize ?? 0,
-    avgPower: r.avgPower ?? 0,
-    sandstormPoints: r.sandstormPoints ?? 0,
+    avgPower: Number(r.avgPower ?? 0),
+    sandstormPoints: Number(r.sandstormPoints ?? 0),
   }));
 }
 

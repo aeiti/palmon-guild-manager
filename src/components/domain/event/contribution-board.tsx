@@ -1,4 +1,3 @@
-import { Star } from "lucide-react";
 import { cn } from "@/lib/utils";
 import type { Member } from "@/lib/game/types";
 import {
@@ -8,6 +7,7 @@ import {
 } from "@/lib/game/event";
 import { Metric } from "@/components/domain/data/metric";
 import { MemberChip } from "@/components/domain/member/member-chip";
+import { MvpBadge } from "./mvp-badge";
 
 const SUB_LABEL: Record<string, string> = {
   kills: "K",
@@ -55,12 +55,7 @@ export function ContributionBoard({
               {rank}
             </span>
             <MemberChip member={m} size="sm" />
-            {e.isMvp ? (
-              <span className="inline-flex items-center gap-1 rounded border border-border-2 bg-surface-2 px-1 font-mono text-[0.6rem] uppercase text-text-2">
-                <Star className="size-2.5" />
-                MVP
-              </span>
-            ) : null}
+            {e.isMvp ? <MvpBadge /> : null}
             <div className="ml-auto text-right">
               <Metric value={e.value} className="text-sm text-text" />
               {e.subScores ? (
