@@ -9,10 +9,12 @@ import {
   users,
 } from "@/lib/db/schema";
 import { EVENT_METRIC } from "@/lib/game/event";
-import { MOCK_MEMBERS } from "@/lib/mock/members";
-import { MOCK_STRONGHOLDS } from "@/lib/mock/strongholds";
-import { MOCK_CONTRIBUTIONS, MOCK_EVENTS } from "@/lib/mock/events";
-import { MOCK_USERS } from "@/lib/mock/users";
+import {
+  REAL_CONTRIBUTIONS,
+  REAL_EVENTS,
+  REAL_MEMBERS,
+  REAL_STRONGHOLDS,
+} from "@/lib/db/seed-data";
 import {
   AVG_POWER_TREND,
   DONATIONS_TREND,
@@ -35,24 +37,20 @@ async function main() {
   await db.delete(members);
   await db.delete(users);
 
-  // App users — keep a member→user id map for linking.
+  // App users derived from the roster: aeiti is Admin (env), R4/R5 → Officer.
   const userIdByMember = new Map<string, string>();
-  const userRows: (typeof users.$inferInsert)[] = MOCK_USERS.map((u) => {
+  const userRows: (typeof users.$inferInsert)[] = REAL_MEMBERS.map((m) => {
     const id = crypto.randomUUID();
-    userIdByMember.set(u.memberId, id);
-    const m = MOCK_MEMBERS.find((mm) => mm.id === u.memberId);
-    return {
-      id,
-      name: m?.ign ?? null,
-      role: u.role,
-      roleSource: u.source,
-      rolePinned: u.source === "pinned",
-    };
+    userIdByMember.set(m.id, id);
+    const role =
+      m.id === "m-aeiti" ? "admin" : m.guildRank >= 4 ? "officer" : "member";
+    const roleSource = m.id === "m-aeiti" ? "env" : "discord";
+    return { id, name: m.ign, role, roleSource, rolePinned: false };
   });
   await db.insert(users).values(userRows);
 
   await db.insert(members).values(
-    MOCK_MEMBERS.map((m) => ({
+    REAL_MEMBERS.map((m) => ({
       id: m.id,
       userId: userIdByMember.get(m.id) ?? null,
       ign: m.ign,
@@ -73,7 +71,7 @@ async function main() {
   );
 
   await db.insert(strongholds).values(
-    MOCK_STRONGHOLDS.map((s) => ({
+    REAL_STRONGHOLDS.map((s) => ({
       id: s.id,
       category: s.category,
       sanctumType: s.sanctumType ?? null,
@@ -93,7 +91,7 @@ async function main() {
   );
 
   await db.insert(events).values(
-    MOCK_EVENTS.map((e) => ({
+    REAL_EVENTS.map((e) => ({
       id: e.id,
       type: e.type,
       title: e.title,
@@ -105,9 +103,9 @@ async function main() {
   );
 
   // Participation rows from the contribution boards.
-  const eventTypeById = new Map(MOCK_EVENTS.map((e) => [e.id, e.type]));
+  const eventTypeById = new Map(REAL_EVENTS.map((e) => [e.id, e.type]));
   const partRows: (typeof participation.$inferInsert)[] = [];
-  for (const [eventId, entries] of Object.entries(MOCK_CONTRIBUTIONS)) {
+  for (const [eventId, entries] of Object.entries(REAL_CONTRIBUTIONS)) {
     const type = eventTypeById.get(eventId);
     const metric = type ? EVENT_METRIC[type] : null;
     for (const en of entries) {
@@ -139,9 +137,9 @@ async function main() {
 
   console.log("Seed complete:", {
     users: userRows.length,
-    members: MOCK_MEMBERS.length,
-    strongholds: MOCK_STRONGHOLDS.length,
-    events: MOCK_EVENTS.length,
+    members: REAL_MEMBERS.length,
+    strongholds: REAL_STRONGHOLDS.length,
+    events: REAL_EVENTS.length,
     participation: partRows.length,
     snapshots: TREND_WEEKS.length,
   });
