@@ -290,6 +290,18 @@
   .buff .bval { font-family: var(--font-mono); font-weight: 700; color: var(--desert); font-size: var(--fs-sm); }
   .buff .blab { font-size: var(--fs-xs); color: var(--text-2); }
   .roles { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 8px; margin-top: 14px; }
+  .sh-lvl { display:inline-flex; align-items:center; justify-content:center; font-family:var(--font-mono); font-weight:700; font-size:.66rem; padding:3px 8px; border-radius:6px; background:#2A2340; color:#DDD1FF; border:1px solid #8B7CF655; }
+  .sh-stats { display:flex; flex-wrap:wrap; gap:8px 18px; margin-top:12px; font-family:var(--font-mono); font-size:var(--fs-xs); color:var(--text-3); }
+  .sh-stats b { color:var(--text-2); font-weight:600; }
+  .sentries { display:flex; gap:3px; align-items:center; }
+  .sentries i { width:9px; height:9px; border-radius:2px; background:var(--border-2); display:block; }
+  .sentries i.on { background:var(--violet); }
+  .ruin-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:12px; }
+  .ruin-card { padding:14px; text-align:center; }
+  .ruin-card .rl2 { font-family:var(--font-mono); font-size:.62rem; letter-spacing:.14em; color:var(--text-3); text-transform:uppercase; }
+  .ruin-card .rv { font-family:var(--font-mono); font-size:1.35rem; font-weight:700; color:var(--desert); margin-top:6px; }
+  .ruin-card .rc { font-family:var(--font-mono); font-size:.62rem; color:var(--text-3); margin-top:6px; }
+  @media (max-width:640px){ .ruin-grid { grid-template-columns:repeat(2,1fr); } }
   .role { background: #00000026; border: 1px solid var(--border); border-radius: var(--r-sm); padding: 10px; }
   .role .rl { font-family: var(--font-mono); font-size: 0.58rem; letter-spacing: .12em; text-transform: uppercase; color: var(--text-3); display: flex; align-items: center; gap: 5px; }
   .role .rl svg { width: 11px; height: 11px; }
@@ -507,18 +519,18 @@
         <div class="grid stats">
           <div class="card stat accent-v">
             <div class="k">Roster</div>
-            <div class="v">47<small> / 100</small></div>
-            <div class="foot"><span class="delta up">▲ 3</span> this week · 42 active</div>
+            <div class="v">49<small> / 100</small></div>
+            <div class="foot">36 active in 24h · 8 idle · 5 inactive</div>
           </div>
           <div class="card stat">
-            <div class="k">Guild Amity</div>
-            <div class="v" style="color:var(--desert)">+38<small>%</small></div>
-            <div class="foot">from 4 held sanctums</div>
+            <div class="k">Desert EXP</div>
+            <div class="v" style="color:var(--desert)">9,600<small>/h</small></div>
+            <div class="foot">5,700 sanctums · 3,900 ruins</div>
           </div>
           <div class="card stat">
-            <div class="k">Desert XP</div>
-            <div class="v" style="color:var(--desert)">+52<small>%</small></div>
-            <div class="foot">from 4 held sanctums</div>
+            <div class="k">Strongholds</div>
+            <div class="v">12<small> / 12</small></div>
+            <div class="foot">6 sanctums · 6 ruins · 0/3 occupied today</div>
           </div>
           <div class="card stat">
             <div class="k">Next Event</div>
@@ -527,25 +539,42 @@
           </div>
         </div>
 
+        <div class="grid" style="grid-template-columns:1fr;margin-top:16px">
+          <div class="card">
+            <div class="card-head"><h3>Guild Buff Stack</h3><span class="mono" style="font-size:var(--fs-xs);color:var(--text-3)">FROM 6 SANCTUMS</span></div>
+            <div class="card-body">
+              <div class="buffs" style="margin:8px 0 0">
+                <div class="buff"><span class="bval">+70%</span><span class="blab">Harvesting Speed</span></div>
+                <div class="buff"><span class="bval">+45%</span><span class="blab">Gold Output</span></div>
+                <div class="buff"><span class="bval">+25%</span><span class="blab">Steel Output</span></div>
+                <div class="buff"><span class="bval">+20%</span><span class="blab">Construction Speed</span></div>
+                <div class="buff" style="background:var(--bad-dim);border-color:#F8717133"><span class="bval" style="color:var(--bad)">0%</span><span class="blab">Lumber Output</span></div>
+                <div class="buff" style="background:var(--bad-dim);border-color:#F8717133"><span class="bval" style="color:var(--bad)">0%</span><span class="blab">Tech Research</span></div>
+              </div>
+              <div class="chart-note">No Woodsong and no Scholar sanctum held — lumber and research uncovered.</div>
+            </div>
+          </div>
+        </div>
+
         <div class="grid two-col" style="margin-top:16px">
           <!-- rank distribution + upcoming -->
           <div style="display:flex;flex-direction:column;gap:16px">
             <div class="card">
-              <div class="card-head"><h3>Rank Distribution</h3><span class="mono" style="font-size:var(--fs-xs);color:var(--text-3)">47 MEMBERS</span></div>
+              <div class="card-head"><h3>Rank Distribution</h3><span class="mono" style="font-size:var(--fs-xs);color:var(--text-3)">49 MEMBERS</span></div>
               <div class="card-body">
                 <div class="distbar">
                   <span style="width:2%;background:#E8A24C" title="R5"></span>
-                  <span style="width:17%;background:#8B7CF6" title="R4"></span>
-                  <span style="width:34%;background:#5b5b86" title="R3"></span>
-                  <span style="width:30%;background:#3a3a56" title="R2"></span>
-                  <span style="width:17%;background:#2a2a40" title="R1"></span>
+                  <span style="width:14%;background:#8B7CF6" title="R4"></span>
+                  <span style="width:68%;background:#5b5b86" title="R3"></span>
+                  <span style="width:12%;background:#3a3a56" title="R2"></span>
+                  <span style="width:4%;background:#2a2a40" title="R1"></span>
                 </div>
                 <div class="distlegend">
                   <div><span class="dot" style="background:#E8A24C"></span>R5 · 1</div>
-                  <div><span class="dot" style="background:#8B7CF6"></span>R4 · 8</div>
-                  <div><span class="dot" style="background:#5b5b86"></span>R3 · 16</div>
-                  <div><span class="dot" style="background:#3a3a56"></span>R2 · 14</div>
-                  <div><span class="dot" style="background:#2a2a40"></span>R1 · 8</div>
+                  <div><span class="dot" style="background:#8B7CF6"></span>R4 · 7 / 8</div>
+                  <div><span class="dot" style="background:#5b5b86"></span>R3 · 33</div>
+                  <div><span class="dot" style="background:#3a3a56"></span>R2 · 6</div>
+                  <div><span class="dot" style="background:#2a2a40"></span>R1 · 2</div>
                 </div>
               </div>
             </div>
@@ -583,19 +612,23 @@
             <div class="card-body">
               <div class="warn-item">
                 <div class="warn-stripe" style="background:var(--bad)"></div>
-                <div><div class="wt">Sanctum of Ash — Governor slot empty</div><div class="wd">Buffs at risk if contested. Assign a second Governor.</div></div>
+                <div><div class="wt">No lumber or research buff</div><div class="wd">VOID holds no Woodsong and no Scholar sanctum — two categories fully uncovered.</div></div>
               </div>
               <div class="warn-item">
                 <div class="warn-stripe" style="background:var(--warn)"></div>
-                <div><div class="wt">Dune Sanctum is contested</div><div class="wd">Under attack since 11:20 UTC · defenders needed</div></div>
+                <div><div class="wt">Steelstory L4 opens in 06:49</div><div class="wd">Occupation window — 1 of 3 daily sanctum occupies used.</div></div>
               </div>
               <div class="warn-item">
                 <div class="warn-stripe" style="background:var(--warn)"></div>
-                <div><div class="wt">Sandstorm Slot B undersubscribed</div><div class="wd">Only 9/24 signed up for tomorrow's run</div></div>
+                <div><div class="wt">Skirmish Squad B undersubscribed</div><div class="wd">Only 9/30 starters registered — Squad B can still be canceled.</div></div>
+              </div>
+              <div class="warn-item">
+                <div class="warn-stripe" style="background:var(--bad)"></div>
+                <div><div class="wt">Sentries understaffed</div><div class="wd">Craftsman Chancel 0/5 · Goldglade L5 1/5 — defense thin on top buildings.</div></div>
               </div>
               <div class="warn-item">
                 <div class="warn-stripe" style="background:var(--text-3)"></div>
-                <div><div class="wt">3 members inactive 14+ days</div><div class="wd">Kesh, Orin, Vale — review for pruning</div></div>
+                <div><div class="wt">2 members offline 30+ days</div><div class="wd">The_Void_Bear, DUCKHUNTING — review for pruning.</div></div>
               </div>
             </div>
           </div>
@@ -608,7 +641,7 @@
           <div>
             <div class="eyebrow">Guild · Roster</div>
             <h1 class="page-title">Members</h1>
-            <div class="page-sub">47 of 100 · members self-edit their own profile; officers edit all</div>
+            <div class="page-sub">49 members · online status is a game-reported bucket, not a timestamp · members self-edit their own profile</div>
           </div>
           <div class="head-actions">
             <button class="btn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 3v12m0 0l-4-4m4 4l4-4M5 21h14" stroke-linecap="round" stroke-linejoin="round"/></svg>Export JSON</button>
@@ -625,7 +658,7 @@
             <button class="on" data-f="all">All</button>
             <button data-f="officers">Officers</button>
             <button data-f="active">Active</button>
-            <button data-f="loa">LOA</button>
+            <button data-f="idle">Idle</button>
             <button data-f="inactive">Inactive</button>
           </div>
         </div>
@@ -634,7 +667,7 @@
           <table>
             <thead>
               <tr>
-                <th>Member</th><th>Rank</th><th>Status</th><th>Last Seen</th><th>Timezone</th><th>Online</th><th>Sandstorm</th><th>Power</th><th>Donations</th><th>Kills</th>
+                <th>Member</th><th>Rank</th><th>Status</th><th>Last Seen</th><th>Lvl</th><th>Timezone</th><th>Online</th><th>Squad</th><th>Power</th><th>Donations</th><th>Kills</th>
               </tr>
             </thead>
             <tbody id="memberRows"></tbody>
@@ -648,233 +681,287 @@
           <div>
             <div class="eyebrow">Guild · Territory</div>
             <h1 class="page-title">Strongholds</h1>
-            <div class="page-sub">4 Sanctums (buffs) · 2 Ruins · totals feed the dashboard</div>
+            <div class="page-sub">6 Sanctums + 6 Desert Ruins (both at cap) · 9,600/h desert EXP · 0/3 occupations used today</div>
           </div>
           <div class="head-actions">
             <button class="btn primary"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12h14" stroke-linecap="round"/></svg>Add Stronghold</button>
           </div>
         </div>
 
-        <div class="section-title">Sanctums</div>
+        <div class="section-title">Sanctums · 5,700/h · buffs + roles</div>
         <div class="grid sh-grid">
-          <!-- Sanctum 1 -->
           <div class="card sh">
             <div class="stripe" style="background:var(--good)"></div>
             <div class="sh-inner">
               <div class="sh-top">
-                <div><h3 class="sh-name">Obsidian Sanctum</h3><div class="sh-kind">Sanctum · Grid H7</div></div>
-                <span class="pill good">● HELD</span>
+                <div><h3 class="sh-name">Craftsman Chancel</h3><div class="sh-kind">X:485 Y:602</div></div>
+                <div style="display:flex;gap:6px;align-items:center"><span class="sh-lvl">LVL 6</span><span class="pill good">● HELD</span></div>
               </div>
-              <div class="buffs">
-                <div class="buff"><span class="bval">+12%</span><span class="blab">Guild Amity</span></div>
-                <div class="buff"><span class="bval">+18%</span><span class="blab">Desert XP</span></div>
-              </div>
+              <div class="buffs"><div class="buff"><span class="bval">+20%</span><span class="blab">Construction Speed</span></div></div>
               <div class="roles">
-                <div class="role"><div class="rl"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 3l7 4v5c0 4-3 6.5-7 8-4-1.5-7-4-7-8V7l7-4Z"/></svg>Guardian</div><div class="rn"><div class="avatar" style="width:24px;height:24px;font-size:.62rem;background:#5a3fd0">SR</div><b>Sarn</b></div></div>
-                <div class="role"><div class="rl">Governor</div><div class="rn"><div class="avatar" style="width:24px;height:24px;font-size:.62rem;background:#3a3a56">MY</div><b>Myra</b></div></div>
-                <div class="role"><div class="rl">Governor</div><div class="rn"><div class="avatar" style="width:24px;height:24px;font-size:.62rem;background:#3a3a56">TK</div><b>Tsuki</b></div></div>
+                <div class="role"><div class="rl"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 3l7 4v5c0 4-3 6.5-7 8-4-1.5-7-4-7-8V7l7-4Z"/></svg>Guardian</div><div class="rn"><div class="avatar" style="width:24px;height:24px;font-size:.62rem;background:linear-gradient(145deg,#E8A24C,#B5701C)">KI</div><b>Kitsune</b></div></div>
+                <div class="role"><div class="rl">Governor</div><div class="rn"><div class="avatar" style="width:24px;height:24px;font-size:.62rem;background:#3a3a56">BB</div><b>Bamm-Bamm</b></div></div><div class="role"><div class="rl">Governor</div><div class="rn"><div class="avatar" style="width:24px;height:24px;font-size:.62rem;background:#3a3a56">DI</div><b>D. Ixchel</b></div></div>
+              </div>
+              <div class="sh-stats">
+                <span><b>1500/h</b> desert EXP</span>
+                <span>Sentries <span class="sentries" style="display:inline-flex;vertical-align:middle;margin-left:4px"><i></i><i></i><i></i><i></i><i></i></span> <b style="color:var(--bad)">0/5</b></span>
+                <span>Death rate <b>20.0%</b></span>
+                <span>Opens in <b style="color:var(--desert)">07:25:23</b></span>
               </div>
             </div>
           </div>
-
-          <!-- Sanctum 2 - contested -->
-          <div class="card sh">
-            <div class="stripe" style="background:var(--warn)"></div>
-            <div class="sh-inner">
-              <div class="sh-top">
-                <div><h3 class="sh-name">Dune Sanctum</h3><div class="sh-kind">Sanctum · Grid C3</div></div>
-                <span class="pill warn">◐ CONTESTED</span>
-              </div>
-              <div class="buffs">
-                <div class="buff"><span class="bval">+10%</span><span class="blab">Guild Amity</span></div>
-                <div class="buff"><span class="bval">+14%</span><span class="blab">Desert XP</span></div>
-              </div>
-              <div class="roles">
-                <div class="role"><div class="rl"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 3l7 4v5c0 4-3 6.5-7 8-4-1.5-7-4-7-8V7l7-4Z"/></svg>Guardian</div><div class="rn"><div class="avatar" style="width:24px;height:24px;font-size:.62rem;background:#5a3fd0">KA</div><b>Kaine</b></div></div>
-                <div class="role"><div class="rl">Governor</div><div class="rn"><div class="avatar" style="width:24px;height:24px;font-size:.62rem;background:#3a3a56">LO</div><b>Lorel</b></div></div>
-                <div class="role"><div class="rl">Governor</div><div class="rn"><div class="avatar" style="width:24px;height:24px;font-size:.62rem;background:#3a3a56">VX</div><b>Vex</b></div></div>
-              </div>
-            </div>
-          </div>
-
-          <!-- Sanctum 3 - empty governor -->
           <div class="card sh">
             <div class="stripe" style="background:var(--good)"></div>
             <div class="sh-inner">
               <div class="sh-top">
-                <div><h3 class="sh-name">Sanctum of Ash</h3><div class="sh-kind">Sanctum · Grid F11</div></div>
-                <span class="pill good">● HELD</span>
+                <div><h3 class="sh-name">Goldglade Shrine</h3><div class="sh-kind">X:485 Y:712</div></div>
+                <div style="display:flex;gap:6px;align-items:center"><span class="sh-lvl">LVL 5</span><span class="pill good">● HELD</span></div>
               </div>
-              <div class="buffs">
-                <div class="buff"><span class="bval">+8%</span><span class="blab">Guild Amity</span></div>
-                <div class="buff"><span class="bval">+12%</span><span class="blab">Desert XP</span></div>
-              </div>
+              <div class="buffs"><div class="buff"><span class="bval">+20%</span><span class="blab">Gold Output</span></div><div class="buff"><span class="bval">+20%</span><span class="blab">Harvesting Speed</span></div></div>
               <div class="roles">
-                <div class="role"><div class="rl"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 3l7 4v5c0 4-3 6.5-7 8-4-1.5-7-4-7-8V7l7-4Z"/></svg>Guardian</div><div class="rn"><div class="avatar" style="width:24px;height:24px;font-size:.62rem;background:#5a3fd0">JD</div><b>Jodi</b></div></div>
-                <div class="role"><div class="rl">Governor</div><div class="rn"><div class="avatar" style="width:24px;height:24px;font-size:.62rem;background:#3a3a56">RE</div><b>Renn</b></div></div>
-                <div class="role empty"><div class="rl">Governor</div><div class="rn">+ Assign</div></div>
+                <div class="role"><div class="rl"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 3l7 4v5c0 4-3 6.5-7 8-4-1.5-7-4-7-8V7l7-4Z"/></svg>Guardian</div><div class="rn"><div class="avatar" style="width:24px;height:24px;font-size:.62rem;background:#5a3fd0">MV</div><b>mvgda</b></div></div>
+                <div class="role"><div class="rl">Governor</div><div class="rn"><div class="avatar" style="width:24px;height:24px;font-size:.62rem;background:#3a3a56">VK</div><b>valkyrie13</b></div></div><div class="role"><div class="rl">Governor</div><div class="rn"><div class="avatar" style="width:24px;height:24px;font-size:.62rem;background:#3a3a56">AN</div><b>anon</b></div></div>
+              </div>
+              <div class="sh-stats">
+                <span><b>1200/h</b> desert EXP</span>
+                <span>Sentries <span class="sentries" style="display:inline-flex;vertical-align:middle;margin-left:4px"><i class="on"></i><i></i><i></i><i></i><i></i></span> <b style="color:var(--warn)">1/5</b></span>
+                <span>Death rate <b>20.0%</b></span>
+                <span>Opens in <b style="color:var(--desert)">07:33:16</b></span>
               </div>
             </div>
           </div>
-
-          <!-- Sanctum 4 -->
           <div class="card sh">
             <div class="stripe" style="background:var(--good)"></div>
             <div class="sh-inner">
               <div class="sh-top">
-                <div><h3 class="sh-name">Mirage Sanctum</h3><div class="sh-kind">Sanctum · Grid A9</div></div>
-                <span class="pill good">● HELD</span>
+                <div><h3 class="sh-name">Steelstory Shrine</h3><div class="sh-kind">X:354 Y:482</div></div>
+                <div style="display:flex;gap:6px;align-items:center"><span class="sh-lvl">LVL 4</span><span class="pill good">● HELD</span></div>
               </div>
-              <div class="buffs">
-                <div class="buff"><span class="bval">+8%</span><span class="blab">Guild Amity</span></div>
-                <div class="buff"><span class="bval">+8%</span><span class="blab">Desert XP</span></div>
-              </div>
+              <div class="buffs"><div class="buff"><span class="bval">+15%</span><span class="blab">Steel Output</span></div><div class="buff"><span class="bval">+15%</span><span class="blab">Harvesting Speed</span></div></div>
               <div class="roles">
-                <div class="role"><div class="rl"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 3l7 4v5c0 4-3 6.5-7 8-4-1.5-7-4-7-8V7l7-4Z"/></svg>Guardian</div><div class="rn"><div class="avatar" style="width:24px;height:24px;font-size:.62rem;background:#5a3fd0">AV</div><b>Aeiti</b></div></div>
-                <div class="role"><div class="rl">Governor</div><div class="rn"><div class="avatar" style="width:24px;height:24px;font-size:.62rem;background:#3a3a56">PL</div><b>Pell</b></div></div>
-                <div class="role"><div class="rl">Governor</div><div class="rn"><div class="avatar" style="width:24px;height:24px;font-size:.62rem;background:#3a3a56">DR</div><b>Dax</b></div></div>
+                <div class="role"><div class="rl"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 3l7 4v5c0 4-3 6.5-7 8-4-1.5-7-4-7-8V7l7-4Z"/></svg>Guardian</div><div class="rn"><div class="avatar" style="width:24px;height:24px;font-size:.62rem;background:#5a3fd0">GR</div><b>GRIM</b></div></div>
+                <div class="role"><div class="rl">Governor</div><div class="rn"><div class="avatar" style="width:24px;height:24px;font-size:.62rem;background:#3a3a56">SH</div><b>ShenH</b></div></div><div class="role"><div class="rl">Governor</div><div class="rn"><div class="avatar" style="width:24px;height:24px;font-size:.62rem;background:#3a3a56">HT</div><b>HiThere</b></div></div>
+              </div>
+              <div class="sh-stats">
+                <span><b>900/h</b> desert EXP</span>
+                <span>Sentries <span class="sentries" style="display:inline-flex;vertical-align:middle;margin-left:4px"><i class="on"></i><i class="on"></i><i></i><i></i><i></i></span> <b style="color:var(--warn)">2/5</b></span>
+                <span>Death rate <b>20.0%</b></span>
+                <span>Opens in <b style="color:var(--desert)">06:49:02</b></span>
+              </div>
+            </div>
+          </div>
+          <div class="card sh">
+            <div class="stripe" style="background:var(--good)"></div>
+            <div class="sh-inner">
+              <div class="sh-top">
+                <div><h3 class="sh-name">Goldglade Shrine</h3><div class="sh-kind">X:354 Y:712</div></div>
+                <div style="display:flex;gap:6px;align-items:center"><span class="sh-lvl">LVL 4</span><span class="pill good">● HELD</span></div>
+              </div>
+              <div class="buffs"><div class="buff"><span class="bval">+15%</span><span class="blab">Gold Output</span></div><div class="buff"><span class="bval">+15%</span><span class="blab">Harvesting Speed</span></div></div>
+              <div class="roles">
+                <div class="role"><div class="rl"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 3l7 4v5c0 4-3 6.5-7 8-4-1.5-7-4-7-8V7l7-4Z"/></svg>Guardian</div><div class="rn"><div class="avatar" style="width:24px;height:24px;font-size:.62rem;background:#5a3fd0">LP</div><b>Lprdgddss</b></div></div>
+                <div class="role"><div class="rl">Governor</div><div class="rn"><div class="avatar" style="width:24px;height:24px;font-size:.62rem;background:#3a3a56">AR</div><b>AriRay</b></div></div><div class="role"><div class="rl">Governor</div><div class="rn"><div class="avatar" style="width:24px;height:24px;font-size:.62rem;background:#3a3a56">WA</div><b>Warden</b></div></div>
+              </div>
+              <div class="sh-stats">
+                <span><b>900/h</b> desert EXP</span>
+                <span>Sentries <span class="sentries" style="display:inline-flex;vertical-align:middle;margin-left:4px"><i class="on"></i><i class="on"></i><i></i><i></i><i></i></span> <b style="color:var(--warn)">2/5</b></span>
+                <span>Death rate <b>20.0%</b></span>
+                <span>Opens in <b style="color:var(--desert)">05:36:39</b></span>
+              </div>
+            </div>
+          </div>
+          <div class="card sh">
+            <div class="stripe" style="background:var(--good)"></div>
+            <div class="sh-inner">
+              <div class="sh-top">
+                <div><h3 class="sh-name">Steelstory Shrine</h3><div class="sh-kind">X:207 Y:602</div></div>
+                <div style="display:flex;gap:6px;align-items:center"><span class="sh-lvl">LVL 3</span><span class="pill good">● HELD</span></div>
+              </div>
+              <div class="buffs"><div class="buff"><span class="bval">+10%</span><span class="blab">Steel Output</span></div><div class="buff"><span class="bval">+10%</span><span class="blab">Harvesting Speed</span></div></div>
+              <div class="roles">
+                <div class="role"><div class="rl"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 3l7 4v5c0 4-3 6.5-7 8-4-1.5-7-4-7-8V7l7-4Z"/></svg>Guardian</div><div class="rn"><div class="avatar" style="width:24px;height:24px;font-size:.62rem;background:#3a3a56">JA</div><b>Janey×³</b></div></div>
+                <div class="role"><div class="rl">Governor</div><div class="rn"><div class="avatar" style="width:24px;height:24px;font-size:.62rem;background:#3a3a56">JK</div><b>Jakob</b></div></div><div class="role" style="opacity:.45"><div class="rl">Governor</div><div class="rn"><span class="muted mono" style="font-size:.7rem">— locked (L4+)</span></div></div>
+              </div>
+              <div class="sh-stats">
+                <span><b>600/h</b> desert EXP</span>
+                <span>Sentries <span class="sentries" style="display:inline-flex;vertical-align:middle;margin-left:4px"><i class="on"></i><i class="on"></i><i></i><i></i><i></i></span> <b style="color:var(--warn)">2/5</b></span>
+                <span>Death rate <b>20.0%</b></span>
+                <span>Opens in <b style="color:var(--desert)">05:22:52</b></span>
+              </div>
+            </div>
+          </div>
+          <div class="card sh">
+            <div class="stripe" style="background:var(--good)"></div>
+            <div class="sh-inner">
+              <div class="sh-top">
+                <div><h3 class="sh-name">Goldglade Shrine</h3><div class="sh-kind">X:207 Y:849</div></div>
+                <div style="display:flex;gap:6px;align-items:center"><span class="sh-lvl">LVL 3</span><span class="pill good">● HELD</span></div>
+              </div>
+              <div class="buffs"><div class="buff"><span class="bval">+10%</span><span class="blab">Gold Output</span></div><div class="buff"><span class="bval">+10%</span><span class="blab">Harvesting Speed</span></div></div>
+              <div class="roles">
+                <div class="role"><div class="rl"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 3l7 4v5c0 4-3 6.5-7 8-4-1.5-7-4-7-8V7l7-4Z"/></svg>Guardian</div><div class="rn"><div class="avatar" style="width:24px;height:24px;font-size:.62rem;background:#3a3a56">SH</div><b>ShenH</b></div></div>
+                <div class="role"><div class="rl">Governor</div><div class="rn"><div class="avatar" style="width:24px;height:24px;font-size:.62rem;background:#3a3a56">HE</div><b>Hermione</b></div></div><div class="role" style="opacity:.45"><div class="rl">Governor</div><div class="rn"><span class="muted mono" style="font-size:.7rem">— locked (L4+)</span></div></div>
+              </div>
+              <div class="sh-stats">
+                <span><b>600/h</b> desert EXP</span>
+                <span>Sentries <span class="sentries" style="display:inline-flex;vertical-align:middle;margin-left:4px"><i class="on"></i><i class="on"></i><i></i><i></i><i></i></span> <b style="color:var(--warn)">2/5</b></span>
+                <span>Death rate <b>20.0%</b></span>
+                <span>Opens in <b style="color:var(--desert)">07:01:57</b></span>
               </div>
             </div>
           </div>
         </div>
 
-        <div class="section-title">Ruins</div>
-        <div class="grid sh-grid">
-          <div class="card sh ruin">
-            <div class="stripe" style="background:var(--good)"></div>
-            <div class="sh-inner">
-              <div class="sh-top">
-                <div><h3 class="sh-name">Hollow Ruin</h3><div class="sh-kind">Ruin · Grid D6</div></div>
-                <span class="pill good">● HELD</span>
-              </div>
-              <div class="ruin-note">Ruins provide no buffs — held for map control &amp; contribution.</div>
+        <div class="section-title">Desert Ruins · 3,900/h · no roles, no buffs</div>
+        <div class="ruin-grid">
+            <div class="card ruin-card">
+              <div class="rl2">Lvl 3</div>
+              <div class="rv">900<span style="font-size:.8rem;color:var(--text-3)">/h</span></div>
+              <div class="rc">X:355 Y:850</div>
             </div>
-          </div>
-          <div class="card sh ruin">
-            <div class="stripe" style="background:var(--bad)"></div>
-            <div class="sh-inner">
-              <div class="sh-top">
-                <div><h3 class="sh-name">Sunken Ruin</h3><div class="sh-kind">Ruin · Grid J2</div></div>
-                <span class="pill bad">✕ LOST</span>
-              </div>
-              <div class="ruin-note">Ruins provide no buffs — held for map control &amp; contribution.</div>
+            <div class="card ruin-card">
+              <div class="rl2">Lvl 3</div>
+              <div class="rv">900<span style="font-size:.8rem;color:var(--text-3)">/h</span></div>
+              <div class="rc">X:355 Y:603</div>
             </div>
-          </div>
+            <div class="card ruin-card">
+              <div class="rl2">Lvl 2</div>
+              <div class="rv">600<span style="font-size:.8rem;color:var(--text-3)">/h</span></div>
+              <div class="rc">X:208 Y:988</div>
+            </div>
+            <div class="card ruin-card">
+              <div class="rl2">Lvl 2</div>
+              <div class="rv">600<span style="font-size:.8rem;color:var(--text-3)">/h</span></div>
+              <div class="rc">X:208 Y:486</div>
+            </div>
+            <div class="card ruin-card">
+              <div class="rl2">Lvl 2</div>
+              <div class="rv">600<span style="font-size:.8rem;color:var(--text-3)">/h</span></div>
+              <div class="rc">X:208 Y:720</div>
+            </div>
+            <div class="card ruin-card">
+              <div class="rl2">Lvl 1</div>
+              <div class="rv">300<span style="font-size:.8rem;color:var(--text-3)">/h</span></div>
+              <div class="rc">X:75 Y:603</div>
+            </div>
         </div>
+        <div class="placeholder-note">Ruins produce desert EXP only — they have no Guardian, Governors, Sentries, or buffs. Totals above are derived from the buildings, so they can't drift out of sync.</div>
       </section>
 
-      <!-- ============ EVENTS ============ -->
       <section class="page" id="events">
         <div class="page-head">
           <div>
             <div class="eyebrow">Guild · Schedule</div>
             <h1 class="page-title">Events</h1>
-            <div class="page-sub">Placeholder layout — per-type fields expand once we have screenshots</div>
+            <div class="page-sub">Six guild events, each with its own fields &amp; contribution metric · times in server (UTC−2) + local</div>
           </div>
           <div class="head-actions">
+            <button class="btn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 3v12m0 0l-4-4m4 4l4-4M5 21h14" stroke-linecap="round" stroke-linejoin="round"/></svg>Log Result</button>
             <button class="btn primary"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12h14" stroke-linecap="round"/></svg>New Event</button>
           </div>
         </div>
 
         <div class="grid ev-grid">
-          <!-- Guild Hunt -->
           <div class="card ev">
             <div class="ev-body">
               <div class="ev-top">
                 <div class="evicon" style="background:var(--violet-dim);color:var(--violet)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 3l2.5 5 5.5.8-4 3.9.9 5.5L12 16.5 7.1 18.2l.9-5.5-4-3.9 5.5-.8L12 3Z"/></svg></div>
-                <div><h3>Guild Hunt</h3><div class="schedule">DAILY · 20:00 SVR · <span class="loc" data-server="20:00">--:--</span> LOCAL · in 2h 14m</div></div>
+                <div><h3>Guild Hunt</h3><div class="schedule">ONGOING · Subterranean Lizard</div></div>
               </div>
-              <div class="ev-meta"><span class="pill violet">GUILD HUNT</span><span class="pill ghost">RECURRING</span></div>
+              <div class="ev-meta"><span class="pill violet">GUILD HUNT</span><span class="pill ghost">TRAP LVL 10</span></div>
               <div class="attend">
-                <div class="attend-row"><span class="al">Signed up</span><span class="av">34 / 47</span></div>
-                <div class="bar"><span style="width:72%"></span></div>
+                <div class="attend-row"><span class="al">Total guild damage</span><span class="av">1.88T / 50B</span></div>
+                <div class="bar"><span style="width:100%;background:linear-gradient(90deg,var(--violet-2),var(--violet))"></span></div>
               </div>
+              <div class="attend"><div class="attend-row" style="margin-bottom:4px"><span class="al">Members contributing</span><span class="av">40 / 49</span></div><div class="attend-row" style="margin-bottom:4px"><span class="al">MVP (×10 bonus)</span><span class="av">αειτι · 421.3B</span></div></div>
             </div>
-            <div class="ev-foot"><span class="plabel">Last result</span><span class="placement" style="color:var(--good)">1st · 4.2M dmg</span></div>
+            <div class="ev-foot"><span class="plabel">Next unlock</span><span class="placement" style="color:var(--good)">Lvl 11 trap</span></div>
           </div>
-
-          <!-- Sandstorm A -->
           <div class="card ev">
             <div class="ev-body">
               <div class="ev-top">
                 <div class="evicon" style="background:var(--desert-dim);color:var(--desert)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M4 15a5 5 0 0 1 5-5h6a4 4 0 0 0 0-8" stroke-linecap="round"/><path d="M2 12h13a3 3 0 1 1 0 6" stroke-linecap="round"/></svg></div>
-                <div><h3>Sandstorm — Slot A</h3><div class="schedule">WED / SAT · 14:00 SVR · <span class="loc" data-server="14:00">--:--</span> LOCAL · tomorrow</div></div>
+                <div><h3>Sandstorm — Skirmish Squad A</h3><div class="schedule">WED / SAT · 14:00 SVR · <span class="loc" data-server="14:00">--:--</span> LOCAL · 40 MIN</div></div>
               </div>
-              <div class="ev-meta"><span class="pill desert">SANDSTORM</span><span class="pill ghost">SLOT A</span></div>
+              <div class="ev-meta"><span class="pill desert">SANDSTORM</span><span class="pill ghost">SQUAD A</span><span class="pill bad">FINAL</span></div>
               <div class="attend">
-                <div class="attend-row"><span class="al">Slot filled</span><span class="av">18 / 24</span></div>
-                <div class="bar"><span style="width:75%;background:linear-gradient(90deg,#B5701C,var(--desert))"></span></div>
+                <div class="attend-row"><span class="al">Starters registered</span><span class="av">30 / 30</span></div>
+                <div class="bar"><span style="width:100%;background:linear-gradient(90deg,#B5701C,var(--desert))"></span></div>
               </div>
+              <div class="attend"><div class="attend-row" style="margin-bottom:4px"><span class="al">Guild points</span><span class="av">412,880</span></div><div class="attend-row" style="margin-bottom:4px"><span class="al">Top scorer</span><span class="av">αειτι · 3,392,068</span></div></div>
             </div>
-            <div class="ev-foot"><span class="plabel">Preferred slot A</span><span class="placement" style="color:var(--desert)">26 members</span></div>
+            <div class="ev-foot"><span class="plabel">Last result</span><span class="placement" style="color:var(--good)">WIN vs [RotR]</span></div>
           </div>
-
-          <!-- Sandstorm B -->
           <div class="card ev">
             <div class="ev-body">
               <div class="ev-top">
                 <div class="evicon" style="background:var(--desert-dim);color:var(--desert)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M4 15a5 5 0 0 1 5-5h6a4 4 0 0 0 0-8" stroke-linecap="round"/><path d="M2 12h13a3 3 0 1 1 0 6" stroke-linecap="round"/></svg></div>
-                <div><h3>Sandstorm — Slot B</h3><div class="schedule">WED / SAT · 21:00 SVR · <span class="loc" data-server="21:00">--:--</span> LOCAL · tomorrow</div></div>
+                <div><h3>Sandstorm — Skirmish Squad B</h3><div class="schedule">WED / SAT · 21:00 SVR · <span class="loc" data-server="21:00">--:--</span> LOCAL · 40 MIN</div></div>
               </div>
-              <div class="ev-meta"><span class="pill desert">SANDSTORM</span><span class="pill ghost">SLOT B</span><span class="pill warn">LOW TURNOUT</span></div>
+              <div class="ev-meta"><span class="pill desert">SANDSTORM</span><span class="pill ghost">SQUAD B</span><span class="pill warn">CANCELABLE</span></div>
               <div class="attend">
-                <div class="attend-row"><span class="al">Slot filled</span><span class="av">9 / 24</span></div>
-                <div class="bar"><span style="width:37%;background:linear-gradient(90deg,#7a4a12,var(--warn))"></span></div>
+                <div class="attend-row"><span class="al">Starters registered</span><span class="av">9 / 30</span></div>
+                <div class="bar"><span style="width:30%;background:linear-gradient(90deg,#7a4a12,var(--warn))"></span></div>
               </div>
+              <div class="attend"><div class="attend-row" style="margin-bottom:4px"><span class="al">Registration</span><span class="av">Thu · needs 10+ votes</span></div><div class="attend-row" style="margin-bottom:4px"><span class="al">Sign-up authority</span><span class="av">R5 + R4 only</span></div></div>
             </div>
-            <div class="ev-foot"><span class="plabel">Preferred slot B</span><span class="placement" style="color:var(--desert)">14 members</span></div>
+            <div class="ev-foot"><span class="plabel">Last result</span><span class="placement" style="color:var(--bad)">LOSS vs [EOC]</span></div>
           </div>
-
-          <!-- Temple -->
-          <div class="card ev">
-            <div class="ev-body">
-              <div class="ev-top">
-                <div class="evicon" style="background:#4ADE801a;color:var(--good)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 3v18M5 8l7-5 7 5M5 8v8l7 5 7-5V8" stroke-linejoin="round"/></svg></div>
-                <div><h3>Temple</h3><div class="schedule">SUN · 19:00 SVR · <span class="loc" data-server="19:00">--:--</span> LOCAL · in 3 days</div></div>
-              </div>
-              <div class="ev-meta"><span class="pill good">TEMPLE</span><span class="pill ghost">WEEKLY</span></div>
-              <div class="attend">
-                <div class="attend-row"><span class="al">Signed up</span><span class="av">— sign-ups open Fri</span></div>
-                <div class="bar"><span style="width:0%"></span></div>
-              </div>
-            </div>
-            <div class="ev-foot"><span class="plabel">Last result</span><span class="placement" style="color:var(--good)">Cleared floor 8</span></div>
-          </div>
-
-          <!-- Arctic Showdown -->
-          <div class="card ev">
-            <div class="ev-body">
-              <div class="ev-top">
-                <div class="evicon" style="background:#38BDF81a;color:#38BDF8"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 2v20M2 12h20M5 5l14 14M19 5L5 19" stroke-linecap="round"/></svg></div>
-                <div><h3>Arctic Showdown</h3><div class="schedule">BI-WEEKLY · MON 18:00 SVR · <span class="loc" data-server="18:00">--:--</span> LOCAL · in 6 days</div></div>
-              </div>
-              <div class="ev-meta"><span class="pill" style="color:#38BDF8;background:#38BDF81a;border-color:#38BDF833">ARCTIC SHOWDOWN</span></div>
-              <div class="attend">
-                <div class="attend-row"><span class="al">Signed up</span><span class="av">—</span></div>
-                <div class="bar"><span style="width:0%"></span></div>
-              </div>
-            </div>
-            <div class="ev-foot"><span class="plabel">Last placement</span><span class="placement" style="color:#38BDF8">3rd / 20</span></div>
-          </div>
-
-          <!-- GVG -->
           <div class="card ev">
             <div class="ev-body">
               <div class="ev-top">
                 <div class="evicon" style="background:#60A5FA1a;color:#60A5FA"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 2l2 4 4 .5-3 3 .8 4-3.8-2-3.8 2 .8-4-3-3 4-.5 2-4Z"/></svg></div>
-                <div><h3>GVG</h3><div class="schedule">FRI · 21:00 SVR · <span class="loc" data-server="21:00">--:--</span> LOCAL · vs. RUIN · in 5 days</div></div>
+                <div><h3>Guild Duel</h3><div class="schedule">MON–SAT · TODAY: DEFEAT ENEMIES (4 VP)</div></div>
               </div>
-              <div class="ev-meta"><span class="pill" style="color:#60A5FA;background:#60A5FA1a;border-color:#60A5FA33">GVG</span><span class="pill good">ROSTER SET</span></div>
+              <div class="ev-meta"><span class="pill" style="color:#60A5FA;background:#60A5FA1a;border-color:#60A5FA33">GUILD DUEL</span><span class="pill ghost">DAY 6 / 6</span></div>
               <div class="attend">
-                <div class="attend-row"><span class="al">Roster locked</span><span class="av">30 / 30</span></div>
-                <div class="bar"><span style="width:100%"></span></div>
+                <div class="attend-row"><span class="al">Guild points share</span><span class="av">20% vs 80%</span></div>
+                <div class="bar"><span style="width:20%;background:linear-gradient(90deg,var(--violet-2),var(--violet))"></span></div>
               </div>
+              <div class="attend"><div class="attend-row" style="margin-bottom:4px"><span class="al">Weekly tally</span><span class="av">0 : 9 vs [HARK]</span></div><div class="attend-row" style="margin-bottom:4px"><span class="al">Today’s MVP</span><span class="av">Κησωηαςθ</span></div></div>
             </div>
-            <div class="ev-foot"><span class="plabel">Season record</span><span class="placement" style="color:var(--good)">6W – 2L</span></div>
+            <div class="ev-foot"><span class="plabel">Week</span><span class="placement" style="color:var(--bad)">LOSING · 41.3M vs 160.5M</span></div>
+          </div>
+          <div class="card ev">
+            <div class="ev-body">
+              <div class="ev-top">
+                <div class="evicon" style="background:#E8A24C1a;color:var(--desert)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M8 21h8M12 17v4M6 4h12v5a6 6 0 0 1-12 0V4Z"/><path d="M6 6H3v2a3 3 0 0 0 3 3M18 6h3v2a3 3 0 0 1-3 3" stroke-linecap="round"/></svg></div>
+                <div><h3>Guild Clash</h3><div class="schedule">SEASON #5 · WEEKS 1–4</div></div>
+              </div>
+              <div class="ev-meta"><span class="pill desert">DIAMOND TIER</span><span class="pill ghost">WEEK 1 SCORED</span></div>
+              <div class="attend"><div class="attend-row" style="margin-bottom:4px"><span class="al">Guild rank</span><span class="av">#8 of 8</span></div><div class="attend-row" style="margin-bottom:4px"><span class="al">Season points</span><span class="av">1,523,448,922</span></div><div class="attend-row" style="margin-bottom:4px"><span class="al">Leader</span><span class="av">[HARK] 6,201,395,237</span></div></div>
+            </div>
+            <div class="ev-foot"><span class="plabel">Gap to #7</span><span class="placement" style="color:var(--warn)">107.8M behind [FFS]</span></div>
+          </div>
+          <div class="card ev">
+            <div class="ev-body">
+              <div class="ev-top">
+                <div class="evicon" style="background:#4ADE801a;color:var(--good)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 3v18M5 8l7-5 7 5M5 8v8l7 5 7-5V8" stroke-linejoin="round"/></svg></div>
+                <div><h3>Clash of Pallantis</h3><div class="schedule">FRI 12:00 SVR · <span class="loc" data-server="12:00">--:--</span> LOCAL · BATTLE PHASE</div></div>
+              </div>
+              <div class="ev-meta"><span class="pill good">TEMPLE</span><span class="pill ghost">CROSS-SERVER</span></div>
+              <div class="attend"><div class="attend-row" style="margin-bottom:4px"><span class="al">Phase</span><span class="av">Settlement — rankings locked</span></div><div class="attend-row" style="margin-bottom:4px"><span class="al">Members ranked</span><span class="av">12 of 49</span></div><div class="attend-row" style="margin-bottom:4px"><span class="al">Best finish</span><span class="av">αειτι · #6 · 1,412,868</span></div></div>
+            </div>
+            <div class="ev-foot"><span class="plabel">Result</span><span class="placement" style="color:var(--text-2)">Winner crowned</span></div>
+          </div>
+          <div class="card ev">
+            <div class="ev-body">
+              <div class="ev-top">
+                <div class="evicon" style="background:#38BDF81a;color:#38BDF8"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 2v20M2 12h20M5 5l14 14M19 5L5 19" stroke-linecap="round"/></svg></div>
+                <div><h3>Arctic Showdown</h3><div class="schedule">MULTI-WEEK TOURNAMENT</div></div>
+              </div>
+              <div class="ev-meta"><span class="pill" style="color:#38BDF8;background:#38BDF81a;border-color:#38BDF833">ARCTIC SHOWDOWN</span><span class="pill ghost">QUALIFIERS</span></div>
+              <div class="attend">
+                <div class="attend-row"><span class="al">Defenders registered</span><span class="av">— / 5–30</span></div>
+                <div class="bar"><span style="width:0%;background:linear-gradient(90deg,#0d5c80,#38BDF8)"></span></div>
+              </div>
+              <div class="attend"><div class="attend-row" style="margin-bottom:4px"><span class="al">Registration</span><span class="av">Sat–Sun Wk 1 · R5 + R4</span></div><div class="attend-row" style="margin-bottom:4px"><span class="al">Advance</span><span class="av">Top 16 → knockout</span></div></div>
+            </div>
+            <div class="ev-foot"><span class="plabel">Last placement</span><span class="placement" style="color:#38BDF8">3rd / 20</span></div>
           </div>
         </div>
 
-        <div class="placeholder-note">Each event type will get its own fields (damage tiers, floor cleared, matchup, slot capacity, etc.) once you share the in-game screenshots.</div>
+        <div class="placeholder-note">Every event except Arctic Showdown has a verified per-member contribution board in game (damage, personal points, or Temple Points) — that is what feeds the participation matrix. Arctic Showdown&rsquo;s roster/bracket screens are still uncaptured.</div>
       </section>
 
       <!-- ============ TRENDS ============ -->
@@ -899,10 +986,10 @@
 
         <!-- KPI strip -->
         <div class="grid stats" style="margin-bottom:16px">
-          <div class="card stat"><div class="k">Participation (30d)</div><div class="v" style="font-size:2rem">78<small>%</small></div><div class="foot"><span class="delta up">▲ 6%</span> events attended</div></div>
-          <div class="card stat"><div class="k">Donations / week</div><div class="v" style="font-size:2rem;color:var(--desert)">214<small>k</small></div><div class="foot"><span class="delta up">▲ 12%</span> guild total</div></div>
-          <div class="card stat"><div class="k">Kills / week</div><div class="v" style="font-size:2rem">1.9<small>M</small></div><div class="foot"><span class="delta up">▲ 8%</span> kill points</div></div>
-          <div class="card stat"><div class="k">Sandstorm Win %</div><div class="v" style="font-size:2rem;color:var(--good)">67<small>%</small></div><div class="foot">4W – 2L last 6</div></div>
+          <div class="card stat"><div class="k">Participation (30d)</div><div class="v" style="font-size:2rem">78<small>%</small></div><div class="foot"><span class="delta up">&#9650; 6%</span> contributed to events</div></div>
+          <div class="card stat"><div class="k">Guild Hunt damage</div><div class="v" style="font-size:2rem">1.88<small>T</small></div><div class="foot">40 of 49 contributed</div></div>
+          <div class="card stat"><div class="k">Guild Duel (weekly)</div><div class="v" style="font-size:2rem">1.26<small>B</small></div><div class="foot">41 scorers &middot; 0:9 tally</div></div>
+          <div class="card stat"><div class="k">Sandstorm Win %</div><div class="v" style="font-size:2rem;color:var(--good)">67<small>%</small></div><div class="foot">4W &ndash; 2L last 6</div></div>
         </div>
 
         <div class="grid trends">
@@ -1000,76 +1087,49 @@
             </div>
           </div>
 
-          <!-- Guild kills -->
+          <!-- Guild Clash rank -->
           <div class="card">
-            <div class="card-head"><h3>Guild Kills / week</h3><span class="pill good">▲ 8%</span></div>
+            <div class="card-head"><h3>Guild Clash &mdash; season rank</h3><span class="pill desert">DIAMOND</span></div>
             <div class="card-body">
-              <svg viewBox="0 0 320 120" width="100%" height="130" preserveAspectRatio="none" role="img" aria-label="Weekly guild kill points rising">
-                <defs><linearGradient id="kg" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#F87171" stop-opacity=".28"/><stop offset="1" stop-color="#F87171" stop-opacity="0"/></linearGradient></defs>
-                <line x1="0" y1="40" x2="320" y2="40" stroke="#ffffff10"/><line x1="0" y1="80" x2="320" y2="80" stroke="#ffffff10"/>
-                <path d="M0,82 L45,86 L90,70 L135,74 L180,60 L225,52 L270,54 L320,42 L320,120 L0,120 Z" fill="url(#kg)"/>
-                <path d="M0,82 L45,86 L90,70 L135,74 L180,60 L225,52 L270,54 L320,42" fill="none" stroke="var(--bad)" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>
-                <circle cx="320" cy="42" r="4" fill="var(--bad)"/>
+              <svg viewBox="0 0 320 120" width="100%" height="130" preserveAspectRatio="none" role="img" aria-label="Guild Clash rank drifting from 6th to 8th">
+                <line x1="0" y1="30" x2="320" y2="30" stroke="#ffffff10"/><line x1="0" y1="60" x2="320" y2="60" stroke="#ffffff10"/><line x1="0" y1="90" x2="320" y2="90" stroke="#ffffff10"/>
+                <path d="M0,42 L80,42 L160,64 L240,64 L320,86" fill="none" stroke="var(--warn)" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/>
+                <circle cx="320" cy="86" r="4" fill="var(--warn)"/>
               </svg>
-              <div class="chart-note">total kill points per week · 1.9M this week</div>
+              <div class="chart-note">rank per week (lower is better) &middot; #6 &rarr; #8 of 8</div>
             </div>
           </div>
         </div>
-
-        <div class="section-title">Leaderboards · this week</div>
-        <div class="grid lb-grid">
-          <div class="card">
-            <div class="card-head"><h3>Top Donators</h3><span class="mono" style="font-size:var(--fs-xs);color:var(--text-3)">COINS</span></div>
-            <div class="card-body"><div class="lb">
-              <div class="lb-row top"><span class="lb-rank">1</span><div class="avatar" style="width:24px;height:24px;font-size:.6rem;background:#5a3fd0">SR</div><span class="lb-name">Sarn</span><span class="lb-val" style="color:var(--desert)">24.1k</span></div>
-              <div class="lb-row top"><span class="lb-rank">2</span><div class="avatar" style="width:24px;height:24px;font-size:.6rem;background:linear-gradient(145deg,#E8A24C,#B5701C)">AV</div><span class="lb-name">Aeiti</span><span class="lb-val" style="color:var(--desert)">21.8k</span></div>
-              <div class="lb-row top"><span class="lb-rank">3</span><div class="avatar" style="width:24px;height:24px;font-size:.6rem;background:#5a3fd0">KA</div><span class="lb-name">Kaine</span><span class="lb-val" style="color:var(--desert)">19.3k</span></div>
-              <div class="lb-row"><span class="lb-rank">4</span><div class="avatar" style="width:24px;height:24px;font-size:.6rem;background:#3a3a56">MY</div><span class="lb-name">Myra</span><span class="lb-val">15.0k</span></div>
-              <div class="lb-row"><span class="lb-rank">5</span><div class="avatar" style="width:24px;height:24px;font-size:.6rem;background:#3a3a56">TK</div><span class="lb-name">Tsuki</span><span class="lb-val">12.7k</span></div>
-            </div></div>
-          </div>
-
-          <div class="card">
-            <div class="card-head"><h3>Top Kills</h3><span class="mono" style="font-size:var(--fs-xs);color:var(--text-3)">KILL PTS</span></div>
-            <div class="card-body"><div class="lb">
-              <div class="lb-row top"><span class="lb-rank">1</span><div class="avatar" style="width:24px;height:24px;font-size:.6rem;background:#5a3fd0">KA</div><span class="lb-name">Kaine</span><span class="lb-val">62.4k</span></div>
-              <div class="lb-row top"><span class="lb-rank">2</span><div class="avatar" style="width:24px;height:24px;font-size:.6rem;background:#5a3fd0">SR</div><span class="lb-name">Sarn</span><span class="lb-val">58.1k</span></div>
-              <div class="lb-row top"><span class="lb-rank">3</span><div class="avatar" style="width:24px;height:24px;font-size:.6rem;background:linear-gradient(145deg,#E8A24C,#B5701C)">AV</div><span class="lb-name">Aeiti</span><span class="lb-val">48.2k</span></div>
-              <div class="lb-row"><span class="lb-rank">4</span><div class="avatar" style="width:24px;height:24px;font-size:.6rem;background:#2f2f47">VX</div><span class="lb-name">Vex</span><span class="lb-val">40.0k</span></div>
-              <div class="lb-row"><span class="lb-rank">5</span><div class="avatar" style="width:24px;height:24px;font-size:.6rem;background:#2a2a40">DR</div><span class="lb-name">Dax</span><span class="lb-val">33.5k</span></div>
-            </div></div>
-          </div>
-
-          <div class="card">
-            <div class="card-head"><h3>Top Participation</h3><span class="mono" style="font-size:var(--fs-xs);color:var(--text-3)">30-DAY</span></div>
-            <div class="card-body"><div class="lb">
-              <div class="lb-row top"><span class="lb-rank">1</span><div class="avatar" style="width:24px;height:24px;font-size:.6rem;background:linear-gradient(145deg,#E8A24C,#B5701C)">AV</div><span class="lb-name">Aeiti</span><span class="lb-val" style="color:var(--good)">100%</span></div>
-              <div class="lb-row top"><span class="lb-rank">2</span><div class="avatar" style="width:24px;height:24px;font-size:.6rem;background:#5a3fd0">SR</div><span class="lb-name">Sarn</span><span class="lb-val" style="color:var(--good)">96%</span></div>
-              <div class="lb-row top"><span class="lb-rank">3</span><div class="avatar" style="width:24px;height:24px;font-size:.6rem;background:#3a3a56">MY</div><span class="lb-name">Myra</span><span class="lb-val" style="color:var(--good)">92%</span></div>
-              <div class="lb-row"><span class="lb-rank">4</span><div class="avatar" style="width:24px;height:24px;font-size:.6rem;background:#3a3a56">TK</div><span class="lb-name">Tsuki</span><span class="lb-val">88%</span></div>
-              <div class="lb-row"><span class="lb-rank">5</span><div class="avatar" style="width:24px;height:24px;font-size:.6rem;background:#2f2f47">PL</div><span class="lb-name">Pell</span><span class="lb-val">84%</span></div>
-            </div></div>
           </div>
         </div>
 
-        <div class="section-title">Who Participated · last 6 events</div>
+        <div class="section-title">Contribution leaderboards &middot; by event metric</div>
+        <div class="grid lb-grid">
+          <div class="card">
+            <div class="card-head"><h3>Guild Hunt</h3><span class="mono" style="font-size:var(--fs-xs);color:var(--text-3)">DAMAGE</span></div>
+            <div class="card-body"><div class="lb"><div class="lb-row top"><span class="lb-rank">1</span><div class="avatar" style="width:24px;height:24px;font-size:.6rem;background:#5a3fd0">AE</div><span class="lb-name">aeiti</span><span class="lb-val" style="color:var(--violet)">421.3B</span></div><div class="lb-row top"><span class="lb-rank">2</span><div class="avatar" style="width:24px;height:24px;font-size:.6rem;background:#5a3fd0">LP</div><span class="lb-name">Lprdgddss</span><span class="lb-val" style="color:var(--violet)">224.4B</span></div><div class="lb-row top"><span class="lb-rank">3</span><div class="avatar" style="width:24px;height:24px;font-size:.6rem;background:linear-gradient(145deg,#E8A24C,#B5701C)">KI</div><span class="lb-name">Kitsune</span><span class="lb-val" style="color:var(--violet)">157.4B</span></div><div class="lb-row"><span class="lb-rank">4</span><div class="avatar" style="width:24px;height:24px;font-size:.6rem;background:#3a3a56">HO</div><span class="lb-name">Hormuz</span><span class="lb-val">130.5B</span></div><div class="lb-row"><span class="lb-rank">5</span><div class="avatar" style="width:24px;height:24px;font-size:.6rem;background:#3a3a56">SH</div><span class="lb-name">ShenH</span><span class="lb-val">123.7B</span></div></div></div>
+          </div>
+          <div class="card">
+            <div class="card-head"><h3>Sandstorm</h3><span class="mono" style="font-size:var(--fs-xs);color:var(--text-3)">PERSONAL PTS</span></div>
+            <div class="card-body"><div class="lb"><div class="lb-row top"><span class="lb-rank">1</span><div class="avatar" style="width:24px;height:24px;font-size:.6rem;background:#5a3fd0">AE</div><span class="lb-name">aeiti</span><span class="lb-val" style="color:var(--desert)">3,392,068</span></div><div class="lb-row top"><span class="lb-rank">2</span><div class="avatar" style="width:24px;height:24px;font-size:.6rem;background:#5a3fd0">LP</div><span class="lb-name">Lprdgddss</span><span class="lb-val" style="color:var(--desert)">2,597,693</span></div><div class="lb-row top"><span class="lb-rank">3</span><div class="avatar" style="width:24px;height:24px;font-size:.6rem;background:#5a3fd0">BB</div><span class="lb-name">Bamm-Bamm</span><span class="lb-val" style="color:var(--desert)">1,711,874</span></div><div class="lb-row"><span class="lb-rank">4</span><div class="avatar" style="width:24px;height:24px;font-size:.6rem;background:#3a3a56">DI</div><span class="lb-name">D. Ixchel</span><span class="lb-val">1,660,428</span></div><div class="lb-row"><span class="lb-rank">5</span><div class="avatar" style="width:24px;height:24px;font-size:.6rem;background:#3a3a56">VK</div><span class="lb-name">valkyrie13</span><span class="lb-val">1,622,274</span></div></div></div>
+          </div>
+          <div class="card">
+            <div class="card-head"><h3>Guild Duel</h3><span class="mono" style="font-size:var(--fs-xs);color:var(--text-3)">WEEKLY PTS</span></div>
+            <div class="card-body"><div class="lb"><div class="lb-row top"><span class="lb-rank">1</span><div class="avatar" style="width:24px;height:24px;font-size:.6rem;background:#5a3fd0">AE</div><span class="lb-name">aeiti</span><span class="lb-val" style="color:var(--good)">102.4M</span></div><div class="lb-row top"><span class="lb-rank">2</span><div class="avatar" style="width:24px;height:24px;font-size:.6rem;background:#3a3a56">SH</div><span class="lb-name">ShenH</span><span class="lb-val" style="color:var(--good)">90.5M</span></div><div class="lb-row top"><span class="lb-rank">3</span><div class="avatar" style="width:24px;height:24px;font-size:.6rem;background:#3a3a56">MV</div><span class="lb-name">mvgda</span><span class="lb-val" style="color:var(--good)">85.7M</span></div><div class="lb-row"><span class="lb-rank">4</span><div class="avatar" style="width:24px;height:24px;font-size:.6rem;background:#3a3a56">VK</div><span class="lb-name">valkyrie13</span><span class="lb-val">83.7M</span></div><div class="lb-row"><span class="lb-rank">5</span><div class="avatar" style="width:24px;height:24px;font-size:.6rem;background:#5a3fd0">GR</div><span class="lb-name">GRIM</span><span class="lb-val">65.8M</span></div></div></div>
+          </div>
+        </div>
+
+        <div class="section-title">Who contributed &middot; last event of each type</div>
         <div class="card">
           <div class="card-body matrix">
             <table>
-              <thead><tr><th>Member</th><th>Hunt</th><th>SS·A</th><th>SS·B</th><th>Temple</th><th>Arctic</th><th>GVG</th><th>Rate</th></tr></thead>
-              <tbody>
-                <tr><td><b>Aeiti</b></td><td class="att-yes">✓</td><td class="att-yes">✓</td><td class="att-no">·</td><td class="att-yes">✓</td><td class="att-yes">✓</td><td class="att-yes">✓</td><td class="att-rate" style="color:var(--good)">100%</td></tr>
-                <tr><td><b>Sarn</b></td><td class="att-yes">✓</td><td class="att-yes">✓</td><td class="att-no">·</td><td class="att-yes">✓</td><td class="att-yes">✓</td><td class="att-yes">✓</td><td class="att-rate" style="color:var(--good)">96%</td></tr>
-                <tr><td><b>Kaine</b></td><td class="att-yes">✓</td><td class="att-no">·</td><td class="att-yes">✓</td><td class="att-yes">✓</td><td class="att-no">·</td><td class="att-yes">✓</td><td class="att-rate">79%</td></tr>
-                <tr><td><b>Myra</b></td><td class="att-yes">✓</td><td class="att-yes">✓</td><td class="att-no">·</td><td class="att-yes">✓</td><td class="att-yes">✓</td><td class="att-yes">✓</td><td class="att-rate" style="color:var(--good)">92%</td></tr>
-                <tr><td><b>Tsuki</b></td><td class="att-yes">✓</td><td class="att-no">·</td><td class="att-yes">✓</td><td class="att-yes">✓</td><td class="att-no">·</td><td class="att-yes">✓</td><td class="att-rate">88%</td></tr>
-                <tr><td><b>Lorel</b> <span class="pill warn" style="margin-left:4px">LOA</span></td><td class="att-no">·</td><td class="att-no">·</td><td class="att-no">·</td><td class="att-no">·</td><td class="att-no">·</td><td class="att-no">·</td><td class="att-rate" style="color:var(--bad)">0%</td></tr>
-              </tbody>
+              <thead><tr><th>Member</th><th>Hunt<br><span class="muted" style="font-weight:400">damage</span></th><th>Sandstorm<br><span class="muted" style="font-weight:400">points</span></th><th>Duel<br><span class="muted" style="font-weight:400">weekly</span></th><th>Pallantis<br><span class="muted" style="font-weight:400">temple</span></th><th>Rate</th></tr></thead>
+              <tbody><tr><td><b>Kitsune</b> <span class="rank r5" style="margin-left:4px">R5</span></td><td class="num">421.3B</td><td class="num">761,230</td><td class="num">53.7M</td><td class="att-no">—</td><td class="att-rate" style="color:var(--good)">75%</td></tr><tr><td><b>aeiti</b> <span class="rank r4" style="margin-left:4px">R4</span></td><td class="num">421.3B</td><td class="num">3,392,068</td><td class="num">102.4M</td><td class="num">1,412,868</td><td class="att-rate" style="color:var(--good)">100%</td></tr><tr><td><b>Lprdgddss</b> <span class="rank r4" style="margin-left:4px">R4</span></td><td class="num">224.4B</td><td class="num">2,597,693</td><td class="num">13.6M</td><td class="att-no">—</td><td class="att-rate" style="color:var(--good)">75%</td></tr><tr><td><b>ShenH</b> <span class="rank r3" style="margin-left:4px">R3</span></td><td class="num">123.7B</td><td class="att-no">—</td><td class="num">90.5M</td><td class="num">101,892</td><td class="att-rate" style="color:var(--good)">75%</td></tr><tr><td><b>mvgda</b> <span class="rank r3" style="margin-left:4px">R3</span></td><td class="num">84.9B</td><td class="att-no">—</td><td class="num">85.7M</td><td class="att-no">—</td><td class="att-rate">50%</td></tr><tr><td><b>Empireof2moro</b> <span class="rank r3" style="margin-left:4px">R3</span></td><td class="num">3.7B</td><td class="att-no">—</td><td class="num">13.3M</td><td class="att-no">—</td><td class="att-rate" style="color:var(--warn)">50%</td></tr><tr><td><b>frieren</b> <span class="rank r3" style="margin-left:4px">R3</span></td><td class="att-no">—</td><td class="att-no">—</td><td class="num">16.0k</td><td class="att-no">—</td><td class="att-rate" style="color:var(--bad)">25%</td></tr><tr><td><b>The_Void_Bear</b> <span class="rank r1" style="margin-left:4px">R1</span></td><td class="att-no">—</td><td class="att-no">—</td><td class="att-no">—</td><td class="att-no">—</td><td class="att-rate" style="color:var(--bad)">0%</td></tr></tbody>
             </table>
           </div>
         </div>
 
-        <div class="placeholder-note">Illustrative sample data. Real trends accrue from day one as members, events, donations, kills, and participation are logged. The participation matrix is built from per-event attendance — the same log that powers the participation rate and leaderboard.</div>
+        <div class="placeholder-note">Illustrative sample data. Real trends accrue from day one as members, events, donations, kills, and participation are logged. The matrix records the actual value each member contributed per event, transcribed from the in-game contribution boards.</div>
       </section>
 
       <!-- ============ ADMIN ============ -->
@@ -1111,23 +1171,31 @@
 <script>
   // ----- member sample data -----
   const members = [
-    { ign:"Aeiti", rank:5, gm:true, status:"active", seen:"12m", seenD:0.01, tz:"UTC-5", online:"18:00–24:00", slot:"A", power:"2.84M", don:"21.8k", kills:"48.2k", av:"AV", c:"linear-gradient(145deg,#E8A24C,#B5701C)" },
-    { ign:"Sarn", rank:4, status:"active", seen:"2h", seenD:0.1, tz:"UTC+1", online:"19:00–23:00", slot:"A", power:"2.71M", don:"24.1k", kills:"58.1k", av:"SR", c:"#5a3fd0" },
-    { ign:"Kaine", rank:4, status:"active", seen:"5h", seenD:0.2, tz:"UTC+8", online:"12:00–15:00", slot:"B", power:"2.66M", don:"19.3k", kills:"62.4k", av:"KA", c:"#5a3fd0" },
-    { ign:"Myra", rank:3, status:"active", seen:"1d", seenD:1, tz:"UTC+0", online:"20:00–22:00", slot:"A", power:"2.10M", don:"15.0k", kills:"31.7k", av:"MY", c:"#3a3a56" },
-    { ign:"Tsuki", rank:3, status:"active", seen:"6h", seenD:0.25, tz:"UTC+9", online:"13:00–16:00", slot:"B", power:"2.02M", don:"12.7k", kills:"28.9k", av:"TK", c:"#3a3a56" },
-    { ign:"Lorel", rank:3, status:"loa", seen:"9d", seenD:9, tz:"UTC-8", online:"02:00–05:00", slot:"B", power:"1.88M", don:"3.2k", kills:"9.1k", av:"LO", c:"#3a3a56" },
-    { ign:"Vex", rank:2, status:"active", seen:"3h", seenD:0.12, tz:"UTC+2", online:"18:00–21:00", slot:"A", power:"1.54M", don:"9.8k", kills:"40.0k", av:"VX", c:"#2f2f47" },
-    { ign:"Renn", rank:2, status:"active", seen:"1d", seenD:1, tz:"UTC+5:30", online:"15:00–18:00", slot:"A", power:"1.47M", don:"8.4k", kills:"22.3k", av:"RE", c:"#2f2f47" },
-    { ign:"Pell", rank:2, status:"active", seen:"4h", seenD:0.17, tz:"UTC-3", online:"21:00–24:00", slot:"B", power:"1.39M", don:"7.9k", kills:"18.6k", av:"PL", c:"#2f2f47" },
-    { ign:"Dax", rank:1, status:"active", seen:"2d", seenD:2, tz:"UTC+10", online:"11:00–14:00", slot:"A", power:"1.02M", don:"5.1k", kills:"33.5k", av:"DR", c:"#2a2a40" },
-    { ign:"Kesh", rank:1, status:"inactive", seen:"16d", seenD:16, tz:"UTC+3", online:"—", slot:"—", power:"0.88M", don:"0", kills:"1.2k", av:"KE", c:"#2a2a40" },
-    { ign:"Orin", rank:1, status:"inactive", seen:"21d", seenD:21, tz:"UTC-6", online:"—", slot:"—", power:"0.81M", don:"0", kills:"0.4k", av:"OR", c:"#2a2a40" },
+    { ign:"Kitsune", rank:5, gm:true, status:"active", seen:"13 min", seenD:0.01, lvl:31, tz:"UTC-5", online:"18:00-24:00", slot:"A", power:"538.7M", don:"1.50M", kills:"157.4B", av:"KI", c:"linear-gradient(145deg,#E8A24C,#B5701C)" },
+    { ign:"aeiti", rank:4, status:"active", seen:"Online", seenD:0, lvl:31, tz:"UTC-5", online:"19:00-02:00", slot:"A", power:"531.4M", don:"1.42M", kills:"421.3B", av:"AE", c:"#5a3fd0" },
+    { ign:"Bamm-Bamm", rank:4, status:"active", seen:"2h", seenD:0.1, lvl:31, tz:"UTC+1", online:"19:00-23:00", slot:"A", power:"622.6M", don:"1.59M", kills:"\u2014", av:"BB", c:"#5a3fd0" },
+    { ign:"GRIM", rank:4, status:"active", seen:"4 min", seenD:0.01, lvl:31, tz:"UTC+8", online:"12:00-15:00", slot:"B", power:"460.3M", don:"1.21M", kills:"68.6B", av:"GR", c:"#5a3fd0" },
+    { ign:"Janey", rank:4, status:"active", seen:"2h", seenD:0.1, lvl:30, tz:"UTC+2", online:"18:00-22:00", slot:"B", power:"498.4M", don:"1.18M", kills:"101B", av:"JA", c:"#5a3fd0" },
+    { ign:"Lprdgddss", rank:4, status:"active", seen:"3h", seenD:0.13, lvl:31, tz:"UTC+0", online:"20:00-23:00", slot:"A", power:"439.1M", don:"1.54M", kills:"224.4B", av:"LP", c:"#5a3fd0" },
+    { ign:"SirUniballer", rank:4, status:"active", seen:"3h", seenD:0.13, lvl:31, tz:"UTC-3", online:"21:00-24:00", slot:"B", power:"379.7M", don:"0.98M", kills:"\u2014", av:"SU", c:"#5a3fd0" },
+    { ign:"mvgda", rank:3, status:"active", seen:"5h", seenD:0.2, lvl:31, tz:"UTC+1", online:"17:00-21:00", slot:"A", power:"497.2M", don:"1.60M", kills:"84.9B", av:"MV", c:"#3a3a56" },
+    { ign:"ShenH", rank:3, status:"active", seen:"26 min", seenD:0.02, lvl:31, tz:"UTC+9", online:"13:00-16:00", slot:"B", power:"470.1M", don:"1.10M", kills:"123.7B", av:"SH", c:"#3a3a56" },
+    { ign:"valkyrie13", rank:3, status:"active", seen:"51 min", seenD:0.04, lvl:31, tz:"UTC+2", online:"18:00-21:00", slot:"A", power:"389.2M", don:"1.52M", kills:"\u2014", av:"VK", c:"#3a3a56" },
+    { ign:"Bluzuk", rank:3, status:"active", seen:"2h", seenD:0.1, lvl:31, tz:"UTC-6", online:"22:00-02:00", slot:"B", power:"470.0M", don:"1.20M", kills:"55.3B", av:"BL", c:"#3a3a56" },
+    { ign:"Empireof2moro", rank:3, status:"idle", seen:"1d", seenD:1, lvl:28, tz:"UTC+3", online:"15:00-18:00", slot:"\u2014", power:"220.9M", don:"0.33M", kills:"3.7B", av:"EM", c:"#3a3a56" },
+    { ign:"frieren", rank:3, status:"idle", seen:"over 3d", seenD:3, lvl:30, tz:"UTC+5:30", online:"\u2014", slot:"\u2014", power:"323.7M", don:"0.21M", kills:"\u2014", av:"FR", c:"#3a3a56" },
+    { ign:"RavenBlackbane", rank:2, status:"idle", seen:"over 7d", seenD:7, lvl:28, tz:"UTC-8", online:"\u2014", slot:"\u2014", power:"361.9M", don:"0.14M", kills:"\u2014", av:"RB", c:"#2f2f47" },
+    { ign:"Dlbj18", rank:2, status:"idle", seen:"over 7d", seenD:7, lvl:28, tz:"UTC+3", online:"\u2014", slot:"\u2014", power:"124.3M", don:"0.08M", kills:"\u2014", av:"DL", c:"#2f2f47" },
+    { ign:"The_Void_Bear", rank:1, status:"inactive", seen:"over 30d", seenD:30, lvl:30, tz:"\u2014", online:"\u2014", slot:"\u2014", power:"280.3M", don:"0", kills:"\u2014", av:"VB", c:"#2a2a40" },
+    { ign:"DUCKHUNTING", rank:1, status:"inactive", seen:"over 30d", seenD:30, lvl:30, tz:"\u2014", online:"\u2014", slot:"\u2014", power:"293.3M", don:"0", kills:"\u2014", av:"DH", c:"#2a2a40" },
   ];
-  const statusPill = { active:'<span class="pill good">ACTIVE</span>', loa:'<span class="pill warn">LOA</span>', inactive:'<span class="pill bad">INACTIVE</span>' };
+
+  const statusPill = { active:'<span class="pill good">ACTIVE</span>', idle:'<span class="pill warn">IDLE</span>', inactive:'<span class="pill bad">INACTIVE</span>' };
   const slotPill = s => s==="—" ? '<span class="muted">—</span>' : `<span class="pill ${s==='A'?'violet':'desert'}">${s}</span>`;
   const crown = '<svg viewBox="0 0 24 24" fill="currentColor"><path d="M3 7l4 4 5-6 5 6 4-4-2 12H5L3 7Z"/></svg>';
-  const seenTag = m => { const d=m.seenD; const c = d>14?'var(--bad)':d>7?'var(--warn)':d<=2?'var(--good)':'var(--text-2)'; return `<span class="mono" style="color:${c}">${m.seen}</span>`; };
+  // Game reports an online-status BUCKET, not a timestamp - colour by bucket.
+  const seenTag = m => { const d=m.seenD; const c = d>=30?'var(--bad)':d>=3?'var(--warn)':'var(--text-2)';
+    return `<span class="mono" style="color:${m.seen==='Online'?'var(--good)':c}">${m.seen}</span>`; };
 
   function renderMembers(filter="all", q="") {
     const tb = document.getElementById("memberRows");
@@ -1136,7 +1204,7 @@
       if (q && !m.ign.toLowerCase().includes(q)) return false;
       if (filter==="officers") return m.rank>=4;
       if (filter==="active") return m.status==="active";
-      if (filter==="loa") return m.status==="loa";
+      if (filter==="idle") return m.status==="idle";
       if (filter==="inactive") return m.status==="inactive";
       return true;
     });
@@ -1147,6 +1215,7 @@
         <td><span class="rank r${m.rank}">${m.rank===5?crown:''}R${m.rank}</span></td>
         <td>${statusPill[m.status]}</td>
         <td>${seenTag(m)}</td>
+        <td class="num muted">${m.lvl}</td>
         <td class="mono muted">${m.tz}</td>
         <td class="mono muted">${m.online}</td>
         <td>${slotPill(m.slot)}</td>
@@ -1154,7 +1223,7 @@
         <td class="num" style="color:var(--desert)">${m.don}</td>
         <td class="num">${m.kills}</td>
       </tr>`).join("");
-    if(!rows.length) tb.innerHTML = '<tr><td colspan="10" style="text-align:center;padding:32px;color:var(--text-3)">No members match.</td></tr>';
+    if(!rows.length) tb.innerHTML = '<tr><td colspan="11" style="text-align:center;padding:32px;color:var(--text-3)">No members match.</td></tr>';
   }
 
   // ----- navigation -----
