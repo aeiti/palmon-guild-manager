@@ -53,6 +53,21 @@
   --event-clash: #f5c94b; /* gold */
   --event-pallantis: #818cf8; /* indigo */
   --event-arctic: #67e8f9; /* ice */
+
+  /* Buff-category palette — one hue per buff type so a stack reads at a glance
+     instead of a wall of amber. Same sanctioned-exception status as the rank
+     and event ramps (docs/components.md §1.1). Loosely themed: metals warm,
+     nature green, the work buffs cool. */
+  --buff-gold: #f5c94b; /* gold — yellow */
+  --buff-steel: #94a3b8; /* steel — slate */
+  --buff-lumber: #84cc16; /* lumber — lime */
+  --buff-harvesting: #2dd4bf; /* harvesting — teal */
+  --buff-construction: #e0925e; /* construction — copper */
+  --buff-research: #818cf8; /* research — indigo */
+
+  /* MVP accent — a brighter, purer gold than rank-5 amber, for the one badge
+     that should feel like a trophy. */
+  --gold: #f5c94b;
 }
 
 @theme inline {
@@ -82,6 +97,13 @@
   --color-event-clash: var(--event-clash);
   --color-event-pallantis: var(--event-pallantis);
   --color-event-arctic: var(--event-arctic);
+  --color-buff-gold: var(--buff-gold);
+  --color-buff-steel: var(--buff-steel);
+  --color-buff-lumber: var(--buff-lumber);
+  --color-buff-harvesting: var(--buff-harvesting);
+  --color-buff-construction: var(--buff-construction);
+  --color-buff-research: var(--buff-research);
+  --color-gold: var(--gold);
 
   /* Fonts — mono for wordmark/labels/data, system sans for body/headings */
   --font-sans: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto,
@@ -127,6 +149,36 @@
      safety net for any raw data rendered in mono. */
   .font-mono {
     font-variant-numeric: tabular-nums;
+  }
+
+  /* MVP badge: a slow gold shimmer on the whole pill plus a gentle twinkle on
+     the star. Subtle by design — one trophy, not a disco. Disabled under
+     prefers-reduced-motion by the block below. */
+  @keyframes mvp-shimmer {
+    0%,
+    100% {
+      box-shadow: 0 0 0 0 color-mix(in oklab, var(--gold) 0%, transparent);
+    }
+    50% {
+      box-shadow: 0 0 8px 0 color-mix(in oklab, var(--gold) 45%, transparent);
+    }
+  }
+  @keyframes mvp-twinkle {
+    0%,
+    100% {
+      opacity: 0.75;
+      transform: scale(1) rotate(0deg);
+    }
+    50% {
+      opacity: 1;
+      transform: scale(1.18) rotate(12deg);
+    }
+  }
+  .mvp-shimmer {
+    animation: mvp-shimmer 2.4s ease-in-out infinite;
+  }
+  .mvp-twinkle {
+    animation: mvp-twinkle 2.4s ease-in-out infinite;
   }
 
   @media (prefers-reduced-motion: reduce) {
