@@ -29,8 +29,17 @@ import { Metric } from "@/components/domain/data/metric";
 import { StatTile } from "@/components/domain/data/stat-tile";
 import { DeltaIndicator } from "@/components/domain/data/delta-indicator";
 import { DataTable, type Column } from "@/components/domain/data/data-table";
+import { Coords } from "@/components/domain/stronghold/coords";
+import { ExpRate } from "@/components/domain/stronghold/exp-rate";
+import { BuffChip } from "@/components/domain/stronghold/buff-chip";
+import { SentryTrack } from "@/components/domain/stronghold/sentry-track";
+import { RoleSlot } from "@/components/domain/stronghold/role-slot";
+import { OccupationWindow } from "@/components/domain/stronghold/occupation-window";
+import { BuffStack } from "@/components/domain/stronghold/buff-stack";
+import { StrongholdCard } from "@/components/domain/stronghold/stronghold-card";
 import type { Member } from "@/lib/game/types";
 import { MOCK_MEMBERS } from "@/lib/mock/members";
+import { MOCK_STRONGHOLDS } from "@/lib/mock/strongholds";
 
 export interface RegistryEntry {
   id: string;
@@ -45,6 +54,7 @@ export const CATEGORY_ORDER = [
   "Layout & State",
   "Member",
   "Data",
+  "Stronghold",
 ];
 
 /** Small helpers to keep example blocks tidy. */
@@ -454,6 +464,115 @@ export const REGISTRY: RegistryEntry[] = [
     category: "Data",
     description: "Sortable table — click a header. Sticky header, scrolls x.",
     render: () => <DataTableDemo />,
+  },
+
+  // ---- Stronghold ----
+  {
+    id: "coords",
+    name: "Coords",
+    category: "Stronghold",
+    description: "Map coordinates, mono.",
+    render: () => <Coords x={485} y={602} />,
+  },
+  {
+    id: "exp-rate",
+    name: "ExpRate",
+    category: "Stronghold",
+    description: "Desert EXP/h in reserved amber.",
+    render: () => (
+      <Row>
+        <ExpRate perHour={1500} />
+        <ExpRate perHour={9600} />
+      </Row>
+    ),
+  },
+  {
+    id: "buff-chip",
+    name: "BuffChip",
+    category: "Stronghold",
+    description: "One buff; amber, but a 0 value reads red (a gap is info).",
+    render: () => (
+      <Row>
+        <BuffChip type="gold" value={45} />
+        <BuffChip type="harvesting" value={70} />
+        <BuffChip type="lumber" value={0} />
+      </Row>
+    ),
+  },
+  {
+    id: "sentry-track",
+    name: "SentryTrack",
+    category: "Stronghold",
+    description: "0–5 fill; 0 red, 1–2 amber, 3+ green.",
+    render: () => (
+      <div className="space-y-2">
+        <SentryTrack filled={0} />
+        <SentryTrack filled={2} />
+        <SentryTrack filled={4} />
+      </div>
+    ),
+  },
+  {
+    id: "role-slot",
+    name: "RoleSlot",
+    category: "Stronghold",
+    description: "Filled / empty (+Assign) / locked (governor unlocks at L4).",
+    render: () => (
+      <div className="w-64 space-y-2">
+        <RoleSlot role="guardian" member={MOCK_MEMBERS[0]} />
+        <RoleSlot role="governor" canEdit />
+        <RoleSlot role="governor" />
+        <RoleSlot role="governor" locked />
+      </div>
+    ),
+  },
+  {
+    id: "occupation-window",
+    name: "OccupationWindow",
+    category: "Stronghold",
+    description: "Open/closed with a live countdown to the next transition.",
+    render: () => {
+      const t = Date.now();
+      const iso = (h: number) => new Date(t + h * 3_600_000).toISOString();
+      return (
+        <div className="space-y-2">
+          <OccupationWindow opensAt={iso(-1)} closesAt={iso(2)} />
+          <OccupationWindow opensAt={iso(3)} closesAt={iso(9)} />
+          <OccupationWindow opensAt={iso(-5)} closesAt={iso(-1)} />
+        </div>
+      );
+    },
+  },
+  {
+    id: "buff-stack",
+    name: "BuffStack",
+    category: "Stronghold",
+    description: "Computed additive totals across sanctums; gaps read red.",
+    render: () => <BuffStack strongholds={MOCK_STRONGHOLDS} />,
+  },
+  {
+    id: "stronghold-card",
+    name: "StrongholdCard",
+    category: "Stronghold",
+    description: "Sanctum (full) and desert ruin (minimal) variants.",
+    render: () => (
+      <div className="grid max-w-3xl gap-3 sm:grid-cols-2">
+        <StrongholdCard
+          stronghold={MOCK_STRONGHOLDS[0]}
+          members={MOCK_MEMBERS}
+          canEdit
+        />
+        <StrongholdCard
+          stronghold={MOCK_STRONGHOLDS[3]}
+          members={MOCK_MEMBERS}
+          canEdit
+        />
+        <StrongholdCard
+          stronghold={MOCK_STRONGHOLDS[6]}
+          members={MOCK_MEMBERS}
+        />
+      </div>
+    ),
   },
 ];
 

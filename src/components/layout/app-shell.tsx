@@ -13,6 +13,7 @@ import {
   type LucideIcon,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { useNow } from "@/lib/use-now";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 
 type NavItem = { href: string; label: string; icon: LucideIcon };
@@ -28,21 +29,6 @@ const NAV: NavItem[] = [
 
 function isActive(pathname: string, href: string) {
   return href === "/" ? pathname === "/" : pathname.startsWith(href);
-}
-
-/** Ticks once a second. Server snapshot is null so there is no hydration
- * mismatch; the second-bucket snapshot keeps React from re-rendering in a loop. */
-function useNow(): Date | null {
-  const subscribe = React.useCallback((onChange: () => void) => {
-    const id = setInterval(onChange, 1000);
-    return () => clearInterval(id);
-  }, []);
-  const seconds = React.useSyncExternalStore(
-    subscribe,
-    () => Math.floor(Date.now() / 1000),
-    () => null,
-  );
-  return seconds === null ? null : new Date(seconds * 1000);
 }
 
 /** Live server (UTC−2) + local clock. A stand-in until the time set's
