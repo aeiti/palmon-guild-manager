@@ -6,7 +6,7 @@ import { activityFromBucket } from "@/lib/game/last-seen";
 import { getMembers } from "@/lib/data/queries";
 import { MembersTable } from "./members-table";
 
-export const metadata = { title: "Members — VOID" };
+export const metadata = { title: "Members" };
 export const dynamic = "force-dynamic";
 
 export default async function MembersPage() {

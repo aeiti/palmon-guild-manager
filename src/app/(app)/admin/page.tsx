@@ -6,7 +6,7 @@ import { MOCK_ROLE_MAP } from "@/lib/mock/users";
 import { getAppUsers } from "@/lib/data/queries";
 import { AdminUsersTable } from "./admin-users-table";
 
-export const metadata = { title: "Admin — VOID" };
+export const metadata = { title: "Admin" };
 export const dynamic = "force-dynamic";
 
 export default async function AdminPage() {

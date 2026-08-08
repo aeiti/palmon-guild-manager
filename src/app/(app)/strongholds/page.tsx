@@ -10,7 +10,7 @@ import {
 } from "@/lib/game/stronghold";
 import { getMembers, getStrongholds } from "@/lib/data/queries";
 
-export const metadata = { title: "Strongholds — VOID" };
+export const metadata = { title: "Strongholds" };
 export const dynamic = "force-dynamic";
 
 export default async function StrongholdsPage() {

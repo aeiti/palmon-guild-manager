@@ -22,7 +22,7 @@ import { activityFromBucket } from "@/lib/game/last-seen";
 import type { GuildRank } from "@/lib/game/types";
 import { getEvents, getMembers, getStrongholds } from "@/lib/data/queries";
 
-export const metadata = { title: "Dashboard — VOID" };
+export const metadata = { title: "Dashboard" };
 export const dynamic = "force-dynamic";
 
 const RANK_COLOR: Record<GuildRank, string> = {

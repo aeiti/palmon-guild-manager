@@ -18,7 +18,7 @@ import {
   getWeeklySnapshots,
 } from "@/lib/data/queries";
 
-export const metadata = { title: "Trends — VOID" };
+export const metadata = { title: "Trends" };
 export const dynamic = "force-dynamic";
 
 // Season sandstorm record — not yet modelled as a table; a single aggregate.

@@ -1,11 +1,12 @@
-// Route gating for VOID guild manager — DORMANT.
+// Route gating for VOID guild manager — ACTIVE.
 //
-// Rename this file to `middleware.ts` (repo root) once auth is configured
-// (AUTH_SECRET + Discord + Neon in .env). Until then it stays inactive so the
-// mock-data app is fully browsable without a login.
+// Redirects unauthenticated requests to /signin for every route except the auth
+// API, Next internals, robots.txt, and the sign-in page itself. Requires auth to
+// be configured (AUTH_SECRET + Discord + Neon in .env).
 //
-// It redirects unauthenticated requests to /signin for every route except the
-// auth API, Next internals, and the sign-in page itself.
+// Consequence for link sharing: because every logged-out request (Discord's
+// unfurl crawler included) lands on /signin, that page's Open Graph tags are the
+// unfurl everyone sees. Its OG image lives under /signin/* so it stays ungated.
 
 import { auth } from "@/auth";
 import { NextResponse } from "next/server";
@@ -19,5 +20,10 @@ export default auth((req) => {
 });
 
 export const config = {
-  matcher: ["/((?!api/auth|_next/static|_next/image|favicon.ico|signin).*)"],
+  // `robots.txt` is excluded so crawlers can read the Disallow rules instead of
+  // being redirected to /signin. The /signin OG image (/signin/opengraph-image)
+  // is already covered by the `signin` exclusion.
+  matcher: [
+    "/((?!api/auth|_next/static|_next/image|favicon.ico|robots.txt|signin).*)",
+  ],
 };
