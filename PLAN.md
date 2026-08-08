@@ -3,8 +3,12 @@
 A guild management website for the **Palmon: Survival** guild **VOID**. Tracks
 members, events, and strongholds, with Discord-based login and trend history.
 
-> Status: **planning complete, pre-build.** This document is the living
-> reference spec. Build begins on explicit go-ahead.
+> Status: **planning + UI mockup review, pre-build.** This document is the
+> living reference spec. Build begins on explicit go-ahead.
+>
+> UI mockup: [`mockups/void-mockup.html`](mockups/void-mockup.html) — open in a
+> browser to click through Dashboard / Members / Strongholds / Events / Trends /
+> Admin (sample data, design direction locked to a dark "survival HUD").
 
 ---
 
@@ -100,10 +104,12 @@ Three app roles, separate from in-game rank:
 - **Events** — placeholder-but-usable: type, schedule/recurrence, notes,
   flexible `typeFields` bag, attendance, and **VOID placement/result**. Expands
   from screenshots. Reminder hooks stubbed (see §7).
-- **Trends** — attendance %, event placements, rank/power changes over time
-  (charts).
+- **Trends** — participation rate, donations & kills (rankings + trend),
+  sandstorm points/W-L/%, roster size, average power, plus a per-event
+  **participation matrix**. (Sanctum control/uptime dropped — not important.)
 - **Admin** — user list + role assignment/pinning; role-map config.
-- **Settings / Data** — reference timezone, JSON export backup.
+- **Settings / Data** — game server timezone (**UTC−2**) shown alongside each
+  viewer's local time; JSON export backup.
 
 ---
 
@@ -114,9 +120,12 @@ Three app roles, separate from in-game rank:
 users        { id, discordId, name, image, role (admin|officer|member), rolePinned }
 Member       { id, discordId?, ign, guildRank (R1..R5), isGuildmaster,
                timezone, onlineWindows[], sandstormPref (A|B|null),
-               power, level, status (active|LOA|inactive), notes }
+               power, level, status (active|LOA|inactive),
+               lastSeenAt,           ← from in-game "time since last login"
+               donations, kills,     ← current cumulative / weekly stats
+               notes }
 Event        { id, type, title, startsAt, recurrence, notes, typeFields{},
-               placement/result }
+               placement/result }    ← Sandstorm typeFields: points, win/loss, slot
 Participation{ id, eventId, memberId, signedUp, attended, slot, result }
 Stronghold   { id, kind (sanctum|ruin), name, status (held|contested|lost),
                buffs[{ type: amity|desertXp|..., value }],
@@ -125,8 +134,10 @@ Stronghold   { id, kind (sanctum|ruin), name, status (held|contested|lost),
 
 ### History / trends (append-only, timestamped)
 ```
-EventResultHistory      — VOID placements over time
-AttendanceHistory       — derived from Participation; per-member attendance %
+EventResultHistory      — VOID placements / sandstorm points & W-L over time
+ParticipationHistory    — per-event attendance log → participation rate & matrix
+DonationHistory         — per-member donations per period → rankings & trend
+KillHistory             — per-member kills per period → rankings & trend
 RankChangeLog           — member R1..R5 (and power) changes over time
 StrongholdStatusHistory — held/contested/lost transitions
 AuditLog                — who changed what
@@ -139,6 +150,36 @@ AuditLog                — who changed what
   with Discord name/avatar, blank game fields).
 - Officers can **pre-create** roster rows (with a `discordId`) for recruits;
   the row links automatically when that person first logs in.
+
+---
+
+## 5a. Metrics & attendance model
+
+### Two separate "attendance" concepts (do not conflate)
+1. **Activity — "Last Seen."** Derived from the game's *time since last login*.
+   An officer records it periodically; store `lastSeenAt = capture time −
+   reported delta`. Auto-derives buckets: **Active ≤7d / Idle 8–14d /
+   Inactive >14d** for the pruning watchlist. Tells you they opened the game —
+   *not* that they showed up.
+2. **Event participation.** Who actually took part in an event. Not exported by
+   the game, so **logged per event** (officer check-off / results screenshot).
+   Yields the true **participation rate** = events attended ÷ events held (per
+   member and guild-wide) and the **participation matrix** (members × events).
+
+### Tracked metrics
+- Participation rate (30-day), participation matrix, attendance streaks.
+- Donations — per-member rankings + guild weekly trend.
+- Kills (kill points) — per-member rankings + guild weekly trend.
+- Sandstorm — points scored, win/loss, win %.
+- Roster size, average power, biggest power gainers/decliners.
+- GVG record / win rate; per-event result history (Temple floor, Arctic
+  placement, Guild Hunt damage).
+
+### Candidate KPIs (proposed, not yet confirmed)
+- **Contribution Score** — single weighted composite (participation +
+  donations + kills + event results) for promotion/pruning decisions.
+- Attendance streaks; timezone coverage (24h defense readiness);
+  new-vs-churned members per week; rank-movement log.
 
 ---
 
@@ -181,7 +222,12 @@ History tables land alongside their module so trends accrue from day one.
 
 ## 9. Open items / TBD
 
-- Per-event-type field details (from in-game screenshots).
-- Exact sandstorm "slot" mechanics — preference is tracked; per-run assignment
-  and coverage view TBD from screenshots.
+- **In-game screenshots pending** — drop into `docs/screenshots/` (or attach in
+  chat). Needed to finalize per-event-type fields, sandstorm mechanics, and
+  sanctum buff values.
+- Per-event-type field details (from screenshots).
+- Exact sandstorm mechanics — preference + points/W-L tracked; per-run slot
+  assignment and coverage view TBD from screenshots.
 - Which buffs sanctums provide beyond guild amity + desert XP, and their values.
+- Confirm which candidate KPIs from §5a to build (recommendation: Contribution
+  Score + attendance streaks + timezone coverage).

@@ -1,0 +1,1215 @@
+<style>
+  :root {
+    /* ground + surfaces */
+    --void:      #0B0B12;
+    --void-2:    #0F0F18;
+    --surface:   #14141F;
+    --surface-2: #1C1C2B;
+    --surface-3: #23233440;
+    --border:    #2A2A3D;
+    --border-2:  #35354D;
+
+    /* text */
+    --text:      #ECEBF5;
+    --text-2:    #B4B2CC;
+    --text-3:    #86849E;
+
+    /* accents */
+    --violet:    #A78BFA;
+    --violet-2:  #7C5CFC;
+    --violet-dim:#8B7CF61A;
+    --desert:    #E8A24C;
+    --desert-dim:#E8A24C1A;
+
+    /* semantic */
+    --good:      #4ADE80;
+    --good-dim:  #4ADE801A;
+    --warn:      #FBBF24;
+    --warn-dim:  #FBBF241A;
+    --bad:       #F87171;
+    --bad-dim:   #F871711A;
+
+    --font-sans: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    --font-mono: ui-monospace, "SF Mono", "Cascadia Code", "JetBrains Mono", Menlo, Consolas, monospace;
+
+    --fs-xs: 0.7rem; --fs-sm: 0.8125rem; --fs-base: 0.9375rem;
+    --fs-lg: 1.0625rem; --fs-xl: 1.375rem; --fs-2xl: 1.875rem; --fs-3xl: 2.5rem;
+
+    --r-sm: 8px; --r-md: 12px; --r-lg: 16px;
+    --rail: 232px;
+  }
+
+  * { box-sizing: border-box; }
+  html { -webkit-text-size-adjust: 100%; }
+  body {
+    margin: 0;
+    font-family: var(--font-sans);
+    font-size: var(--fs-base);
+    line-height: 1.5;
+    color: var(--text);
+    background:
+      radial-gradient(1200px 700px at 78% -8%, #1B1638 0%, transparent 55%),
+      radial-gradient(900px 600px at 8% 108%, #221A12 0%, transparent 55%),
+      var(--void);
+    background-attachment: fixed;
+    min-height: 100vh;
+    -webkit-font-smoothing: antialiased;
+  }
+  a { color: inherit; text-decoration: none; }
+  button { font-family: inherit; cursor: pointer; }
+  :focus-visible { outline: 2px solid var(--violet); outline-offset: 2px; border-radius: 4px; }
+
+  .mono { font-family: var(--font-mono); }
+  .eyebrow {
+    font-family: var(--font-mono); font-size: var(--fs-xs);
+    letter-spacing: 0.22em; text-transform: uppercase; color: var(--text-3);
+  }
+
+  /* ---------- Shell ---------- */
+  .app { display: flex; min-height: 100vh; }
+
+  .rail {
+    width: var(--rail); flex-shrink: 0;
+    position: sticky; top: 0; height: 100vh;
+    background: linear-gradient(180deg, #13131E 0%, #0E0E17 100%);
+    border-right: 1px solid var(--border);
+    display: flex; flex-direction: column; padding: 22px 14px;
+    z-index: 20;
+  }
+  .brand { display: flex; align-items: center; gap: 12px; padding: 6px 8px 22px; }
+  .brand-mark {
+    width: 38px; height: 38px; border-radius: 10px; flex-shrink: 0;
+    display: grid; place-items: center;
+    background: linear-gradient(145deg, var(--violet-2), #4A2FB0);
+    box-shadow: 0 0 0 1px #ffffff14, 0 8px 20px -6px var(--violet-2);
+  }
+  .brand-mark svg { width: 20px; height: 20px; }
+  .brand-name {
+    font-family: var(--font-mono); font-weight: 700; font-size: 1.15rem;
+    letter-spacing: 0.34em; color: var(--text); line-height: 1;
+  }
+  .brand-sub {
+    font-family: var(--font-mono); font-size: 0.6rem; letter-spacing: 0.28em;
+    color: var(--text-3); text-transform: uppercase; margin-top: 5px;
+  }
+
+  .nav { display: flex; flex-direction: column; gap: 3px; margin-top: 6px; }
+  .nav-label {
+    font-family: var(--font-mono); font-size: 0.6rem; letter-spacing: 0.24em;
+    color: var(--text-3); text-transform: uppercase; padding: 14px 10px 6px;
+  }
+  .nav-item {
+    display: flex; align-items: center; gap: 12px;
+    padding: 9px 11px; border-radius: var(--r-sm);
+    color: var(--text-2); font-size: var(--fs-sm); font-weight: 500;
+    background: transparent; border: 1px solid transparent; width: 100%; text-align: left;
+    transition: background .15s, color .15s, border-color .15s;
+  }
+  .nav-item svg { width: 18px; height: 18px; flex-shrink: 0; opacity: .85; }
+  .nav-item:hover { background: #ffffff08; color: var(--text); }
+  .nav-item.active {
+    background: linear-gradient(90deg, var(--violet-dim), transparent);
+    color: var(--text); border-color: #8B7CF633;
+  }
+  .nav-item.active svg { color: var(--violet); opacity: 1; }
+  .nav-item .badge {
+    margin-left: auto; font-family: var(--font-mono); font-size: 0.62rem;
+    background: var(--surface-2); color: var(--text-3);
+    padding: 1px 7px; border-radius: 20px; border: 1px solid var(--border);
+  }
+  .rail-foot { margin-top: auto; padding-top: 16px; }
+  .userchip {
+    display: flex; align-items: center; gap: 10px; padding: 8px 10px;
+    background: var(--surface); border: 1px solid var(--border); border-radius: var(--r-md);
+  }
+  .avatar {
+    width: 32px; height: 32px; border-radius: 9px; flex-shrink: 0;
+    display: grid; place-items: center; font-family: var(--font-mono);
+    font-weight: 700; font-size: 0.8rem; color: #fff;
+  }
+  .userchip .who { min-width: 0; }
+  .userchip .who b { display: block; font-size: var(--fs-sm); font-weight: 600; }
+  .userchip .who span { font-size: 0.66rem; color: var(--text-3); font-family: var(--font-mono); letter-spacing: .04em; }
+
+  /* ---------- Main ---------- */
+  .main { flex: 1; min-width: 0; display: flex; flex-direction: column; }
+  .topbar {
+    display: none; align-items: center; justify-content: space-between;
+    padding: 12px 16px; border-bottom: 1px solid var(--border);
+    position: sticky; top: 0; background: #0E0E17E6; backdrop-filter: blur(8px); z-index: 30;
+  }
+  .content { padding: 30px 34px 60px; max-width: 1240px; width: 100%; margin: 0 auto; }
+
+  .page-head { display: flex; align-items: flex-end; justify-content: space-between; gap: 20px; margin-bottom: 26px; flex-wrap: wrap; }
+  .page-title { font-size: var(--fs-2xl); font-weight: 700; margin: 6px 0 0; letter-spacing: -0.01em; text-wrap: balance; }
+  .page-sub { color: var(--text-3); font-size: var(--fs-sm); margin-top: 4px; }
+  .head-actions { display: flex; gap: 10px; }
+
+  .btn {
+    display: inline-flex; align-items: center; gap: 8px;
+    padding: 9px 15px; border-radius: var(--r-sm); font-size: var(--fs-sm); font-weight: 600;
+    background: var(--surface-2); color: var(--text); border: 1px solid var(--border-2);
+    transition: border-color .15s, background .15s, transform .05s;
+  }
+  .btn:hover { border-color: #4a4a68; background: #22223300; }
+  .btn:active { transform: translateY(1px); }
+  .btn svg { width: 15px; height: 15px; }
+  .btn.primary {
+    background: linear-gradient(145deg, var(--violet-2), #5a3fd0);
+    border-color: transparent; color: #fff;
+    box-shadow: 0 6px 18px -8px var(--violet-2);
+  }
+  .btn.primary:hover { filter: brightness(1.08); }
+
+  /* ---------- Cards / grid ---------- */
+  .card {
+    background: linear-gradient(180deg, var(--surface) 0%, var(--void-2) 140%);
+    border: 1px solid var(--border); border-radius: var(--r-lg);
+  }
+  .grid { display: grid; gap: 16px; }
+  .section-title { font-size: var(--fs-xs); letter-spacing: .2em; text-transform: uppercase; color: var(--text-3); font-family: var(--font-mono); margin: 30px 0 14px; }
+
+  /* stat tiles */
+  .stats { grid-template-columns: repeat(4, 1fr); }
+  .stat { padding: 18px 18px 16px; position: relative; overflow: hidden; }
+  .stat .k { font-family: var(--font-mono); font-size: 0.64rem; letter-spacing: .16em; text-transform: uppercase; color: var(--text-3); }
+  .stat .v { font-family: var(--font-mono); font-size: var(--fs-3xl); font-weight: 700; line-height: 1.05; margin-top: 8px; font-variant-numeric: tabular-nums; }
+  .stat .v small { font-size: 1.1rem; color: var(--text-3); font-weight: 500; }
+  .stat .foot { font-size: var(--fs-xs); color: var(--text-3); margin-top: 8px; display: flex; align-items: center; gap: 6px; }
+  .stat .spark { margin-top: 12px; }
+  .stat.accent-v { box-shadow: inset 0 0 0 1px #8B7CF622; }
+  .stat .glyph { position: absolute; right: 14px; top: 14px; width: 20px; height: 20px; opacity: .3; }
+
+  .delta { font-family: var(--font-mono); font-weight: 600; }
+  .delta.up { color: var(--good); } .delta.down { color: var(--bad); }
+
+  /* rank distribution bar */
+  .distbar { display: flex; height: 12px; border-radius: 20px; overflow: hidden; gap: 2px; margin-top: 12px; background: #00000030; }
+  .distbar span { display: block; }
+  .distlegend { display: flex; flex-wrap: wrap; gap: 10px 16px; margin-top: 14px; }
+  .distlegend div { display: flex; align-items: center; gap: 7px; font-size: var(--fs-xs); color: var(--text-2); font-family: var(--font-mono); }
+  .dot { width: 9px; height: 9px; border-radius: 3px; flex-shrink: 0; }
+
+  .two-col { grid-template-columns: 1.35fr 1fr; align-items: start; }
+  .card-head { display: flex; align-items: center; justify-content: space-between; padding: 16px 18px; border-bottom: 1px solid var(--border); }
+  .card-head h3 { margin: 0; font-size: var(--fs-base); font-weight: 600; }
+  .card-head a { font-size: var(--fs-xs); color: var(--violet); font-family: var(--font-mono); letter-spacing: .04em; }
+  .card-body { padding: 8px 18px 16px; }
+
+  /* event rows (dashboard) */
+  .evrow { display: flex; align-items: center; gap: 14px; padding: 12px 0; border-bottom: 1px solid var(--border); }
+  .evrow:last-child { border-bottom: 0; }
+  .evicon { width: 38px; height: 38px; border-radius: 10px; display: grid; place-items: center; flex-shrink: 0; border: 1px solid var(--border-2); }
+  .evicon svg { width: 18px; height: 18px; }
+  .evrow .meta { min-width: 0; flex: 1; }
+  .evrow .meta b { font-size: var(--fs-sm); font-weight: 600; display: block; }
+  .evrow .meta span { font-size: var(--fs-xs); color: var(--text-3); font-family: var(--font-mono); }
+  .evrow .when { text-align: right; flex-shrink: 0; }
+  .evrow .when b { font-family: var(--font-mono); font-size: var(--fs-sm); color: var(--violet); display: block; }
+  .evrow .when span { font-size: var(--fs-xs); color: var(--text-3); }
+
+  /* warnings */
+  .warn-item { display: flex; gap: 12px; padding: 12px 0; border-bottom: 1px solid var(--border); }
+  .warn-item:last-child { border-bottom: 0; }
+  .warn-stripe { width: 3px; border-radius: 3px; flex-shrink: 0; }
+  .warn-item .wt { font-size: var(--fs-sm); font-weight: 600; }
+  .warn-item .wd { font-size: var(--fs-xs); color: var(--text-3); margin-top: 2px; }
+
+  /* chips / pills */
+  .pill {
+    display: inline-flex; align-items: center; gap: 5px;
+    font-family: var(--font-mono); font-size: 0.66rem; font-weight: 600;
+    letter-spacing: .04em; padding: 3px 9px; border-radius: 20px;
+    border: 1px solid transparent; white-space: nowrap;
+  }
+  .pill.good { color: var(--good); background: var(--good-dim); border-color: #4ADE8033; }
+  .pill.warn { color: var(--warn); background: var(--warn-dim); border-color: #FBBF2433; }
+  .pill.bad  { color: var(--bad);  background: var(--bad-dim);  border-color: #F8717133; }
+  .pill.violet { color: var(--violet); background: var(--violet-dim); border-color: #8B7CF633; }
+  .pill.desert { color: var(--desert); background: var(--desert-dim); border-color: #E8A24C33; }
+  .pill.ghost { color: var(--text-3); background: #ffffff08; border-color: var(--border); }
+
+  .rank {
+    display: inline-flex; align-items: center; gap: 5px; justify-content: center;
+    font-family: var(--font-mono); font-weight: 700; font-size: 0.68rem;
+    min-width: 34px; padding: 3px 8px; border-radius: 6px; letter-spacing: .02em;
+  }
+  .rank.r5 { color: #FBE7B0; background: linear-gradient(145deg,#4A3A12,#2C2208); border: 1px solid #E8A24C55; }
+  .rank.r4 { color: #DDD1FF; background: #2A2350; border: 1px solid #8B7CF655; }
+  .rank.r3 { color: var(--text); background: #23233a; border: 1px solid var(--border-2); }
+  .rank.r2 { color: var(--text-2); background: #1e1e2e; border: 1px solid var(--border); }
+  .rank.r1 { color: var(--text-3); background: #191926; border: 1px solid var(--border); }
+  .rank svg { width: 11px; height: 11px; }
+
+  /* ---------- Table ---------- */
+  .toolbar { display: flex; align-items: center; gap: 10px; margin-bottom: 16px; flex-wrap: wrap; }
+  .search { position: relative; flex: 1; min-width: 220px; max-width: 360px; }
+  .search svg { position: absolute; left: 12px; top: 50%; transform: translateY(-50%); width: 15px; height: 15px; color: var(--text-3); }
+  .search input {
+    width: 100%; padding: 9px 12px 9px 34px; background: var(--surface); color: var(--text);
+    border: 1px solid var(--border); border-radius: var(--r-sm); font-size: var(--fs-sm); font-family: var(--font-sans);
+  }
+  .search input::placeholder { color: var(--text-3); }
+  .segmented { display: inline-flex; background: var(--surface); border: 1px solid var(--border); border-radius: var(--r-sm); padding: 3px; gap: 2px; }
+  .segmented button {
+    border: 0; background: transparent; color: var(--text-3); font-size: var(--fs-xs); font-weight: 600;
+    padding: 6px 11px; border-radius: 6px; font-family: var(--font-mono); letter-spacing: .03em;
+  }
+  .segmented button.on { background: var(--surface-2); color: var(--text); box-shadow: inset 0 0 0 1px var(--border-2); }
+
+  .table-wrap { overflow-x: auto; border: 1px solid var(--border); border-radius: var(--r-lg); background: var(--surface); }
+  table { width: 100%; border-collapse: collapse; min-width: 780px; }
+  #members table { min-width: 1040px; }
+  thead th {
+    text-align: left; font-family: var(--font-mono); font-size: 0.62rem; letter-spacing: .14em;
+    text-transform: uppercase; color: var(--text-3); font-weight: 600;
+    padding: 13px 16px; border-bottom: 1px solid var(--border); background: #ffffff04; white-space: nowrap;
+  }
+  tbody td { padding: 12px 16px; border-bottom: 1px solid var(--border); font-size: var(--fs-sm); vertical-align: middle; }
+  tbody tr:last-child td { border-bottom: 0; }
+  tbody tr { transition: background .12s; }
+  tbody tr:hover { background: #ffffff05; }
+  .cell-ign { display: flex; align-items: center; gap: 11px; }
+  .cell-ign b { font-weight: 600; }
+  .cell-ign .gm { font-size: 0.6rem; color: var(--desert); font-family: var(--font-mono); letter-spacing: .1em; }
+  .num { font-family: var(--font-mono); font-variant-numeric: tabular-nums; }
+  .muted { color: var(--text-3); }
+
+  /* ---------- Strongholds ---------- */
+  .sh-grid { grid-template-columns: repeat(2, 1fr); }
+  .sh {
+    position: relative; padding: 0; overflow: hidden;
+  }
+  .sh .stripe { height: 3px; width: 100%; }
+  .sh-inner { padding: 18px; }
+  .sh-top { display: flex; align-items: flex-start; justify-content: space-between; gap: 12px; }
+  .sh-name { font-size: var(--fs-lg); font-weight: 700; margin: 0; }
+  .sh-kind { font-family: var(--font-mono); font-size: 0.62rem; letter-spacing: .16em; text-transform: uppercase; color: var(--text-3); margin-top: 3px; }
+  .buffs { display: flex; flex-wrap: wrap; gap: 8px; margin: 16px 0; }
+  .buff { display: flex; align-items: center; gap: 8px; padding: 8px 12px; background: var(--desert-dim); border: 1px solid #E8A24C2e; border-radius: var(--r-sm); }
+  .buff .bval { font-family: var(--font-mono); font-weight: 700; color: var(--desert); font-size: var(--fs-sm); }
+  .buff .blab { font-size: var(--fs-xs); color: var(--text-2); }
+  .roles { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 8px; margin-top: 14px; }
+  .role { background: #00000026; border: 1px solid var(--border); border-radius: var(--r-sm); padding: 10px; }
+  .role .rl { font-family: var(--font-mono); font-size: 0.58rem; letter-spacing: .12em; text-transform: uppercase; color: var(--text-3); display: flex; align-items: center; gap: 5px; }
+  .role .rl svg { width: 11px; height: 11px; }
+  .role .rn { display: flex; align-items: center; gap: 8px; margin-top: 8px; }
+  .role .rn b { font-size: var(--fs-sm); font-weight: 600; }
+  .role.empty { border-style: dashed; border-color: #F8717155; background: var(--bad-dim); }
+  .role.empty .rn { color: var(--bad); font-size: var(--fs-sm); font-weight: 600; font-family: var(--font-mono); }
+  .sh.ruin .sh-inner { opacity: .96; }
+  .ruin-note { font-size: var(--fs-xs); color: var(--text-3); font-style: italic; margin-top: 14px; }
+
+  /* ---------- Events ---------- */
+  .ev-grid { grid-template-columns: repeat(2, 1fr); }
+  .ev {
+    padding: 0; overflow: hidden; display: flex; flex-direction: column;
+  }
+  .ev-body { padding: 18px; display: flex; flex-direction: column; gap: 14px; flex: 1; }
+  .ev-top { display: flex; align-items: center; gap: 13px; }
+  .ev-top .evicon { width: 44px; height: 44px; }
+  .ev-top h3 { margin: 0; font-size: var(--fs-lg); font-weight: 700; }
+  .ev-top .schedule { font-family: var(--font-mono); font-size: var(--fs-xs); color: var(--text-3); margin-top: 3px; }
+  .ev-meta { display: flex; flex-wrap: wrap; gap: 8px; }
+  .attend { margin-top: 2px; }
+  .attend-row { display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 6px; }
+  .attend-row .al { font-size: var(--fs-xs); color: var(--text-3); font-family: var(--font-mono); letter-spacing: .06em; text-transform: uppercase; }
+  .attend-row .av { font-family: var(--font-mono); font-size: var(--fs-sm); font-weight: 600; }
+  .bar { height: 8px; border-radius: 20px; background: #00000038; overflow: hidden; }
+  .bar span { display: block; height: 100%; border-radius: 20px; background: linear-gradient(90deg, var(--violet-2), var(--violet)); }
+  .ev-foot { border-top: 1px solid var(--border); padding: 12px 18px; display: flex; align-items: center; justify-content: space-between; background: #ffffff04; }
+  .ev-foot .placement { font-family: var(--font-mono); font-size: var(--fs-sm); font-weight: 700; }
+  .ev-foot .plabel { font-size: var(--fs-xs); color: var(--text-3); }
+
+  .demo-banner {
+    display: flex; align-items: center; gap: 10px; flex-wrap: wrap;
+    background: var(--violet-dim); border: 1px solid #8B7CF633; color: var(--text-2);
+    padding: 10px 16px; border-radius: var(--r-md); font-size: var(--fs-xs); margin-bottom: 24px;
+  }
+  .demo-banner b { color: var(--violet); font-family: var(--font-mono); letter-spacing: .06em; }
+
+  /* time bar */
+  .content-top { display: flex; align-items: stretch; justify-content: space-between; gap: 16px; flex-wrap: wrap; margin-bottom: 24px; }
+  .content-top .demo-banner { margin-bottom: 0; flex: 1; min-width: 240px; }
+  .timebar { display: flex; gap: 10px; }
+  .clock { display: flex; flex-direction: column; gap: 2px; align-items: flex-end; justify-content: center; padding: 6px 14px; background: var(--surface); border: 1px solid var(--border); border-radius: var(--r-md); min-width: 112px; }
+  .clock .eyebrow { font-size: .56rem; }
+  .clock b { font-family: var(--font-mono); font-size: 1.15rem; font-variant-numeric: tabular-nums; letter-spacing: .04em; line-height: 1.1; }
+  .loc { color: var(--violet); }
+  .tzs { color: var(--text-3); font-size: .88em; }
+  @media (max-width: 620px) { .timebar { width: 100%; } .clock { flex: 1; } }
+
+  /* trends */
+  .grid.trends { grid-template-columns: repeat(2, 1fr); }
+  .trend-range { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin-bottom: 16px; flex-wrap: wrap; }
+  .chart-note { font-size: var(--fs-xs); color: var(--text-3); margin-top: 10px; font-family: var(--font-mono); letter-spacing: .03em; }
+  .bars { display: flex; align-items: flex-end; gap: 6px; height: 120px; padding-top: 8px; }
+  .bars > div { flex: 1; display: flex; align-items: flex-end; justify-content: center; gap: 3px; height: 100%; }
+  .bars .b { border-radius: 5px 5px 0 0; width: 100%; }
+
+  /* leaderboards */
+  .lb-grid { grid-template-columns: repeat(3, 1fr); }
+  .lb { display: flex; flex-direction: column; }
+  .lb-row { display: flex; align-items: center; gap: 10px; padding: 9px 0; border-bottom: 1px solid var(--border); }
+  .lb-row:last-child { border-bottom: 0; }
+  .lb-rank { font-family: var(--font-mono); font-size: .72rem; color: var(--text-3); width: 18px; text-align: center; flex-shrink: 0; }
+  .lb-row.top .lb-rank { color: var(--desert); font-weight: 700; }
+  .lb-name { font-size: var(--fs-sm); font-weight: 600; flex: 1; min-width: 0; }
+  .lb-val { font-family: var(--font-mono); font-variant-numeric: tabular-nums; font-size: var(--fs-sm); }
+
+  /* participation matrix */
+  .matrix { overflow-x: auto; padding: 4px 0; }
+  .matrix table { min-width: 640px; }
+  .matrix th, .matrix td { text-align: center; }
+  .matrix thead th { font-size: .58rem; }
+  .matrix th:first-child, .matrix td:first-child { text-align: left; white-space: nowrap; }
+  .att-yes { color: var(--good); font-weight: 700; }
+  .att-no { color: #4a3a4a; }
+  .att-rate { font-family: var(--font-mono); font-weight: 700; }
+  @media (max-width: 960px) { .lb-grid { grid-template-columns: 1fr; } }
+
+  .placeholder-note {
+    font-size: var(--fs-xs); color: var(--text-3); font-style: italic;
+    border-left: 2px solid var(--border-2); padding: 3px 0 3px 12px; margin-top: 6px;
+  }
+
+  /* pages */
+  .page { display: none; animation: fade .25s ease; }
+  .page.active { display: block; }
+  @keyframes fade { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: none; } }
+
+  .mobile-only { display: none; }
+
+  /* ---------- Responsive ---------- */
+  @media (max-width: 960px) {
+    .rail { display: none; }
+    .topbar { display: flex; }
+    .mobile-only { display: flex; }
+    .content { padding: 20px 16px 80px; }
+    .stats { grid-template-columns: repeat(2, 1fr); }
+    .two-col, .sh-grid, .ev-grid, .trends { grid-template-columns: 1fr; }
+    .page-title { font-size: var(--fs-xl); }
+    .mobile-nav {
+      position: fixed; bottom: 0; left: 0; right: 0; z-index: 40;
+      display: flex; justify-content: space-around;
+      background: #0E0E17F2; backdrop-filter: blur(10px); border-top: 1px solid var(--border);
+      padding: 8px 4px calc(8px + env(safe-area-inset-bottom));
+    }
+    .mobile-nav button {
+      background: transparent; border: 0; color: var(--text-3);
+      display: flex; flex-direction: column; align-items: center; gap: 3px;
+      font-size: 0.58rem; font-family: var(--font-mono); letter-spacing: .04em; padding: 4px 8px;
+    }
+    .mobile-nav button svg { width: 20px; height: 20px; }
+    .mobile-nav button.active { color: var(--violet); }
+  }
+  @media (max-width: 520px) {
+    .stats { grid-template-columns: 1fr 1fr; }
+    .roles { grid-template-columns: 1fr; }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .page { animation: none; }
+    * { transition: none !important; }
+  }
+</style>
+
+<div class="app">
+  <!-- ===== Rail ===== -->
+  <aside class="rail">
+    <div class="brand">
+      <div class="brand-mark">
+        <svg viewBox="0 0 24 24" fill="none"><path d="M12 2 L21 12 L12 22 L3 12 Z" stroke="#fff" stroke-width="1.6" fill="#ffffff22"/><path d="M12 7 L16.5 12 L12 17 L7.5 12 Z" fill="#fff"/></svg>
+      </div>
+      <div>
+        <div class="brand-name">VOID</div>
+        <div class="brand-sub">Guild Manager</div>
+      </div>
+    </div>
+
+    <nav class="nav">
+      <div class="nav-label">Overview</div>
+      <button class="nav-item active" data-page="dashboard">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><rect x="3" y="3" width="7" height="9" rx="1.5"/><rect x="14" y="3" width="7" height="5" rx="1.5"/><rect x="14" y="12" width="7" height="9" rx="1.5"/><rect x="3" y="16" width="7" height="5" rx="1.5"/></svg>
+        Dashboard
+      </button>
+      <div class="nav-label">Guild</div>
+      <button class="nav-item" data-page="members">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><circle cx="9" cy="8" r="3.2"/><path d="M3.5 20a5.5 5.5 0 0 1 11 0"/><path d="M16 5.2a3 3 0 0 1 0 5.6"/><path d="M18 20a5 5 0 0 0-3-4.6"/></svg>
+        Members <span class="badge">47</span>
+      </button>
+      <button class="nav-item" data-page="strongholds">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M12 3 4 6.5v5c0 4.5 3.3 7.8 8 9.5 4.7-1.7 8-5 8-9.5v-5L12 3Z"/><path d="M12 8v5" stroke-linecap="round"/></svg>
+        Strongholds <span class="badge">6</span>
+      </button>
+      <button class="nav-item" data-page="events">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><rect x="3.5" y="5" width="17" height="16" rx="2"/><path d="M3.5 9.5h17M8 3v4M16 3v4" stroke-linecap="round"/></svg>
+        Events <span class="badge">6</span>
+      </button>
+      <button class="nav-item" data-page="trends">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M4 19V5M4 19h16" stroke-linecap="round"/><path d="M7 15l3.5-4 3 2.5L20 8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        Trends
+      </button>
+      <div class="nav-label">Manage</div>
+      <button class="nav-item" data-page="admin">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><circle cx="12" cy="12" r="3"/><path d="M12 2v3M12 19v3M2 12h3M19 12h3M5 5l2 2M17 17l2 2M19 5l-2 2M7 17l-2 2"/></svg>
+        Admin
+      </button>
+    </nav>
+
+    <div class="rail-foot">
+      <div class="userchip">
+        <div class="avatar" style="background:linear-gradient(145deg,#E8A24C,#B5701C)">AV</div>
+        <div class="who">
+          <b>Aeiti</b>
+          <span>R5 · GUILDMASTER</span>
+        </div>
+      </div>
+    </div>
+  </aside>
+
+  <!-- ===== Main ===== -->
+  <div class="main">
+    <div class="topbar">
+      <div class="brand" style="padding:0;gap:10px">
+        <div class="brand-mark" style="width:32px;height:32px">
+          <svg viewBox="0 0 24 24" fill="none"><path d="M12 2 L21 12 L12 22 L3 12 Z" stroke="#fff" stroke-width="1.6" fill="#ffffff22"/><path d="M12 7 L16.5 12 L12 17 L7.5 12 Z" fill="#fff"/></svg>
+        </div>
+        <div class="brand-name" style="font-size:1rem">VOID</div>
+      </div>
+      <div class="avatar" style="background:linear-gradient(145deg,#E8A24C,#B5701C);width:30px;height:30px;font-size:.72rem">AV</div>
+    </div>
+
+    <div class="content">
+      <div class="content-top">
+        <div class="demo-banner">
+          <b>DEMO</b> Static mockup with sample data — for UI decisions only. Nothing here is wired up yet.
+        </div>
+        <div class="timebar">
+          <div class="clock"><span class="eyebrow">Server · UTC−2</span><b class="mono" id="clkServer">--:--</b></div>
+          <div class="clock"><span class="eyebrow">Local · <span id="tzLocal">—</span></span><b class="mono loc" id="clkLocal">--:--</b></div>
+        </div>
+      </div>
+
+      <!-- ============ DASHBOARD ============ -->
+      <section class="page active" id="dashboard">
+        <div class="page-head">
+          <div>
+            <div class="eyebrow">Guild Overview</div>
+            <h1 class="page-title">Command Center</h1>
+            <div class="page-sub">Season 4 · Desert Cycle 12 · times shown in server (UTC−2) &amp; your local</div>
+          </div>
+          <div class="head-actions">
+            <button class="btn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12h14" stroke-linecap="round"/></svg>Log Event</button>
+            <button class="btn primary"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12h14" stroke-linecap="round"/></svg>Add Member</button>
+          </div>
+        </div>
+
+        <div class="grid stats">
+          <div class="card stat accent-v">
+            <div class="k">Roster</div>
+            <div class="v">47<small> / 100</small></div>
+            <div class="foot"><span class="delta up">▲ 3</span> this week · 42 active</div>
+          </div>
+          <div class="card stat">
+            <div class="k">Guild Amity</div>
+            <div class="v" style="color:var(--desert)">+38<small>%</small></div>
+            <div class="foot">from 4 held sanctums</div>
+          </div>
+          <div class="card stat">
+            <div class="k">Desert XP</div>
+            <div class="v" style="color:var(--desert)">+52<small>%</small></div>
+            <div class="foot">from 4 held sanctums</div>
+          </div>
+          <div class="card stat">
+            <div class="k">Next Event</div>
+            <div class="v mono" style="font-size:1.6rem;padding-top:6px">02:14<small>:30</small></div>
+            <div class="foot"><span class="pill violet">GUILD HUNT</span></div>
+          </div>
+        </div>
+
+        <div class="grid two-col" style="margin-top:16px">
+          <!-- rank distribution + upcoming -->
+          <div style="display:flex;flex-direction:column;gap:16px">
+            <div class="card">
+              <div class="card-head"><h3>Rank Distribution</h3><span class="mono" style="font-size:var(--fs-xs);color:var(--text-3)">47 MEMBERS</span></div>
+              <div class="card-body">
+                <div class="distbar">
+                  <span style="width:2%;background:#E8A24C" title="R5"></span>
+                  <span style="width:17%;background:#8B7CF6" title="R4"></span>
+                  <span style="width:34%;background:#5b5b86" title="R3"></span>
+                  <span style="width:30%;background:#3a3a56" title="R2"></span>
+                  <span style="width:17%;background:#2a2a40" title="R1"></span>
+                </div>
+                <div class="distlegend">
+                  <div><span class="dot" style="background:#E8A24C"></span>R5 · 1</div>
+                  <div><span class="dot" style="background:#8B7CF6"></span>R4 · 8</div>
+                  <div><span class="dot" style="background:#5b5b86"></span>R3 · 16</div>
+                  <div><span class="dot" style="background:#3a3a56"></span>R2 · 14</div>
+                  <div><span class="dot" style="background:#2a2a40"></span>R1 · 8</div>
+                </div>
+              </div>
+            </div>
+
+            <div class="card">
+              <div class="card-head"><h3>Upcoming Events</h3><a href="#" data-jump="events">View all →</a></div>
+              <div class="card-body">
+                <div class="evrow">
+                  <div class="evicon" style="background:var(--violet-dim);color:var(--violet)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 3l2.5 5 5.5.8-4 3.9.9 5.5L12 16.5 7.1 18.2l.9-5.5-4-3.9 5.5-.8L12 3Z"/></svg></div>
+                  <div class="meta"><b>Guild Hunt</b><span>Daily · 20:00 <span class="tzs">svr</span> · <span class="loc" data-server="20:00">--:--</span> <span class="tzs">local</span></span></div>
+                  <div class="when"><b>2h 14m</b><span>34/47 in</span></div>
+                </div>
+                <div class="evrow">
+                  <div class="evicon" style="background:var(--desert-dim);color:var(--desert)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M4 15a5 5 0 0 1 5-5h6a4 4 0 0 0 0-8" stroke-linecap="round"/><path d="M2 12h13a3 3 0 1 1 0 6" stroke-linecap="round"/></svg></div>
+                  <div class="meta"><b>Sandstorm · Slot A</b><span>Wed / Sat · 14:00 <span class="tzs">svr</span> · <span class="loc" data-server="14:00">--:--</span> <span class="tzs">local</span></span></div>
+                  <div class="when"><b>Tomorrow</b><span>18/24 in</span></div>
+                </div>
+                <div class="evrow">
+                  <div class="evicon" style="background:#4ADE801a;color:var(--good)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 3v18M5 8l7-5 7 5M5 8v8l7 5 7-5V8" stroke-linejoin="round"/></svg></div>
+                  <div class="meta"><b>Temple</b><span>Sun · 19:00 <span class="tzs">svr</span> · <span class="loc" data-server="19:00">--:--</span> <span class="tzs">local</span></span></div>
+                  <div class="when"><b>3 days</b><span>—</span></div>
+                </div>
+                <div class="evrow">
+                  <div class="evicon" style="background:#60A5FA1a;color:#60A5FA"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 2l2 4 4 .5-3 3 .8 4-3.8-2-3.8 2 .8-4-3-3 4-.5 2-4Z"/></svg></div>
+                  <div class="meta"><b>GVG</b><span>Fri · 21:00 <span class="tzs">svr</span> · <span class="loc" data-server="21:00">--:--</span> <span class="tzs">local</span> · vs. RUIN</span></div>
+                  <div class="when"><b>5 days</b><span>roster set</span></div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- warnings -->
+          <div class="card">
+            <div class="card-head"><h3>Needs Attention</h3><span class="pill bad">4</span></div>
+            <div class="card-body">
+              <div class="warn-item">
+                <div class="warn-stripe" style="background:var(--bad)"></div>
+                <div><div class="wt">Sanctum of Ash — Governor slot empty</div><div class="wd">Buffs at risk if contested. Assign a second Governor.</div></div>
+              </div>
+              <div class="warn-item">
+                <div class="warn-stripe" style="background:var(--warn)"></div>
+                <div><div class="wt">Dune Sanctum is contested</div><div class="wd">Under attack since 11:20 UTC · defenders needed</div></div>
+              </div>
+              <div class="warn-item">
+                <div class="warn-stripe" style="background:var(--warn)"></div>
+                <div><div class="wt">Sandstorm Slot B undersubscribed</div><div class="wd">Only 9/24 signed up for tomorrow's run</div></div>
+              </div>
+              <div class="warn-item">
+                <div class="warn-stripe" style="background:var(--text-3)"></div>
+                <div><div class="wt">3 members inactive 14+ days</div><div class="wd">Kesh, Orin, Vale — review for pruning</div></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ============ MEMBERS ============ -->
+      <section class="page" id="members">
+        <div class="page-head">
+          <div>
+            <div class="eyebrow">Guild · Roster</div>
+            <h1 class="page-title">Members</h1>
+            <div class="page-sub">47 of 100 · members self-edit their own profile; officers edit all</div>
+          </div>
+          <div class="head-actions">
+            <button class="btn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 3v12m0 0l-4-4m4 4l4-4M5 21h14" stroke-linecap="round" stroke-linejoin="round"/></svg>Export JSON</button>
+            <button class="btn primary"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12h14" stroke-linecap="round"/></svg>Add Member</button>
+          </div>
+        </div>
+
+        <div class="toolbar">
+          <div class="search">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3.5-3.5" stroke-linecap="round"/></svg>
+            <input type="text" placeholder="Search IGN…" id="memberSearch" />
+          </div>
+          <div class="segmented" id="memberFilter">
+            <button class="on" data-f="all">All</button>
+            <button data-f="officers">Officers</button>
+            <button data-f="active">Active</button>
+            <button data-f="loa">LOA</button>
+            <button data-f="inactive">Inactive</button>
+          </div>
+        </div>
+
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>Member</th><th>Rank</th><th>Status</th><th>Last Seen</th><th>Timezone</th><th>Online</th><th>Sandstorm</th><th>Power</th><th>Donations</th><th>Kills</th>
+              </tr>
+            </thead>
+            <tbody id="memberRows"></tbody>
+          </table>
+        </div>
+      </section>
+
+      <!-- ============ STRONGHOLDS ============ -->
+      <section class="page" id="strongholds">
+        <div class="page-head">
+          <div>
+            <div class="eyebrow">Guild · Territory</div>
+            <h1 class="page-title">Strongholds</h1>
+            <div class="page-sub">4 Sanctums (buffs) · 2 Ruins · totals feed the dashboard</div>
+          </div>
+          <div class="head-actions">
+            <button class="btn primary"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12h14" stroke-linecap="round"/></svg>Add Stronghold</button>
+          </div>
+        </div>
+
+        <div class="section-title">Sanctums</div>
+        <div class="grid sh-grid">
+          <!-- Sanctum 1 -->
+          <div class="card sh">
+            <div class="stripe" style="background:var(--good)"></div>
+            <div class="sh-inner">
+              <div class="sh-top">
+                <div><h3 class="sh-name">Obsidian Sanctum</h3><div class="sh-kind">Sanctum · Grid H7</div></div>
+                <span class="pill good">● HELD</span>
+              </div>
+              <div class="buffs">
+                <div class="buff"><span class="bval">+12%</span><span class="blab">Guild Amity</span></div>
+                <div class="buff"><span class="bval">+18%</span><span class="blab">Desert XP</span></div>
+              </div>
+              <div class="roles">
+                <div class="role"><div class="rl"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 3l7 4v5c0 4-3 6.5-7 8-4-1.5-7-4-7-8V7l7-4Z"/></svg>Guardian</div><div class="rn"><div class="avatar" style="width:24px;height:24px;font-size:.62rem;background:#5a3fd0">SR</div><b>Sarn</b></div></div>
+                <div class="role"><div class="rl">Governor</div><div class="rn"><div class="avatar" style="width:24px;height:24px;font-size:.62rem;background:#3a3a56">MY</div><b>Myra</b></div></div>
+                <div class="role"><div class="rl">Governor</div><div class="rn"><div class="avatar" style="width:24px;height:24px;font-size:.62rem;background:#3a3a56">TK</div><b>Tsuki</b></div></div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Sanctum 2 - contested -->
+          <div class="card sh">
+            <div class="stripe" style="background:var(--warn)"></div>
+            <div class="sh-inner">
+              <div class="sh-top">
+                <div><h3 class="sh-name">Dune Sanctum</h3><div class="sh-kind">Sanctum · Grid C3</div></div>
+                <span class="pill warn">◐ CONTESTED</span>
+              </div>
+              <div class="buffs">
+                <div class="buff"><span class="bval">+10%</span><span class="blab">Guild Amity</span></div>
+                <div class="buff"><span class="bval">+14%</span><span class="blab">Desert XP</span></div>
+              </div>
+              <div class="roles">
+                <div class="role"><div class="rl"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 3l7 4v5c0 4-3 6.5-7 8-4-1.5-7-4-7-8V7l7-4Z"/></svg>Guardian</div><div class="rn"><div class="avatar" style="width:24px;height:24px;font-size:.62rem;background:#5a3fd0">KA</div><b>Kaine</b></div></div>
+                <div class="role"><div class="rl">Governor</div><div class="rn"><div class="avatar" style="width:24px;height:24px;font-size:.62rem;background:#3a3a56">LO</div><b>Lorel</b></div></div>
+                <div class="role"><div class="rl">Governor</div><div class="rn"><div class="avatar" style="width:24px;height:24px;font-size:.62rem;background:#3a3a56">VX</div><b>Vex</b></div></div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Sanctum 3 - empty governor -->
+          <div class="card sh">
+            <div class="stripe" style="background:var(--good)"></div>
+            <div class="sh-inner">
+              <div class="sh-top">
+                <div><h3 class="sh-name">Sanctum of Ash</h3><div class="sh-kind">Sanctum · Grid F11</div></div>
+                <span class="pill good">● HELD</span>
+              </div>
+              <div class="buffs">
+                <div class="buff"><span class="bval">+8%</span><span class="blab">Guild Amity</span></div>
+                <div class="buff"><span class="bval">+12%</span><span class="blab">Desert XP</span></div>
+              </div>
+              <div class="roles">
+                <div class="role"><div class="rl"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 3l7 4v5c0 4-3 6.5-7 8-4-1.5-7-4-7-8V7l7-4Z"/></svg>Guardian</div><div class="rn"><div class="avatar" style="width:24px;height:24px;font-size:.62rem;background:#5a3fd0">JD</div><b>Jodi</b></div></div>
+                <div class="role"><div class="rl">Governor</div><div class="rn"><div class="avatar" style="width:24px;height:24px;font-size:.62rem;background:#3a3a56">RE</div><b>Renn</b></div></div>
+                <div class="role empty"><div class="rl">Governor</div><div class="rn">+ Assign</div></div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Sanctum 4 -->
+          <div class="card sh">
+            <div class="stripe" style="background:var(--good)"></div>
+            <div class="sh-inner">
+              <div class="sh-top">
+                <div><h3 class="sh-name">Mirage Sanctum</h3><div class="sh-kind">Sanctum · Grid A9</div></div>
+                <span class="pill good">● HELD</span>
+              </div>
+              <div class="buffs">
+                <div class="buff"><span class="bval">+8%</span><span class="blab">Guild Amity</span></div>
+                <div class="buff"><span class="bval">+8%</span><span class="blab">Desert XP</span></div>
+              </div>
+              <div class="roles">
+                <div class="role"><div class="rl"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 3l7 4v5c0 4-3 6.5-7 8-4-1.5-7-4-7-8V7l7-4Z"/></svg>Guardian</div><div class="rn"><div class="avatar" style="width:24px;height:24px;font-size:.62rem;background:#5a3fd0">AV</div><b>Aeiti</b></div></div>
+                <div class="role"><div class="rl">Governor</div><div class="rn"><div class="avatar" style="width:24px;height:24px;font-size:.62rem;background:#3a3a56">PL</div><b>Pell</b></div></div>
+                <div class="role"><div class="rl">Governor</div><div class="rn"><div class="avatar" style="width:24px;height:24px;font-size:.62rem;background:#3a3a56">DR</div><b>Dax</b></div></div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="section-title">Ruins</div>
+        <div class="grid sh-grid">
+          <div class="card sh ruin">
+            <div class="stripe" style="background:var(--good)"></div>
+            <div class="sh-inner">
+              <div class="sh-top">
+                <div><h3 class="sh-name">Hollow Ruin</h3><div class="sh-kind">Ruin · Grid D6</div></div>
+                <span class="pill good">● HELD</span>
+              </div>
+              <div class="ruin-note">Ruins provide no buffs — held for map control &amp; contribution.</div>
+            </div>
+          </div>
+          <div class="card sh ruin">
+            <div class="stripe" style="background:var(--bad)"></div>
+            <div class="sh-inner">
+              <div class="sh-top">
+                <div><h3 class="sh-name">Sunken Ruin</h3><div class="sh-kind">Ruin · Grid J2</div></div>
+                <span class="pill bad">✕ LOST</span>
+              </div>
+              <div class="ruin-note">Ruins provide no buffs — held for map control &amp; contribution.</div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ============ EVENTS ============ -->
+      <section class="page" id="events">
+        <div class="page-head">
+          <div>
+            <div class="eyebrow">Guild · Schedule</div>
+            <h1 class="page-title">Events</h1>
+            <div class="page-sub">Placeholder layout — per-type fields expand once we have screenshots</div>
+          </div>
+          <div class="head-actions">
+            <button class="btn primary"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12h14" stroke-linecap="round"/></svg>New Event</button>
+          </div>
+        </div>
+
+        <div class="grid ev-grid">
+          <!-- Guild Hunt -->
+          <div class="card ev">
+            <div class="ev-body">
+              <div class="ev-top">
+                <div class="evicon" style="background:var(--violet-dim);color:var(--violet)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 3l2.5 5 5.5.8-4 3.9.9 5.5L12 16.5 7.1 18.2l.9-5.5-4-3.9 5.5-.8L12 3Z"/></svg></div>
+                <div><h3>Guild Hunt</h3><div class="schedule">DAILY · 20:00 SVR · <span class="loc" data-server="20:00">--:--</span> LOCAL · in 2h 14m</div></div>
+              </div>
+              <div class="ev-meta"><span class="pill violet">GUILD HUNT</span><span class="pill ghost">RECURRING</span></div>
+              <div class="attend">
+                <div class="attend-row"><span class="al">Signed up</span><span class="av">34 / 47</span></div>
+                <div class="bar"><span style="width:72%"></span></div>
+              </div>
+            </div>
+            <div class="ev-foot"><span class="plabel">Last result</span><span class="placement" style="color:var(--good)">1st · 4.2M dmg</span></div>
+          </div>
+
+          <!-- Sandstorm A -->
+          <div class="card ev">
+            <div class="ev-body">
+              <div class="ev-top">
+                <div class="evicon" style="background:var(--desert-dim);color:var(--desert)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M4 15a5 5 0 0 1 5-5h6a4 4 0 0 0 0-8" stroke-linecap="round"/><path d="M2 12h13a3 3 0 1 1 0 6" stroke-linecap="round"/></svg></div>
+                <div><h3>Sandstorm — Slot A</h3><div class="schedule">WED / SAT · 14:00 SVR · <span class="loc" data-server="14:00">--:--</span> LOCAL · tomorrow</div></div>
+              </div>
+              <div class="ev-meta"><span class="pill desert">SANDSTORM</span><span class="pill ghost">SLOT A</span></div>
+              <div class="attend">
+                <div class="attend-row"><span class="al">Slot filled</span><span class="av">18 / 24</span></div>
+                <div class="bar"><span style="width:75%;background:linear-gradient(90deg,#B5701C,var(--desert))"></span></div>
+              </div>
+            </div>
+            <div class="ev-foot"><span class="plabel">Preferred slot A</span><span class="placement" style="color:var(--desert)">26 members</span></div>
+          </div>
+
+          <!-- Sandstorm B -->
+          <div class="card ev">
+            <div class="ev-body">
+              <div class="ev-top">
+                <div class="evicon" style="background:var(--desert-dim);color:var(--desert)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M4 15a5 5 0 0 1 5-5h6a4 4 0 0 0 0-8" stroke-linecap="round"/><path d="M2 12h13a3 3 0 1 1 0 6" stroke-linecap="round"/></svg></div>
+                <div><h3>Sandstorm — Slot B</h3><div class="schedule">WED / SAT · 21:00 SVR · <span class="loc" data-server="21:00">--:--</span> LOCAL · tomorrow</div></div>
+              </div>
+              <div class="ev-meta"><span class="pill desert">SANDSTORM</span><span class="pill ghost">SLOT B</span><span class="pill warn">LOW TURNOUT</span></div>
+              <div class="attend">
+                <div class="attend-row"><span class="al">Slot filled</span><span class="av">9 / 24</span></div>
+                <div class="bar"><span style="width:37%;background:linear-gradient(90deg,#7a4a12,var(--warn))"></span></div>
+              </div>
+            </div>
+            <div class="ev-foot"><span class="plabel">Preferred slot B</span><span class="placement" style="color:var(--desert)">14 members</span></div>
+          </div>
+
+          <!-- Temple -->
+          <div class="card ev">
+            <div class="ev-body">
+              <div class="ev-top">
+                <div class="evicon" style="background:#4ADE801a;color:var(--good)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 3v18M5 8l7-5 7 5M5 8v8l7 5 7-5V8" stroke-linejoin="round"/></svg></div>
+                <div><h3>Temple</h3><div class="schedule">SUN · 19:00 SVR · <span class="loc" data-server="19:00">--:--</span> LOCAL · in 3 days</div></div>
+              </div>
+              <div class="ev-meta"><span class="pill good">TEMPLE</span><span class="pill ghost">WEEKLY</span></div>
+              <div class="attend">
+                <div class="attend-row"><span class="al">Signed up</span><span class="av">— sign-ups open Fri</span></div>
+                <div class="bar"><span style="width:0%"></span></div>
+              </div>
+            </div>
+            <div class="ev-foot"><span class="plabel">Last result</span><span class="placement" style="color:var(--good)">Cleared floor 8</span></div>
+          </div>
+
+          <!-- Arctic Showdown -->
+          <div class="card ev">
+            <div class="ev-body">
+              <div class="ev-top">
+                <div class="evicon" style="background:#38BDF81a;color:#38BDF8"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 2v20M2 12h20M5 5l14 14M19 5L5 19" stroke-linecap="round"/></svg></div>
+                <div><h3>Arctic Showdown</h3><div class="schedule">BI-WEEKLY · MON 18:00 SVR · <span class="loc" data-server="18:00">--:--</span> LOCAL · in 6 days</div></div>
+              </div>
+              <div class="ev-meta"><span class="pill" style="color:#38BDF8;background:#38BDF81a;border-color:#38BDF833">ARCTIC SHOWDOWN</span></div>
+              <div class="attend">
+                <div class="attend-row"><span class="al">Signed up</span><span class="av">—</span></div>
+                <div class="bar"><span style="width:0%"></span></div>
+              </div>
+            </div>
+            <div class="ev-foot"><span class="plabel">Last placement</span><span class="placement" style="color:#38BDF8">3rd / 20</span></div>
+          </div>
+
+          <!-- GVG -->
+          <div class="card ev">
+            <div class="ev-body">
+              <div class="ev-top">
+                <div class="evicon" style="background:#60A5FA1a;color:#60A5FA"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 2l2 4 4 .5-3 3 .8 4-3.8-2-3.8 2 .8-4-3-3 4-.5 2-4Z"/></svg></div>
+                <div><h3>GVG</h3><div class="schedule">FRI · 21:00 SVR · <span class="loc" data-server="21:00">--:--</span> LOCAL · vs. RUIN · in 5 days</div></div>
+              </div>
+              <div class="ev-meta"><span class="pill" style="color:#60A5FA;background:#60A5FA1a;border-color:#60A5FA33">GVG</span><span class="pill good">ROSTER SET</span></div>
+              <div class="attend">
+                <div class="attend-row"><span class="al">Roster locked</span><span class="av">30 / 30</span></div>
+                <div class="bar"><span style="width:100%"></span></div>
+              </div>
+            </div>
+            <div class="ev-foot"><span class="plabel">Season record</span><span class="placement" style="color:var(--good)">6W – 2L</span></div>
+          </div>
+        </div>
+
+        <div class="placeholder-note">Each event type will get its own fields (damage tiers, floor cleared, matchup, slot capacity, etc.) once you share the in-game screenshots.</div>
+      </section>
+
+      <!-- ============ TRENDS ============ -->
+      <section class="page" id="trends">
+        <div class="page-head">
+          <div>
+            <div class="eyebrow">Guild · History</div>
+            <h1 class="page-title">Trends</h1>
+            <div class="page-sub">How the guild is moving — roster, power, participation, results &amp; territory over time</div>
+          </div>
+        </div>
+
+        <div class="trend-range">
+          <div class="segmented">
+            <button data-r="4w">4W</button>
+            <button class="on" data-r="8w">8W</button>
+            <button data-r="season">Season</button>
+            <button data-r="all">All</button>
+          </div>
+          <span class="mono" style="font-size:var(--fs-xs);color:var(--text-3)">SNAPSHOTS LOGGED WEEKLY</span>
+        </div>
+
+        <!-- KPI strip -->
+        <div class="grid stats" style="margin-bottom:16px">
+          <div class="card stat"><div class="k">Participation (30d)</div><div class="v" style="font-size:2rem">78<small>%</small></div><div class="foot"><span class="delta up">▲ 6%</span> events attended</div></div>
+          <div class="card stat"><div class="k">Donations / week</div><div class="v" style="font-size:2rem;color:var(--desert)">214<small>k</small></div><div class="foot"><span class="delta up">▲ 12%</span> guild total</div></div>
+          <div class="card stat"><div class="k">Kills / week</div><div class="v" style="font-size:2rem">1.9<small>M</small></div><div class="foot"><span class="delta up">▲ 8%</span> kill points</div></div>
+          <div class="card stat"><div class="k">Sandstorm Win %</div><div class="v" style="font-size:2rem;color:var(--good)">67<small>%</small></div><div class="foot">4W – 2L last 6</div></div>
+        </div>
+
+        <div class="grid trends">
+          <!-- Roster size -->
+          <div class="card">
+            <div class="card-head"><h3>Roster Size</h3><span class="pill good">▲ 3</span></div>
+            <div class="card-body">
+              <svg viewBox="0 0 320 120" width="100%" height="130" preserveAspectRatio="none" role="img" aria-label="Roster size climbing from 38 to 47">
+                <defs><linearGradient id="rg" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#4ADE80" stop-opacity=".3"/><stop offset="1" stop-color="#4ADE80" stop-opacity="0"/></linearGradient></defs>
+                <line x1="0" y1="40" x2="320" y2="40" stroke="#ffffff10"/><line x1="0" y1="80" x2="320" y2="80" stroke="#ffffff10"/>
+                <path d="M0,86 L45,84 L90,74 L135,72 L180,60 L225,58 L270,46 L320,40 L320,120 L0,120 Z" fill="url(#rg)"/>
+                <path d="M0,86 L45,84 L90,74 L135,72 L180,60 L225,58 L270,46 L320,40" fill="none" stroke="var(--good)" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>
+                <circle cx="320" cy="40" r="4" fill="var(--good)"/>
+              </svg>
+              <div class="chart-note">38 → 47 members · target 100</div>
+            </div>
+          </div>
+
+          <!-- Avg power -->
+          <div class="card">
+            <div class="card-head"><h3>Average Power</h3><span class="pill good">▲ 9%</span></div>
+            <div class="card-body">
+              <svg viewBox="0 0 320 120" width="100%" height="130" preserveAspectRatio="none" role="img" aria-label="Average power rising steadily">
+                <defs><linearGradient id="pg" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#E8A24C" stop-opacity=".3"/><stop offset="1" stop-color="#E8A24C" stop-opacity="0"/></linearGradient></defs>
+                <line x1="0" y1="40" x2="320" y2="40" stroke="#ffffff10"/><line x1="0" y1="80" x2="320" y2="80" stroke="#ffffff10"/>
+                <path d="M0,90 L45,82 L90,80 L135,68 L180,64 L225,54 L270,46 L320,38 L320,120 L0,120 Z" fill="url(#pg)"/>
+                <path d="M0,90 L45,82 L90,80 L135,68 L180,64 L225,54 L270,46 L320,38" fill="none" stroke="var(--desert)" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>
+                <circle cx="320" cy="38" r="4" fill="var(--desert)"/>
+              </svg>
+              <div class="chart-note">1.60M → 1.74M average combat power</div>
+            </div>
+          </div>
+
+          <!-- Participation -->
+          <div class="card">
+            <div class="card-head"><h3>Participation Rate</h3><span class="pill good">▲ 6%</span></div>
+            <div class="card-body">
+              <svg viewBox="0 0 320 120" width="100%" height="130" preserveAspectRatio="none" role="img" aria-label="Participation trend rising from 64% to 78%">
+                <defs><linearGradient id="ag" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#8B7CF6" stop-opacity=".35"/><stop offset="1" stop-color="#8B7CF6" stop-opacity="0"/></linearGradient></defs>
+                <line x1="0" y1="30" x2="320" y2="30" stroke="#ffffff10"/><line x1="0" y1="60" x2="320" y2="60" stroke="#ffffff10"/><line x1="0" y1="90" x2="320" y2="90" stroke="#ffffff10"/>
+                <path d="M0,78 L45,72 L90,80 L135,58 L180,62 L225,44 L270,40 L320,30 L320,120 L0,120 Z" fill="url(#ag)"/>
+                <path d="M0,78 L45,72 L90,80 L135,58 L180,62 L225,44 L270,40 L320,30" fill="none" stroke="var(--violet)" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>
+                <circle cx="320" cy="30" r="4" fill="var(--violet)"/>
+              </svg>
+              <div class="chart-note">% of members who showed up · 64% → 78%</div>
+            </div>
+          </div>
+
+          <!-- GVG record -->
+          <div class="card">
+            <div class="card-head"><h3>GVG Record</h3><span class="mono" style="font-size:var(--fs-xs);color:var(--text-3)">8 MATCHES</span></div>
+            <div class="card-body">
+              <div class="bars">
+                <div><div class="b" style="height:100%;background:var(--good-dim);border:1px solid #4ADE8033"></div></div>
+                <div><div class="b" style="height:100%;background:var(--good-dim);border:1px solid #4ADE8033"></div></div>
+                <div><div class="b" style="height:42%;background:var(--bad-dim);border:1px solid #F8717133"></div></div>
+                <div><div class="b" style="height:100%;background:var(--good-dim);border:1px solid #4ADE8033"></div></div>
+                <div><div class="b" style="height:100%;background:var(--good-dim);border:1px solid #4ADE8033"></div></div>
+                <div><div class="b" style="height:42%;background:var(--bad-dim);border:1px solid #F8717133"></div></div>
+                <div><div class="b" style="height:100%;background:var(--good-dim);border:1px solid #4ADE8033"></div></div>
+                <div><div class="b" style="height:100%;background:var(--good-dim);border:1px solid #4ADE8033"></div></div>
+              </div>
+              <div class="chart-note">green = win · red = loss · vs. RUIN, ASH, KILN…</div>
+            </div>
+          </div>
+
+          <!-- Sandstorm points + results -->
+          <div class="card">
+            <div class="card-head"><h3>Sandstorm — Points &amp; Results</h3><span class="pill good">67% W</span></div>
+            <div class="card-body">
+              <div class="bars">
+                <div><div class="b" style="height:70%;background:var(--good-dim);border:1px solid #4ADE8044"></div></div>
+                <div><div class="b" style="height:85%;background:var(--good-dim);border:1px solid #4ADE8044"></div></div>
+                <div><div class="b" style="height:52%;background:var(--bad-dim);border:1px solid #F8717144"></div></div>
+                <div><div class="b" style="height:78%;background:var(--good-dim);border:1px solid #4ADE8044"></div></div>
+                <div><div class="b" style="height:60%;background:var(--bad-dim);border:1px solid #F8717144"></div></div>
+                <div><div class="b" style="height:92%;background:var(--good-dim);border:1px solid #4ADE8044"></div></div>
+              </div>
+              <div class="chart-note">bar height = points scored · <span style="color:var(--good)">green win</span> / <span style="color:var(--bad)">red loss</span> · 4W–2L</div>
+            </div>
+          </div>
+
+          <!-- Guild donations -->
+          <div class="card">
+            <div class="card-head"><h3>Guild Donations / week</h3><span class="pill good">▲ 12%</span></div>
+            <div class="card-body">
+              <svg viewBox="0 0 320 120" width="100%" height="130" preserveAspectRatio="none" role="img" aria-label="Weekly guild donations rising">
+                <defs><linearGradient id="dg" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#E8A24C" stop-opacity=".32"/><stop offset="1" stop-color="#E8A24C" stop-opacity="0"/></linearGradient></defs>
+                <line x1="0" y1="40" x2="320" y2="40" stroke="#ffffff10"/><line x1="0" y1="80" x2="320" y2="80" stroke="#ffffff10"/>
+                <path d="M0,88 L45,80 L90,84 L135,66 L180,58 L225,60 L270,46 L320,36 L320,120 L0,120 Z" fill="url(#dg)"/>
+                <path d="M0,88 L45,80 L90,84 L135,66 L180,58 L225,60 L270,46 L320,36" fill="none" stroke="var(--desert)" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>
+                <circle cx="320" cy="36" r="4" fill="var(--desert)"/>
+              </svg>
+              <div class="chart-note">total coins donated per week · 214k this week</div>
+            </div>
+          </div>
+
+          <!-- Guild kills -->
+          <div class="card">
+            <div class="card-head"><h3>Guild Kills / week</h3><span class="pill good">▲ 8%</span></div>
+            <div class="card-body">
+              <svg viewBox="0 0 320 120" width="100%" height="130" preserveAspectRatio="none" role="img" aria-label="Weekly guild kill points rising">
+                <defs><linearGradient id="kg" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#F87171" stop-opacity=".28"/><stop offset="1" stop-color="#F87171" stop-opacity="0"/></linearGradient></defs>
+                <line x1="0" y1="40" x2="320" y2="40" stroke="#ffffff10"/><line x1="0" y1="80" x2="320" y2="80" stroke="#ffffff10"/>
+                <path d="M0,82 L45,86 L90,70 L135,74 L180,60 L225,52 L270,54 L320,42 L320,120 L0,120 Z" fill="url(#kg)"/>
+                <path d="M0,82 L45,86 L90,70 L135,74 L180,60 L225,52 L270,54 L320,42" fill="none" stroke="var(--bad)" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>
+                <circle cx="320" cy="42" r="4" fill="var(--bad)"/>
+              </svg>
+              <div class="chart-note">total kill points per week · 1.9M this week</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="section-title">Leaderboards · this week</div>
+        <div class="grid lb-grid">
+          <div class="card">
+            <div class="card-head"><h3>Top Donators</h3><span class="mono" style="font-size:var(--fs-xs);color:var(--text-3)">COINS</span></div>
+            <div class="card-body"><div class="lb">
+              <div class="lb-row top"><span class="lb-rank">1</span><div class="avatar" style="width:24px;height:24px;font-size:.6rem;background:#5a3fd0">SR</div><span class="lb-name">Sarn</span><span class="lb-val" style="color:var(--desert)">24.1k</span></div>
+              <div class="lb-row top"><span class="lb-rank">2</span><div class="avatar" style="width:24px;height:24px;font-size:.6rem;background:linear-gradient(145deg,#E8A24C,#B5701C)">AV</div><span class="lb-name">Aeiti</span><span class="lb-val" style="color:var(--desert)">21.8k</span></div>
+              <div class="lb-row top"><span class="lb-rank">3</span><div class="avatar" style="width:24px;height:24px;font-size:.6rem;background:#5a3fd0">KA</div><span class="lb-name">Kaine</span><span class="lb-val" style="color:var(--desert)">19.3k</span></div>
+              <div class="lb-row"><span class="lb-rank">4</span><div class="avatar" style="width:24px;height:24px;font-size:.6rem;background:#3a3a56">MY</div><span class="lb-name">Myra</span><span class="lb-val">15.0k</span></div>
+              <div class="lb-row"><span class="lb-rank">5</span><div class="avatar" style="width:24px;height:24px;font-size:.6rem;background:#3a3a56">TK</div><span class="lb-name">Tsuki</span><span class="lb-val">12.7k</span></div>
+            </div></div>
+          </div>
+
+          <div class="card">
+            <div class="card-head"><h3>Top Kills</h3><span class="mono" style="font-size:var(--fs-xs);color:var(--text-3)">KILL PTS</span></div>
+            <div class="card-body"><div class="lb">
+              <div class="lb-row top"><span class="lb-rank">1</span><div class="avatar" style="width:24px;height:24px;font-size:.6rem;background:#5a3fd0">KA</div><span class="lb-name">Kaine</span><span class="lb-val">62.4k</span></div>
+              <div class="lb-row top"><span class="lb-rank">2</span><div class="avatar" style="width:24px;height:24px;font-size:.6rem;background:#5a3fd0">SR</div><span class="lb-name">Sarn</span><span class="lb-val">58.1k</span></div>
+              <div class="lb-row top"><span class="lb-rank">3</span><div class="avatar" style="width:24px;height:24px;font-size:.6rem;background:linear-gradient(145deg,#E8A24C,#B5701C)">AV</div><span class="lb-name">Aeiti</span><span class="lb-val">48.2k</span></div>
+              <div class="lb-row"><span class="lb-rank">4</span><div class="avatar" style="width:24px;height:24px;font-size:.6rem;background:#2f2f47">VX</div><span class="lb-name">Vex</span><span class="lb-val">40.0k</span></div>
+              <div class="lb-row"><span class="lb-rank">5</span><div class="avatar" style="width:24px;height:24px;font-size:.6rem;background:#2a2a40">DR</div><span class="lb-name">Dax</span><span class="lb-val">33.5k</span></div>
+            </div></div>
+          </div>
+
+          <div class="card">
+            <div class="card-head"><h3>Top Participation</h3><span class="mono" style="font-size:var(--fs-xs);color:var(--text-3)">30-DAY</span></div>
+            <div class="card-body"><div class="lb">
+              <div class="lb-row top"><span class="lb-rank">1</span><div class="avatar" style="width:24px;height:24px;font-size:.6rem;background:linear-gradient(145deg,#E8A24C,#B5701C)">AV</div><span class="lb-name">Aeiti</span><span class="lb-val" style="color:var(--good)">100%</span></div>
+              <div class="lb-row top"><span class="lb-rank">2</span><div class="avatar" style="width:24px;height:24px;font-size:.6rem;background:#5a3fd0">SR</div><span class="lb-name">Sarn</span><span class="lb-val" style="color:var(--good)">96%</span></div>
+              <div class="lb-row top"><span class="lb-rank">3</span><div class="avatar" style="width:24px;height:24px;font-size:.6rem;background:#3a3a56">MY</div><span class="lb-name">Myra</span><span class="lb-val" style="color:var(--good)">92%</span></div>
+              <div class="lb-row"><span class="lb-rank">4</span><div class="avatar" style="width:24px;height:24px;font-size:.6rem;background:#3a3a56">TK</div><span class="lb-name">Tsuki</span><span class="lb-val">88%</span></div>
+              <div class="lb-row"><span class="lb-rank">5</span><div class="avatar" style="width:24px;height:24px;font-size:.6rem;background:#2f2f47">PL</div><span class="lb-name">Pell</span><span class="lb-val">84%</span></div>
+            </div></div>
+          </div>
+        </div>
+
+        <div class="section-title">Who Participated · last 6 events</div>
+        <div class="card">
+          <div class="card-body matrix">
+            <table>
+              <thead><tr><th>Member</th><th>Hunt</th><th>SS·A</th><th>SS·B</th><th>Temple</th><th>Arctic</th><th>GVG</th><th>Rate</th></tr></thead>
+              <tbody>
+                <tr><td><b>Aeiti</b></td><td class="att-yes">✓</td><td class="att-yes">✓</td><td class="att-no">·</td><td class="att-yes">✓</td><td class="att-yes">✓</td><td class="att-yes">✓</td><td class="att-rate" style="color:var(--good)">100%</td></tr>
+                <tr><td><b>Sarn</b></td><td class="att-yes">✓</td><td class="att-yes">✓</td><td class="att-no">·</td><td class="att-yes">✓</td><td class="att-yes">✓</td><td class="att-yes">✓</td><td class="att-rate" style="color:var(--good)">96%</td></tr>
+                <tr><td><b>Kaine</b></td><td class="att-yes">✓</td><td class="att-no">·</td><td class="att-yes">✓</td><td class="att-yes">✓</td><td class="att-no">·</td><td class="att-yes">✓</td><td class="att-rate">79%</td></tr>
+                <tr><td><b>Myra</b></td><td class="att-yes">✓</td><td class="att-yes">✓</td><td class="att-no">·</td><td class="att-yes">✓</td><td class="att-yes">✓</td><td class="att-yes">✓</td><td class="att-rate" style="color:var(--good)">92%</td></tr>
+                <tr><td><b>Tsuki</b></td><td class="att-yes">✓</td><td class="att-no">·</td><td class="att-yes">✓</td><td class="att-yes">✓</td><td class="att-no">·</td><td class="att-yes">✓</td><td class="att-rate">88%</td></tr>
+                <tr><td><b>Lorel</b> <span class="pill warn" style="margin-left:4px">LOA</span></td><td class="att-no">·</td><td class="att-no">·</td><td class="att-no">·</td><td class="att-no">·</td><td class="att-no">·</td><td class="att-no">·</td><td class="att-rate" style="color:var(--bad)">0%</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <div class="placeholder-note">Illustrative sample data. Real trends accrue from day one as members, events, donations, kills, and participation are logged. The participation matrix is built from per-event attendance — the same log that powers the participation rate and leaderboard.</div>
+      </section>
+
+      <!-- ============ ADMIN ============ -->
+      <section class="page" id="admin">
+        <div class="page-head">
+          <div>
+            <div class="eyebrow">Manage · Access</div>
+            <h1 class="page-title">Admin</h1>
+            <div class="page-sub">Roles auto-sync from Discord on login · pin to override</div>
+          </div>
+        </div>
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th>User</th><th>Discord Role</th><th>App Role</th><th>Source</th><th></th></tr></thead>
+            <tbody>
+              <tr><td><div class="cell-ign"><div class="avatar" style="width:28px;height:28px;font-size:.68rem;background:linear-gradient(145deg,#E8A24C,#B5701C)">AV</div><b>Aeiti</b></div></td><td class="mono muted">@Guildmaster</td><td><span class="pill desert">ADMIN</span></td><td class="mono muted">ENV allowlist</td><td class="muted">—</td></tr>
+              <tr><td><div class="cell-ign"><div class="avatar" style="width:28px;height:28px;font-size:.68rem;background:#5a3fd0">SR</div><b>Sarn</b></div></td><td class="mono muted">@Officer</td><td><span class="pill violet">OFFICER</span></td><td class="mono muted">Discord role</td><td><span class="pill ghost">PIN</span></td></tr>
+              <tr><td><div class="cell-ign"><div class="avatar" style="width:28px;height:28px;font-size:.68rem;background:#5a3fd0">KA</div><b>Kaine</b></div></td><td class="mono muted">@Officer</td><td><span class="pill violet">OFFICER</span></td><td class="mono muted">Discord role</td><td><span class="pill ghost">PIN</span></td></tr>
+              <tr><td><div class="cell-ign"><div class="avatar" style="width:28px;height:28px;font-size:.68rem;background:#3a3a56">MY</div><b>Myra</b></div></td><td class="mono muted">@Member</td><td><span class="pill ghost">MEMBER</span></td><td class="mono muted">Discord role</td><td><span class="pill ghost">PIN</span></td></tr>
+              <tr><td><div class="cell-ign"><div class="avatar" style="width:28px;height:28px;font-size:.68rem;background:#3a3a56">TK</div><b>Tsuki</b></div></td><td class="mono muted">@Member</td><td><span class="pill violet">OFFICER</span></td><td class="mono" style="color:var(--warn)">PINNED</td><td><span class="pill warn">UNPIN</span></td></tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+    </div>
+  </div>
+</div>
+
+<!-- mobile bottom nav -->
+<nav class="mobile-nav mobile-only">
+  <button class="active" data-page="dashboard"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><rect x="3" y="3" width="7" height="9" rx="1.5"/><rect x="14" y="3" width="7" height="5" rx="1.5"/><rect x="14" y="12" width="7" height="9" rx="1.5"/><rect x="3" y="16" width="7" height="5" rx="1.5"/></svg>Home</button>
+  <button data-page="members"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><circle cx="9" cy="8" r="3.2"/><path d="M3.5 20a5.5 5.5 0 0 1 11 0"/><path d="M16 5.2a3 3 0 0 1 0 5.6"/></svg>Members</button>
+  <button data-page="strongholds"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M12 3 4 6.5v5c0 4.5 3.3 7.8 8 9.5 4.7-1.7 8-5 8-9.5v-5L12 3Z"/></svg>Territory</button>
+  <button data-page="events"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><rect x="3.5" y="5" width="17" height="16" rx="2"/><path d="M3.5 9.5h17M8 3v4M16 3v4" stroke-linecap="round"/></svg>Events</button>
+  <button data-page="trends"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M4 19V5M4 19h16" stroke-linecap="round"/><path d="M7 15l3.5-4 3 2.5L20 8" stroke-linecap="round" stroke-linejoin="round"/></svg>Trends</button>
+</nav>
+
+<script>
+  // ----- member sample data -----
+  const members = [
+    { ign:"Aeiti", rank:5, gm:true, status:"active", seen:"12m", seenD:0.01, tz:"UTC-5", online:"18:00–24:00", slot:"A", power:"2.84M", don:"21.8k", kills:"48.2k", av:"AV", c:"linear-gradient(145deg,#E8A24C,#B5701C)" },
+    { ign:"Sarn", rank:4, status:"active", seen:"2h", seenD:0.1, tz:"UTC+1", online:"19:00–23:00", slot:"A", power:"2.71M", don:"24.1k", kills:"58.1k", av:"SR", c:"#5a3fd0" },
+    { ign:"Kaine", rank:4, status:"active", seen:"5h", seenD:0.2, tz:"UTC+8", online:"12:00–15:00", slot:"B", power:"2.66M", don:"19.3k", kills:"62.4k", av:"KA", c:"#5a3fd0" },
+    { ign:"Myra", rank:3, status:"active", seen:"1d", seenD:1, tz:"UTC+0", online:"20:00–22:00", slot:"A", power:"2.10M", don:"15.0k", kills:"31.7k", av:"MY", c:"#3a3a56" },
+    { ign:"Tsuki", rank:3, status:"active", seen:"6h", seenD:0.25, tz:"UTC+9", online:"13:00–16:00", slot:"B", power:"2.02M", don:"12.7k", kills:"28.9k", av:"TK", c:"#3a3a56" },
+    { ign:"Lorel", rank:3, status:"loa", seen:"9d", seenD:9, tz:"UTC-8", online:"02:00–05:00", slot:"B", power:"1.88M", don:"3.2k", kills:"9.1k", av:"LO", c:"#3a3a56" },
+    { ign:"Vex", rank:2, status:"active", seen:"3h", seenD:0.12, tz:"UTC+2", online:"18:00–21:00", slot:"A", power:"1.54M", don:"9.8k", kills:"40.0k", av:"VX", c:"#2f2f47" },
+    { ign:"Renn", rank:2, status:"active", seen:"1d", seenD:1, tz:"UTC+5:30", online:"15:00–18:00", slot:"A", power:"1.47M", don:"8.4k", kills:"22.3k", av:"RE", c:"#2f2f47" },
+    { ign:"Pell", rank:2, status:"active", seen:"4h", seenD:0.17, tz:"UTC-3", online:"21:00–24:00", slot:"B", power:"1.39M", don:"7.9k", kills:"18.6k", av:"PL", c:"#2f2f47" },
+    { ign:"Dax", rank:1, status:"active", seen:"2d", seenD:2, tz:"UTC+10", online:"11:00–14:00", slot:"A", power:"1.02M", don:"5.1k", kills:"33.5k", av:"DR", c:"#2a2a40" },
+    { ign:"Kesh", rank:1, status:"inactive", seen:"16d", seenD:16, tz:"UTC+3", online:"—", slot:"—", power:"0.88M", don:"0", kills:"1.2k", av:"KE", c:"#2a2a40" },
+    { ign:"Orin", rank:1, status:"inactive", seen:"21d", seenD:21, tz:"UTC-6", online:"—", slot:"—", power:"0.81M", don:"0", kills:"0.4k", av:"OR", c:"#2a2a40" },
+  ];
+  const statusPill = { active:'<span class="pill good">ACTIVE</span>', loa:'<span class="pill warn">LOA</span>', inactive:'<span class="pill bad">INACTIVE</span>' };
+  const slotPill = s => s==="—" ? '<span class="muted">—</span>' : `<span class="pill ${s==='A'?'violet':'desert'}">${s}</span>`;
+  const crown = '<svg viewBox="0 0 24 24" fill="currentColor"><path d="M3 7l4 4 5-6 5 6 4-4-2 12H5L3 7Z"/></svg>';
+  const seenTag = m => { const d=m.seenD; const c = d>14?'var(--bad)':d>7?'var(--warn)':d<=2?'var(--good)':'var(--text-2)'; return `<span class="mono" style="color:${c}">${m.seen}</span>`; };
+
+  function renderMembers(filter="all", q="") {
+    const tb = document.getElementById("memberRows");
+    q = q.trim().toLowerCase();
+    const rows = members.filter(m => {
+      if (q && !m.ign.toLowerCase().includes(q)) return false;
+      if (filter==="officers") return m.rank>=4;
+      if (filter==="active") return m.status==="active";
+      if (filter==="loa") return m.status==="loa";
+      if (filter==="inactive") return m.status==="inactive";
+      return true;
+    });
+    tb.innerHTML = rows.map(m => `
+      <tr>
+        <td><div class="cell-ign"><div class="avatar" style="width:30px;height:30px;font-size:.7rem;background:${m.c}">${m.av}</div>
+          <div><b>${m.ign}</b>${m.gm?'<div class="gm">GUILDMASTER</div>':''}</div></div></td>
+        <td><span class="rank r${m.rank}">${m.rank===5?crown:''}R${m.rank}</span></td>
+        <td>${statusPill[m.status]}</td>
+        <td>${seenTag(m)}</td>
+        <td class="mono muted">${m.tz}</td>
+        <td class="mono muted">${m.online}</td>
+        <td>${slotPill(m.slot)}</td>
+        <td class="num">${m.power}</td>
+        <td class="num" style="color:var(--desert)">${m.don}</td>
+        <td class="num">${m.kills}</td>
+      </tr>`).join("");
+    if(!rows.length) tb.innerHTML = '<tr><td colspan="10" style="text-align:center;padding:32px;color:var(--text-3)">No members match.</td></tr>';
+  }
+
+  // ----- navigation -----
+  function go(page) {
+    document.querySelectorAll(".page").forEach(p => p.classList.toggle("active", p.id===page));
+    document.querySelectorAll("[data-page]").forEach(b => b.classList.toggle("active", b.dataset.page===page));
+    window.scrollTo({ top:0, behavior:"instant" in window ? "instant" : "auto" });
+  }
+  document.querySelectorAll("[data-page]").forEach(b => b.addEventListener("click", () => go(b.dataset.page)));
+  document.querySelectorAll("[data-jump]").forEach(a => a.addEventListener("click", e => { e.preventDefault(); go(a.dataset.jump); }));
+
+  // ----- member filters -----
+  let curFilter = "all";
+  document.querySelectorAll("#memberFilter button").forEach(b => b.addEventListener("click", () => {
+    document.querySelectorAll("#memberFilter button").forEach(x => x.classList.remove("on"));
+    b.classList.add("on"); curFilter = b.dataset.f;
+    renderMembers(curFilter, document.getElementById("memberSearch").value);
+  }));
+  document.getElementById("memberSearch").addEventListener("input", e => renderMembers(curFilter, e.target.value));
+
+  renderMembers();
+
+  // ----- dual clock: server (UTC-2) + local -----
+  const SERVER_OFFSET = -2; // game server = UTC-2
+  const pad = n => String(n).padStart(2, "0");
+
+  function tick() {
+    const now = new Date();
+    const utcMs = now.getTime() + now.getTimezoneOffset() * 60000;
+    const server = new Date(utcMs + SERVER_OFFSET * 3600000);
+    document.getElementById("clkServer").textContent = pad(server.getHours()) + ":" + pad(server.getMinutes());
+    document.getElementById("clkLocal").textContent = pad(now.getHours()) + ":" + pad(now.getMinutes());
+  }
+
+  function localLabel() {
+    const off = -new Date().getTimezoneOffset() / 60;
+    const sign = off >= 0 ? "+" : "−";
+    const h = Math.abs(off);
+    const whole = Math.floor(h);
+    const mins = Math.round((h - whole) * 60);
+    return "UTC" + sign + whole + (mins ? ":" + pad(mins) : "");
+  }
+
+  // convert a server-time "HH:MM" into the viewer's local "HH:MM"
+  function serverToLocal(str) {
+    const [h, m] = str.split(":").map(Number);
+    const localOff = -new Date().getTimezoneOffset() / 60;
+    const diff = localOff - SERVER_OFFSET; // hours
+    let total = h * 60 + m + Math.round(diff * 60);
+    total = ((total % 1440) + 1440) % 1440;
+    return pad(Math.floor(total / 60)) + ":" + pad(total % 60);
+  }
+
+  document.getElementById("tzLocal").textContent = localLabel();
+  document.querySelectorAll("[data-server]").forEach(el => { el.textContent = serverToLocal(el.dataset.server); });
+  tick();
+  setInterval(tick, 10000);
+</script>
