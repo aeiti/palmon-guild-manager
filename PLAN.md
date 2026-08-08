@@ -13,6 +13,9 @@ members, events, and strongholds, with Discord-based login and trend history.
 > Game mechanics: [`docs/game-data.md`](docs/game-data.md) — extracted from
 > in-game screenshots. **That document is authoritative** where it and this
 > plan disagree.
+>
+> UI vocabulary: [`docs/components.md`](docs/components.md) — the component
+> spec every screen is built from.
 
 ### Terminology (corrected against the game)
 
@@ -90,8 +93,11 @@ Three app roles, separate from in-game rank:
   - **R1–R3 → Member.**
   - **R5** additionally carries a **"Guildmaster"** title/marker (cosmetic +
     dashboard highlight, no extra permissions beyond Officer).
-- In-game rank and app permission are independent axes and can diverge when
-  needed.
+- In-game rank and app permission are **independent axes that do diverge in
+  practice**: the site owner (`aeiti`) is **R4 in game but Admin in the app**,
+  while the R5 guildmaster (`Kitsune`) holds Officer permissions. The UI must
+  never style app role and in-game rank alike — see
+  [`docs/components.md`](docs/components.md) §5.4.
 
 ### Field-level edit permissions
 
