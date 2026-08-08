@@ -12,7 +12,7 @@ import { WarningItem, type Severity } from "@/components/domain/data/warning-ite
 import { BuffStack } from "@/components/domain/stronghold/buff-stack";
 import { MemberChip } from "@/components/domain/member/member-chip";
 import { TimePair } from "@/components/domain/time/time-pair";
-import { EVENT_SHORT } from "@/lib/game/event";
+import { EventBadge } from "@/components/domain/event/event-badge";
 import {
   governorCapacity,
   totalExpPerHour,
@@ -234,9 +234,7 @@ export default function DashboardPage() {
                   className="flex items-center justify-between gap-3 border-b border-border/60 pb-2 last:border-0 last:pb-0"
                 >
                   <div className="flex min-w-0 items-center gap-2">
-                    <Badge tone="violet" size="sm">
-                      {EVENT_SHORT[e.type]}
-                    </Badge>
+                    <EventBadge type={e.type} short />
                     <span className="truncate text-sm text-text-2">
                       {e.title}
                     </span>

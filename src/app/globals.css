@@ -44,6 +44,15 @@
   --rank-3: #60a5fa; /* blue */
   --rank-2: #4ade80; /* green */
   --rank-1: #86849e; /* grey */
+
+  /* Event-type categorical palette — a distinct hue per event type, like the
+     rank ramp. Same sanctioned-exception status (docs/components.md §1.1). */
+  --event-hunt: #fb923c; /* orange */
+  --event-sandstorm: #2dd4bf; /* teal */
+  --event-duel: #fb7185; /* rose */
+  --event-clash: #f5c94b; /* gold */
+  --event-pallantis: #818cf8; /* indigo */
+  --event-arctic: #67e8f9; /* ice */
 }
 
 @theme inline {
@@ -67,6 +76,12 @@
   --color-rank-3: var(--rank-3);
   --color-rank-2: var(--rank-2);
   --color-rank-1: var(--rank-1);
+  --color-event-hunt: var(--event-hunt);
+  --color-event-sandstorm: var(--event-sandstorm);
+  --color-event-duel: var(--event-duel);
+  --color-event-clash: var(--event-clash);
+  --color-event-pallantis: var(--event-pallantis);
+  --color-event-arctic: var(--event-arctic);
 
   /* Fonts — mono for wordmark/labels/data, system sans for body/headings */
   --font-sans: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto,

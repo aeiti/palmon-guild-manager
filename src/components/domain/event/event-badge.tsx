@@ -1,8 +1,9 @@
 import { cn } from "@/lib/utils";
 import { EVENT_LABEL, EVENT_SHORT, type EventType } from "@/lib/game/event";
-import { EventTypeIcon } from "./event-type-icon";
+import { EVENT_CHIP, EventTypeIcon } from "./event-type-icon";
 
-/** Icon + label pill for an event type (docs/components.md §3.4). */
+/** Icon + label pill for an event type (docs/components.md §3.4), tinted with
+ * the type's categorical colour. */
 export function EventBadge({
   type,
   short = false,
@@ -15,11 +16,12 @@ export function EventBadge({
   return (
     <span
       className={cn(
-        "inline-flex items-center gap-1.5 rounded-md border border-border-2 bg-surface-2 px-2 py-0.5 font-mono text-xs uppercase tracking-wide text-text-2",
+        "inline-flex items-center gap-1.5 rounded-md border px-2 py-0.5 font-mono text-xs uppercase tracking-wide",
+        EVENT_CHIP[type],
         className,
       )}
     >
-      <EventTypeIcon type={type} className="size-3.5" />
+      <EventTypeIcon type={type} colored={false} className="size-3.5" />
       {short ? EVENT_SHORT[type] : EVENT_LABEL[type]}
     </span>
   );

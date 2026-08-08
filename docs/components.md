@@ -38,10 +38,17 @@ raw hex in a component.
 
 Single dark theme, committed. Backgrounds are always painted explicitly.
 
-**One sanctioned exception:** `RankBadge` (§3.1) colours R1–R5 to match the game
-(R5 amber, R4 violet, R3 blue, R2 green, R1 grey). It uses dedicated `rank-*`
-tokens so `--violet`/`--desert` keep their reserved meaning everywhere else.
-This is the *only* place the three rules bend, and only for in-game rank.
+**Two sanctioned exceptions,** both categorical (identity, not state), each on
+dedicated tokens so `--violet`/`--desert` keep their reserved meaning everywhere
+else:
+
+1. `RankBadge` (§3.1) colours R1–R5 to match the game (R5 amber, R4 violet, R3
+   blue, R2 green, R1 grey) via `rank-*` tokens.
+2. `EventTypeIcon`/`EventBadge` (§3.4) give each of the six event types a
+   distinct hue via `event-*` tokens (hunt orange, sandstorm teal, duel rose,
+   clash gold, pallantis indigo, arctic ice).
+
+Nowhere else do the three rules bend.
 
 ### 1.2 Typography
 
@@ -121,8 +128,8 @@ each is that a rule lives in **one** place.
 
 | Component | Signature | Notes |
 | --- | --- | --- |
-| `EventTypeIcon` | `{ type }` | One icon + colour per event type, defined once. |
-| `EventBadge` | `{ type }` | Icon + label pill. |
+| `EventTypeIcon` | `{ type, colored? }` | Hand-drawn SVG glyph + categorical colour per event type (`event-*` tokens), defined once. |
+| `EventBadge` | `{ type, short? }` | Icon + label pill, tinted with the type's colour. |
 | `EventCard` | `{ event }` | Shell + a per-type body (see below). |
 | `EventBody.*` | — | One small component per event type — `GuildHunt`, `Sandstorm`, `GuildDuel`, `GuildClash`, `Pallantis`, `ArcticShowdown` — each rendering that event's real fields (§4a of PLAN.md). This is why `typeFields` is typed, not free-form. |
 | `ContributionBoard` | `{ eventId, metric }` | Ranked per-member contribution for one event. `metric` drives the unit label (damage / personal points / Temple Points). |

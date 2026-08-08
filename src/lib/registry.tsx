@@ -41,6 +41,7 @@ import { TimezoneCoverage } from "@/components/domain/kpi/timezone-coverage";
 import { contributionScore } from "@/lib/metrics";
 import { TimePair } from "@/components/domain/time/time-pair";
 import { EventBadge } from "@/components/domain/event/event-badge";
+import { EventTypeIcon } from "@/components/domain/event/event-type-icon";
 import { EventCard } from "@/components/domain/event/event-card";
 import { ContributionBoard } from "@/components/domain/event/contribution-board";
 import { ParticipationMatrix } from "@/components/domain/event/participation-matrix";
@@ -744,10 +745,23 @@ export const REGISTRY: RegistryEntry[] = [
 
   // ---- Event ----
   {
+    id: "event-type-icon",
+    name: "EventTypeIcon",
+    category: "Event",
+    description: "Hand-drawn glyph + categorical colour, one per event type.",
+    render: () => (
+      <div className="flex flex-wrap items-center gap-4">
+        {ALL_EVENT_TYPES.map((t) => (
+          <EventTypeIcon key={t} type={t} className="size-7" />
+        ))}
+      </div>
+    ),
+  },
+  {
     id: "event-badge",
     name: "EventBadge",
     category: "Event",
-    description: "Icon + label pill, one per event type (icons neutral for now).",
+    description: "Icon + label pill, tinted with the event type's colour.",
     render: () => (
       <div className="flex flex-wrap gap-2">
         {ALL_EVENT_TYPES.map((t) => (
