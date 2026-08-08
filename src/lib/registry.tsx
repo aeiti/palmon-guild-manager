@@ -32,6 +32,13 @@ import { DataTable, type Column } from "@/components/domain/data/data-table";
 import { DistributionBar } from "@/components/domain/data/distribution-bar";
 import { WarningItem } from "@/components/domain/data/warning-item";
 import { ProgressBar } from "@/components/domain/data/progress-bar";
+import { Sparkline } from "@/components/domain/data/sparkline";
+import { AreaChart } from "@/components/domain/data/area-chart";
+import { BarSeries } from "@/components/domain/data/bar-series";
+import { ContributionScore } from "@/components/domain/kpi/contribution-score";
+import { StreakBadge } from "@/components/domain/kpi/streak-badge";
+import { TimezoneCoverage } from "@/components/domain/kpi/timezone-coverage";
+import { contributionScore } from "@/lib/metrics";
 import { TimePair } from "@/components/domain/time/time-pair";
 import { EventBadge } from "@/components/domain/event/event-badge";
 import { EventCard } from "@/components/domain/event/event-card";
@@ -71,7 +78,18 @@ export const CATEGORY_ORDER = [
   "Stronghold",
   "Time",
   "Event",
+  "KPI",
 ];
+
+const SCORE_DEMO = contributionScore(
+  {
+    participationRate: 0.875,
+    kills: 2_610_000,
+    donations: 184_000,
+    eventResults: 0.75,
+  },
+  { kills: 2_940_000, donations: 201_500 },
+);
 
 const ALL_EVENT_TYPES: EventType[] = [
   "guildHunt",
@@ -511,6 +529,45 @@ export const REGISTRY: RegistryEntry[] = [
     ),
   },
   {
+    id: "sparkline",
+    name: "Sparkline",
+    category: "Data",
+    description: "Tiny trend line with an emphasised endpoint. Inline SVG.",
+    render: () => (
+      <Sparkline data={[44, 45, 46, 47, 47, 48, 49, 49]} width={160} height={40} />
+    ),
+  },
+  {
+    id: "area-chart",
+    name: "AreaChart",
+    category: "Data",
+    description: "Area + line + faint grid; responsive; optional x labels.",
+    render: () => (
+      <div className="max-w-md">
+        <AreaChart
+          data={[820, 910, 880, 1040, 1120, 1080, 1210, 1290]}
+          labels={["W1", "W2", "W3", "W4", "W5", "W6", "W7", "W8"]}
+        />
+      </div>
+    ),
+  },
+  {
+    id: "bar-series",
+    name: "BarSeries",
+    category: "Data",
+    description: "Vertical bars, tallest emphasised. Violet or desert.",
+    render: () => (
+      <div className="max-w-md">
+        <BarSeries
+          data={[21, 24, 19, 28, 31, 26, 34, 36].map((v, i) => ({
+            label: `W${i + 1}`,
+            value: v,
+          }))}
+        />
+      </div>
+    ),
+  },
+  {
     id: "distribution-bar",
     name: "DistributionBar",
     category: "Data",
@@ -738,6 +795,48 @@ export const REGISTRY: RegistryEntry[] = [
         events={MATRIX_DEMO_EVENTS}
         getValue={getContribution}
       />
+    ),
+  },
+
+  // ---- KPI ----
+  {
+    id: "contribution-score",
+    name: "ContributionScore",
+    category: "KPI",
+    description: "Weighted composite (participation ≫ kills > donations); breakdown.",
+    render: () => (
+      <div className="max-w-xs">
+        <ContributionScore
+          score={SCORE_DEMO.score}
+          breakdown={SCORE_DEMO.breakdown}
+          size="lg"
+        />
+      </div>
+    ),
+  },
+  {
+    id: "streak-badge",
+    name: "StreakBadge",
+    category: "KPI",
+    description: "Consecutive events contributed to; active = good, broken = muted.",
+    render: () => (
+      <Row>
+        <StreakBadge count={8} active />
+        <StreakBadge count={3} active />
+        <StreakBadge count={5} active={false} />
+        <StreakBadge count={0} active={false} />
+      </Row>
+    ),
+  },
+  {
+    id: "timezone-coverage",
+    name: "TimezoneCoverage",
+    category: "KPI",
+    description: "24h band in server time; bar height = members online; red = gap.",
+    render: () => (
+      <div className="max-w-lg">
+        <TimezoneCoverage members={MOCK_MEMBERS} />
+      </div>
     ),
   },
 ];
