@@ -9,12 +9,19 @@ import {
   totalExpPerHour,
 } from "@/lib/game/stronghold";
 import { getMembers, getStrongholds } from "@/lib/data/queries";
+import { currentRole } from "@/lib/auth/guard";
+import { EditableStronghold } from "./stronghold-edit-dialog";
 
 export const metadata = { title: "Strongholds — VOID" };
 export const dynamic = "force-dynamic";
 
 export default async function StrongholdsPage() {
-  const [all, members] = await Promise.all([getStrongholds(), getMembers()]);
+  const [all, members, role] = await Promise.all([
+    getStrongholds(),
+    getMembers(),
+    currentRole(),
+  ]);
+  const canEdit = role === "admin" || role === "officer";
   const sanctums = all.filter((s) => s.category === "sanctum");
   const ruins = all.filter((s) => s.category === "desertRuin");
 
@@ -72,27 +79,30 @@ export default async function StrongholdsPage() {
       <section className="space-y-3">
         <SectionTitle>Sanctums</SectionTitle>
         <div className="grid gap-3 md:grid-cols-2 xl:grid-cols-3">
-          {sanctums.map((s) => (
-            <StrongholdCard
-              key={s.id}
-              stronghold={s}
-              members={members}
-              canEdit
-            />
-          ))}
+          {sanctums.map((s) =>
+            canEdit ? (
+              <EditableStronghold key={s.id} stronghold={s} members={members}>
+                <StrongholdCard stronghold={s} members={members} />
+              </EditableStronghold>
+            ) : (
+              <StrongholdCard key={s.id} stronghold={s} members={members} />
+            ),
+          )}
         </div>
       </section>
 
       <section className="space-y-3">
         <SectionTitle>Desert Ruins</SectionTitle>
         <div className="grid gap-3 sm:grid-cols-2 xl:grid-cols-3">
-          {ruins.map((s) => (
-            <StrongholdCard
-              key={s.id}
-              stronghold={s}
-              members={members}
-            />
-          ))}
+          {ruins.map((s) =>
+            canEdit ? (
+              <EditableStronghold key={s.id} stronghold={s} members={members}>
+                <StrongholdCard stronghold={s} members={members} />
+              </EditableStronghold>
+            ) : (
+              <StrongholdCard key={s.id} stronghold={s} members={members} />
+            ),
+          )}
         </div>
       </section>
     </div>

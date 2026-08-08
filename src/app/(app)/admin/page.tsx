@@ -4,12 +4,26 @@ import { WarningItem } from "@/components/domain/data/warning-item";
 import { AppRoleBadge } from "@/components/domain/member/app-role-badge";
 import { MOCK_ROLE_MAP } from "@/lib/mock/users";
 import { getAppUsers } from "@/lib/data/queries";
+import { currentRole } from "@/lib/auth/guard";
+import { ErrorState } from "@/components/layout/states";
 import { AdminUsersTable } from "./admin-users-table";
 
 export const metadata = { title: "Admin — VOID" };
 export const dynamic = "force-dynamic";
 
 export default async function AdminPage() {
+  const role = await currentRole();
+  if (role !== "admin") {
+    return (
+      <div className="space-y-6">
+        <PageHeader eyebrow="Access control" title="Admin" />
+        <ErrorState
+          title="Admins only"
+          detail="You need the Admin app role to manage users and roles."
+        />
+      </div>
+    );
+  }
   const { users, members } = await getAppUsers();
   return (
     <div className="space-y-6">

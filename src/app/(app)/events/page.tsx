@@ -12,6 +12,8 @@ import {
   getEvents,
   getMembers,
 } from "@/lib/data/queries";
+import { currentRole } from "@/lib/auth/guard";
+import { EditableEvent } from "./event-edit-dialog";
 
 export const metadata = { title: "Events — VOID" };
 export const dynamic = "force-dynamic";
@@ -24,11 +26,13 @@ const MATRIX_EVENTS: MatrixEvent[] = [
 ];
 
 export default async function EventsPage() {
-  const [events, contribMap, members] = await Promise.all([
+  const [events, contribMap, members, role] = await Promise.all([
     getEvents(),
     getContributionsMap(),
     getMembers(),
+    currentRole(),
   ]);
+  const canEdit = role === "admin" || role === "officer";
   const getValue = (eventId: string, memberId: string) =>
     contribMap[eventId]?.find((e) => e.memberId === memberId)?.value;
 
@@ -43,9 +47,20 @@ export default async function EventsPage() {
       <section className="space-y-3">
         <SectionTitle>This week</SectionTitle>
         <div className="grid gap-3 md:grid-cols-2 xl:grid-cols-3">
-          {events.map((e) => (
-            <EventCard key={e.id} event={e} members={members} />
-          ))}
+          {events.map((e) =>
+            canEdit ? (
+              <EditableEvent
+                key={e.id}
+                event={e}
+                members={members}
+                contributions={contribMap[e.id] ?? []}
+              >
+                <EventCard event={e} members={members} />
+              </EditableEvent>
+            ) : (
+              <EventCard key={e.id} event={e} members={members} />
+            ),
+          )}
         </div>
       </section>
 

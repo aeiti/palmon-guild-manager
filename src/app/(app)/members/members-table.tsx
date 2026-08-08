@@ -1,5 +1,7 @@
 "use client";
 
+import * as React from "react";
+import { Pencil } from "lucide-react";
 import type { Member } from "@/lib/game/types";
 import { activityFromBucket, bucketSortValue } from "@/lib/game/last-seen";
 import { DataTable, type Column } from "@/components/domain/data/data-table";
@@ -9,6 +11,7 @@ import { RankBadge } from "@/components/domain/member/rank-badge";
 import { SquadBadge } from "@/components/domain/member/squad-badge";
 import { StatusPill } from "@/components/domain/member/status-pill";
 import { LastSeen } from "@/components/domain/member/last-seen";
+import { MemberEditDialog } from "./member-edit-dialog";
 
 const SQUAD_ORDER = { A: 0, B: 1 } as const;
 
@@ -75,13 +78,51 @@ const columns: Column<Member>[] = [
   },
 ];
 
-export function MembersTable({ members }: { members: Member[] }) {
+export function MembersTable({
+  members,
+  canEdit = false,
+}: {
+  members: Member[];
+  canEdit?: boolean;
+}) {
+  const [editing, setEditing] = React.useState<Member | null>(null);
+
+  const cols: Column<Member>[] = canEdit
+    ? [
+        ...columns,
+        {
+          key: "edit",
+          header: "",
+          align: "right",
+          cell: (m) => (
+            <button
+              type="button"
+              onClick={() => setEditing(m)}
+              aria-label={`Edit ${m.ign}`}
+              className="inline-flex items-center gap-1 rounded-md px-2 py-1 text-xs text-text-3 transition-colors hover:bg-surface-2 hover:text-violet"
+            >
+              <Pencil className="size-3.5" />
+            </button>
+          ),
+        },
+      ]
+    : columns;
+
   return (
-    <DataTable
-      columns={columns}
-      rows={members}
-      getRowId={(m) => m.id}
-      initialSort={{ key: "power", dir: "desc" }}
-    />
+    <>
+      <DataTable
+        columns={cols}
+        rows={members}
+        getRowId={(m) => m.id}
+        initialSort={{ key: "power", dir: "desc" }}
+      />
+      {editing ? (
+        <MemberEditDialog
+          member={editing}
+          open={!!editing}
+          onOpenChange={(o) => !o && setEditing(null)}
+        />
+      ) : null}
+    </>
   );
 }

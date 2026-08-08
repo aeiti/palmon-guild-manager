@@ -4,13 +4,15 @@ import { StatTile } from "@/components/domain/data/stat-tile";
 import { Metric } from "@/components/domain/data/metric";
 import { activityFromBucket } from "@/lib/game/last-seen";
 import { getMembers } from "@/lib/data/queries";
+import { currentRole } from "@/lib/auth/guard";
 import { MembersTable } from "./members-table";
 
 export const metadata = { title: "Members — VOID" };
 export const dynamic = "force-dynamic";
 
 export default async function MembersPage() {
-  const members = await getMembers();
+  const [members, role] = await Promise.all([getMembers(), currentRole()]);
+  const canEdit = role === "admin" || role === "officer";
   const total = members.length;
   const guildmasters = members.filter((m) => m.isGuildmaster).length;
   const active = members.filter(
@@ -53,7 +55,7 @@ export default async function MembersPage() {
         />
       </div>
 
-      <MembersTable members={members} />
+      <MembersTable members={members} canEdit={canEdit} />
     </div>
   );
 }
