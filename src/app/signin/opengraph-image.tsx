@@ -4,7 +4,7 @@ import { ImageResponse } from "next/og";
 // — the only ungated route — so crawlers can fetch it. Colors mirror the design
 // tokens in globals.css. next/og ships a default sans font; we lean on wide
 // letter-spacing to echo the mono wordmark rather than bundling a font file.
-export const runtime = "edge";
+export const runtime = "nodejs";
 export const alt = "VOID — Guild Manager (Palmon: Survival, server #111)";
 export const size = { width: 1200, height: 630 };
 export const contentType = "image/png";
