@@ -31,7 +31,13 @@ import { DeltaIndicator } from "@/components/domain/data/delta-indicator";
 import { DataTable, type Column } from "@/components/domain/data/data-table";
 import { DistributionBar } from "@/components/domain/data/distribution-bar";
 import { WarningItem } from "@/components/domain/data/warning-item";
+import { ProgressBar } from "@/components/domain/data/progress-bar";
 import { TimePair } from "@/components/domain/time/time-pair";
+import { EventBadge } from "@/components/domain/event/event-badge";
+import { EventCard } from "@/components/domain/event/event-card";
+import { ContributionBoard } from "@/components/domain/event/contribution-board";
+import { ParticipationMatrix } from "@/components/domain/event/participation-matrix";
+import type { EventType } from "@/lib/game/event";
 import { Coords } from "@/components/domain/stronghold/coords";
 import { ExpRate } from "@/components/domain/stronghold/exp-rate";
 import { BuffChip } from "@/components/domain/stronghold/buff-chip";
@@ -43,6 +49,11 @@ import { StrongholdCard } from "@/components/domain/stronghold/stronghold-card";
 import type { Member } from "@/lib/game/types";
 import { MOCK_MEMBERS } from "@/lib/mock/members";
 import { MOCK_STRONGHOLDS } from "@/lib/mock/strongholds";
+import {
+  MOCK_CONTRIBUTIONS,
+  MOCK_EVENTS,
+  getContribution,
+} from "@/lib/mock/events";
 
 export interface RegistryEntry {
   id: string;
@@ -59,6 +70,23 @@ export const CATEGORY_ORDER = [
   "Data",
   "Stronghold",
   "Time",
+  "Event",
+];
+
+const ALL_EVENT_TYPES: EventType[] = [
+  "guildHunt",
+  "sandstorm",
+  "guildDuel",
+  "guildClash",
+  "pallantis",
+  "arcticShowdown",
+];
+
+const MATRIX_DEMO_EVENTS = [
+  { id: "e-hunt", type: "guildHunt" as const },
+  { id: "e-sandstorm", type: "sandstorm" as const },
+  { id: "e-duel", type: "guildDuel" as const },
+  { id: "e-pallantis", type: "pallantis" as const },
 ];
 
 /** Small helpers to keep example blocks tidy. */
@@ -470,6 +498,19 @@ export const REGISTRY: RegistryEntry[] = [
     render: () => <DataTableDemo />,
   },
   {
+    id: "progress-bar",
+    name: "ProgressBar",
+    category: "Data",
+    description: "Proportional bar, clamped 0–100%, variant-coloured.",
+    render: () => (
+      <div className="max-w-sm space-y-2">
+        <ProgressBar value={70} max={100} />
+        <ProgressBar value={45} max={100} variant="desert" />
+        <ProgressBar value={100} max={100} variant="good" />
+      </div>
+    ),
+  },
+  {
     id: "distribution-bar",
     name: "DistributionBar",
     category: "Data",
@@ -641,6 +682,62 @@ export const REGISTRY: RegistryEntry[] = [
           members={MOCK_MEMBERS}
         />
       </div>
+    ),
+  },
+
+  // ---- Event ----
+  {
+    id: "event-badge",
+    name: "EventBadge",
+    category: "Event",
+    description: "Icon + label pill, one per event type (icons neutral for now).",
+    render: () => (
+      <div className="flex flex-wrap gap-2">
+        {ALL_EVENT_TYPES.map((t) => (
+          <EventBadge key={t} type={t} />
+        ))}
+      </div>
+    ),
+  },
+  {
+    id: "event-card",
+    name: "EventCard",
+    category: "Event",
+    description: "Shell + a per-type body rendering that event's real fields.",
+    render: () => (
+      <div className="grid max-w-3xl gap-3 md:grid-cols-2">
+        {MOCK_EVENTS.slice(0, 4).map((e) => (
+          <EventCard key={e.id} event={e} members={MOCK_MEMBERS} />
+        ))}
+      </div>
+    ),
+  },
+  {
+    id: "contribution-board",
+    name: "ContributionBoard",
+    category: "Event",
+    description: "Ranked per-member contribution for one event; MVP + sub-scores.",
+    render: () => (
+      <div className="max-w-md">
+        <ContributionBoard
+          entries={MOCK_CONTRIBUTIONS["e-hunt"]}
+          members={MOCK_MEMBERS}
+          metric="damage"
+        />
+      </div>
+    ),
+  },
+  {
+    id: "participation-matrix",
+    name: "ParticipationMatrix",
+    category: "Event",
+    description: "Members × events, contributed values; non-participation = dash.",
+    render: () => (
+      <ParticipationMatrix
+        members={MOCK_MEMBERS.slice(0, 8)}
+        events={MATRIX_DEMO_EVENTS}
+        getValue={getContribution}
+      />
     ),
   },
 ];
