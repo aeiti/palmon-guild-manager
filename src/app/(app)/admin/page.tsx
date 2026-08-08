@@ -8,7 +8,7 @@ import { currentRole } from "@/lib/auth/guard";
 import { ErrorState } from "@/components/layout/states";
 import { AdminUsersTable } from "./admin-users-table";
 
-export const metadata = { title: "Admin — VOID" };
+export const metadata = { title: "Admin" };
 export const dynamic = "force-dynamic";
 
 export default async function AdminPage() {

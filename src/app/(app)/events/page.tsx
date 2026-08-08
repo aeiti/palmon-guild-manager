@@ -15,7 +15,7 @@ import {
 import { currentRole } from "@/lib/auth/guard";
 import { EditableEvent } from "./event-edit-dialog";
 
-export const metadata = { title: "Events — VOID" };
+export const metadata = { title: "Events" };
 export const dynamic = "force-dynamic";
 
 const MATRIX_EVENTS: MatrixEvent[] = [

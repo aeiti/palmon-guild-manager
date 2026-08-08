@@ -12,7 +12,7 @@ import { getMembers, getStrongholds } from "@/lib/data/queries";
 import { currentRole } from "@/lib/auth/guard";
 import { EditableStronghold } from "./stronghold-edit-dialog";
 
-export const metadata = { title: "Strongholds — VOID" };
+export const metadata = { title: "Strongholds" };
 export const dynamic = "force-dynamic";
 
 export default async function StrongholdsPage() {
