@@ -29,6 +29,9 @@ import { Metric } from "@/components/domain/data/metric";
 import { StatTile } from "@/components/domain/data/stat-tile";
 import { DeltaIndicator } from "@/components/domain/data/delta-indicator";
 import { DataTable, type Column } from "@/components/domain/data/data-table";
+import { DistributionBar } from "@/components/domain/data/distribution-bar";
+import { WarningItem } from "@/components/domain/data/warning-item";
+import { TimePair } from "@/components/domain/time/time-pair";
 import { Coords } from "@/components/domain/stronghold/coords";
 import { ExpRate } from "@/components/domain/stronghold/exp-rate";
 import { BuffChip } from "@/components/domain/stronghold/buff-chip";
@@ -55,6 +58,7 @@ export const CATEGORY_ORDER = [
   "Member",
   "Data",
   "Stronghold",
+  "Time",
 ];
 
 /** Small helpers to keep example blocks tidy. */
@@ -464,6 +468,71 @@ export const REGISTRY: RegistryEntry[] = [
     category: "Data",
     description: "Sortable table — click a header. Sticky header, scrolls x.",
     render: () => <DataTableDemo />,
+  },
+  {
+    id: "distribution-bar",
+    name: "DistributionBar",
+    category: "Data",
+    description: "Stacked proportional bar + legend — the R5→R1 rank split.",
+    render: () => (
+      <div className="max-w-md">
+        <DistributionBar
+          segments={[
+            { key: "R5", label: "R5", value: 1, color: "bg-rank-5" },
+            { key: "R4", label: "R4", value: 3, color: "bg-rank-4" },
+            { key: "R3", label: "R3", value: 3, color: "bg-rank-3" },
+            { key: "R2", label: "R2", value: 2, color: "bg-rank-2" },
+            { key: "R1", label: "R1", value: 3, color: "bg-rank-1" },
+          ]}
+        />
+      </div>
+    ),
+  },
+  {
+    id: "warning-item",
+    name: "WarningItem",
+    category: "Data",
+    description: "Severity stripe + text; feeds 'Needs Attention'.",
+    render: () => (
+      <div className="max-w-md space-y-1.5">
+        <WarningItem
+          severity="critical"
+          title="Guardian unassigned — Goldglade Shrine"
+          detail="L4"
+        />
+        <WarningItem
+          severity="warning"
+          title="2 governor slots open — Goldglade Shrine"
+        />
+        <WarningItem
+          severity="info"
+          title="Steelstory Shrine opens soon"
+          detail="occupation window about to open"
+        />
+      </div>
+    ),
+  },
+
+  // ---- Time ----
+  {
+    id: "time-pair",
+    name: "TimePair",
+    category: "Time",
+    description: "The only way an event time renders — server (UTC−2) + local.",
+    render: () => {
+      const t = Date.now();
+      const iso = (h: number) => new Date(t + h * 3_600_000).toISOString();
+      return (
+        <div className="space-y-1">
+          <div>
+            <TimePair serverTime={iso(3)} />
+          </div>
+          <div>
+            <TimePair serverTime={iso(26)} />
+          </div>
+        </div>
+      );
+    },
   },
 
   // ---- Stronghold ----

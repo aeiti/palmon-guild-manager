@@ -17,3 +17,16 @@ export function useNow(): Date | null {
   );
   return seconds === null ? null : new Date(seconds * 1000);
 }
+
+/**
+ * False during SSR and the first client render, true thereafter — without a
+ * setState-in-effect. Use to gate viewer-local time rendering so it can't cause
+ * a hydration mismatch (the server has no idea what timezone the viewer is in).
+ */
+export function useMounted(): boolean {
+  return React.useSyncExternalStore(
+    () => () => {},
+    () => true,
+    () => false,
+  );
+}
