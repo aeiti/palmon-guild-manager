@@ -263,11 +263,17 @@ plus the **participation matrix** (members × events) and per-event value.
 - Roster size, average power, biggest power gainers/decliners.
 - Strongholds — total EXP/h and buff stack over time; buff-coverage gaps.
 
-### Candidate KPIs (proposed, not yet confirmed)
-- **Contribution Score** — single weighted composite (participation +
-  donations + kills + event results) for promotion/pruning decisions.
-- Attendance streaks; timezone coverage (24h defense readiness);
-  new-vs-churned members per week; rank-movement log.
+### KPIs confirmed for v1
+- **Contribution Score** — single weighted composite for promotion/pruning
+  decisions. **Priority: event participation ≫ kills > donations**, event-results
+  a modest add-on. Weights live in `lib/metrics.ts`, tunable in one place
+  (numbers are a starting point to retune on real data).
+- **Participation streaks** — consecutive events contributed to.
+- **Timezone coverage** — 24h defense-readiness band (roster spans UTC−8…UTC+9).
+
+Component homes for these are in [`docs/components.md`](docs/components.md) §3.8.
+Deferred: new-vs-churned per week, rank-movement log (schema supports them via
+`RankChangeLog`; build later).
 
 ---
 
@@ -315,8 +321,9 @@ Screenshots are captured and mechanics are resolved — see
 
 - **Arctic Showdown** roster/registration and bracket screens — user has no
   access yet, so its per-member contribution metric is still unknown.
-- Confirm which candidate KPIs from §5a to build (recommendation: Contribution
-  Score + participation streaks + timezone coverage).
+- ~~Confirm which candidate KPIs to build~~ — **done: Contribution Score,
+  participation streaks, timezone coverage** (see §5a). Contribution Score
+  weights still need tuning once real data exists.
 - Deferred by the user, not blocking: Guildmates **Groups** tab, Sandstorm
   **registration** screen, **Rank → Power / Kills** tabs.
 - Minor: the ~1% Construction delta between the sanctum buff sum (+20%) and the

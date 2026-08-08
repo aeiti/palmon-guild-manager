@@ -154,6 +154,18 @@ loaded. An empty roster and a failed fetch must not look the same.
 | `PermissionGate` | `{ can, children, fallback? }` | Hides or disables. |
 | `EditableField` | `{ value, canEdit, onSave, render }` | Read-only text when not permitted; inline edit when permitted. Keeps "who may edit what" out of every form. |
 
+### 3.8 KPIs (v1 confirmed)
+
+The three KPIs chosen for v1. Each has one component so the metric's definition
+lives in exactly one place; the arithmetic behind them lives in `lib/metrics.ts`
+(see §4), never inline in a component.
+
+| Component | Signature | Notes |
+| --- | --- | --- |
+| `ContributionScore` | `{ member, breakdown?, size? }` | The single **weighted composite** used for promote/prune calls. Renders the score compact; `breakdown` expands to show each weighted term so the number is never a black box. **Default priority (highest→lowest): event participation ≫ kills > donations**, with event-results (placements) a modest add-on. Weights are **data in `lib/metrics.ts`, tunable in one edit**; exact numbers are a starting point to retune once real data exists. Consumed by the Members `DataTable`, `Leaderboard`, and the promote/prune view. |
+| `StreakBadge` | `{ count, active }` | **Participation streak** — consecutive events a member contributed to. `active` (ongoing) reads in `--good`; a broken/zero streak reads muted. Sources from `ParticipationHistory`, so it means "showed up", not "logged in" (§5.1). |
+| `TimezoneCoverage` | `{ members, focus? }` | **24-hour coverage band** for defense readiness. X axis is the hour of day shown in **both** server (UTC−2) and viewer local (via the time rules in §3.3); height/intensity is how many members are typically online that hour, from each member's `timezone` + `onlineWindows`. Thin hours are flagged — that's the whole point, since the roster spans UTC−8…UTC+9. **Data is officer-seedable:** R4/R5 (Officer/Admin) can set any member's timezone + online windows (PLAN §3 field table), so coverage need not wait on self-service — members who haven't filled a profile simply don't contribute to the band yet. Inline SVG, same family as the other charts. |
+
 ---
 
 ## 4. File layout
@@ -166,12 +178,17 @@ components/
 lib/
   format.ts    number/time formatting — the ONLY place
   permissions.ts
+  metrics.ts   KPI arithmetic — contribution weights, streak calc, coverage bins
   game/        EXP tables, buff scaling, bucket→status maps
 ```
 
 `lib/game/` holds the rules from `docs/game-data.md` as data (EXP per level,
 buff scaling, governor capacity per level, bucket definitions) so components
 stay dumb and the tables stay checkable against the screenshots.
+
+`lib/metrics.ts` holds the KPI definitions from §3.8 — the Contribution Score
+weights (tunable in one place), the streak reducer over `ParticipationHistory`,
+and the hourly coverage binning — so the KPI components stay presentational.
 
 ---
 
@@ -203,17 +220,19 @@ stay dumb and the tables stay checkable against the screenshots.
 5. Stronghold set.
 6. Time set.
 7. Event set.
-8. Data-display set (charts last — they're the least load-bearing).
+8. Data-display set, then the §3.8 KPI components and charts last — they're the
+   least load-bearing and depend on the history tables being populated.
 
 ---
 
-## 7. Open decisions
+## 7. Resolved decisions
 
-- **Charts**: hand-rolled inline SVG (as in the mockup — zero deps, full token
-  control) vs Recharts (faster to build, heavier, harder to theme).
-  Recommendation: **inline SVG**, since our charts are simple and few.
-- **Tables**: plain `DataTable` vs TanStack Table. At ~50 rows, plain is
-  enough; TanStack only if we want column resize/virtualisation later.
-- **Icons**: Lucide (matches shadcn) vs the hand-drawn set in the mockup.
-  Recommendation: **Lucide for UI chrome, custom for event types**, since the
-  event icons carry meaning Lucide doesn't have.
+- **Charts: hand-rolled inline SVG.** Zero deps, full token control; our charts
+  are simple and few (`Sparkline` / `AreaChart` / `BarSeries` / `DistributionBar`
+  / the `TimezoneCoverage` band). Revisit only if a chart needs interaction the
+  SVG approach makes painful.
+- **Tables: plain `DataTable`.** At ~50–100 rows this is enough. Reach for
+  TanStack Table only if we later want column resize/virtualisation.
+- **Icons: Lucide for UI chrome, custom for event types.** Lucide matches
+  shadcn and covers nav/actions; the six event-type icons carry game meaning
+  Lucide doesn't have, so they stay hand-drawn (`EventTypeIcon`, one per type).
