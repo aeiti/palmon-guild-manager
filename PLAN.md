@@ -303,7 +303,11 @@ History tables land alongside their module so trends accrue from day one.
 
 ---
 
-## 8. Go-live inputs (needed before deploy, walkthrough provided later)
+## 8. Go-live inputs (needed before deploy)
+
+The auth + DB layer is **written and dormant** — see
+[`docs/auth-setup.md`](docs/auth-setup.md) for the step-by-step activation.
+Supply these (into `.env`, copied from `.env.example`):
 
 - Discord application: client ID, client secret, redirect URL.
 - VOID Discord **server (guild) ID**.
@@ -311,6 +315,8 @@ History tables land alongside their module so trends accrue from day one.
 - Neon database URL.
 - Auth.js secret.
 - Your **admin Discord ID** (`ADMIN_DISCORD_IDS`).
+
+Then `npm run db:push` and rename `middleware.ts.example` → `middleware.ts`.
 
 ---
 
