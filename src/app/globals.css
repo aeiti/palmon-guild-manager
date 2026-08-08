@@ -35,6 +35,15 @@
   --good: #4ade80;
   --warn: #fbbf24;
   --bad: #f87171;
+
+  /* In-game rank ramp — the ONE sanctioned exception to the colour rules
+     (docs/components.md §3.1). Dedicated tokens so --violet/--desert keep their
+     reserved meaning in code even though R4/R5 echo those hues. */
+  --rank-5: #e8a24c; /* amber/gold */
+  --rank-4: #a78bfa; /* violet */
+  --rank-3: #60a5fa; /* blue */
+  --rank-2: #4ade80; /* green */
+  --rank-1: #86849e; /* grey */
 }
 
 @theme inline {
@@ -53,6 +62,11 @@
   --color-good: var(--good);
   --color-warn: var(--warn);
   --color-bad: var(--bad);
+  --color-rank-5: var(--rank-5);
+  --color-rank-4: var(--rank-4);
+  --color-rank-3: var(--rank-3);
+  --color-rank-2: var(--rank-2);
+  --color-rank-1: var(--rank-1);
 
   /* Fonts — mono for wordmark/labels/data, system sans for body/headings */
   --font-sans: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto,

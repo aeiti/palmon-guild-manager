@@ -38,6 +38,11 @@ raw hex in a component.
 
 Single dark theme, committed. Backgrounds are always painted explicitly.
 
+**One sanctioned exception:** `RankBadge` (§3.1) colours R1–R5 to match the game
+(R5 amber, R4 violet, R3 blue, R2 green, R1 grey). It uses dedicated `rank-*`
+tokens so `--violet`/`--desert` keep their reserved meaning everywhere else.
+This is the *only* place the three rules bend, and only for in-game rank.
+
 ### 1.2 Typography
 
 | Role | Family | Notes |
@@ -83,7 +88,7 @@ each is that a rule lives in **one** place.
 
 | Component | Signature | Notes |
 | --- | --- | --- |
-| `RankBadge` | `{ rank: 1..5, guildmaster?: boolean }` | R1–R5, coloured to match the game (R5 amber, R4 violet, R3 blue, R2 green, R1 grey). Guildmaster adds a crown — a **title marker, not a permission**. |
+| `RankBadge` | `{ rank: 1..5, guildmaster?: boolean }` | R1–R5, coloured to match the game (R5 amber, R4 violet, R3 blue, R2 green, R1 grey) via dedicated `rank-*` tokens — the one sanctioned exception to §1.1. Guildmaster adds a crown — a **title marker, not a permission**. |
 | `AppRoleBadge` | `{ role: 'admin'\|'officer'\|'member', source }` | Deliberately **visually distinct** from `RankBadge` — the two axes are independent (an R4 can hold Admin). `source` renders "Discord role" / "ENV allowlist" / "Pinned". |
 | `StatusPill` | `{ status: 'active'\|'idle'\|'inactive' }` | Derived from the last-seen bucket, never hand-set. |
 | `LastSeen` | `{ bucket, observedAt }` | **Renders the game's bucket verbatim** ("over 7d") and colours it. Tooltip shows when the bucket was captured. **Must never render a computed timestamp** — see §5. |

@@ -3,20 +3,21 @@ import { cn } from "@/lib/utils";
 import type { GuildRank } from "@/lib/game/types";
 
 /**
- * In-game rank R1–R5 (docs/components.md §3.1). Rendered as a mono chip with a
- * brightness ramp for hierarchy rather than the reserved semantic hues — violet
- * stays "interactive" and amber stays "state" (§1.1). Guildmaster adds a crown,
- * a TITLE marker, not a permission (§3, PLAN §3).
+ * In-game rank R1–R5 (docs/components.md §3.1), coloured to match the game:
+ * R5 amber, R4 violet, R3 blue, R2 green, R1 grey. This is the ONE sanctioned
+ * exception to the §1.1 colour rules — it uses dedicated `rank-*` tokens so the
+ * reserved --violet/--desert keep their meaning elsewhere. Guildmaster adds a
+ * crown, a TITLE marker, not a permission (§3, PLAN §3).
  *
- * Deliberately distinct from AppRoleBadge (§5.4): rank is a bare "R4", app role
- * is an icon + word. The two axes diverge (an R4 can hold Admin).
+ * Still distinct from AppRoleBadge (§5.4): rank is a coloured bare "R4", app
+ * role is a neutral icon + word. The two axes diverge (an R4 can hold Admin).
  */
 const RANK_STYLE: Record<GuildRank, string> = {
-  5: "border-text-3/70 bg-surface-2 text-text font-semibold",
-  4: "border-border-2 bg-surface-2 text-text",
-  3: "border-border-2 bg-surface text-text-2",
-  2: "border-border bg-surface text-text-2",
-  1: "border-border bg-surface text-text-3",
+  5: "border-rank-5/40 bg-rank-5/10 text-rank-5",
+  4: "border-rank-4/40 bg-rank-4/10 text-rank-4",
+  3: "border-rank-3/40 bg-rank-3/10 text-rank-3",
+  2: "border-rank-2/40 bg-rank-2/10 text-rank-2",
+  1: "border-rank-1/40 bg-rank-1/10 text-rank-1",
 };
 
 export function RankBadge({
