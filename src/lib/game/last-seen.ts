@@ -22,6 +22,22 @@ export function formatBucket(bucket: LastSeenBucket): string {
   }
 }
 
+/** Ordering for sorting a Last Seen column — 0 (Online) … 7 (over 30d). */
+export function bucketSortValue(bucket: LastSeenBucket): number {
+  switch (bucket.kind) {
+    case "online":
+      return 0;
+    case "minutes":
+      return 1;
+    case "hours":
+      return 2;
+    case "days":
+      return bucket.n === 1 ? 3 : 4;
+    case "over":
+      return bucket.days === 3 ? 5 : bucket.days === 7 ? 6 : 7;
+  }
+}
+
 /**
  * Activity tier for the pruning watchlist:
  *   Active  — Online … 2d

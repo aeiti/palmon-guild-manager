@@ -25,6 +25,11 @@ import { LastSeen } from "@/components/domain/member/last-seen";
 import { SquadBadge } from "@/components/domain/member/squad-badge";
 import { MemberChip } from "@/components/domain/member/member-chip";
 import { MemberPicker } from "@/components/domain/member/member-picker";
+import { Metric } from "@/components/domain/data/metric";
+import { StatTile } from "@/components/domain/data/stat-tile";
+import { DeltaIndicator } from "@/components/domain/data/delta-indicator";
+import { DataTable, type Column } from "@/components/domain/data/data-table";
+import type { Member } from "@/lib/game/types";
 import { MOCK_MEMBERS } from "@/lib/mock/members";
 
 export interface RegistryEntry {
@@ -35,7 +40,12 @@ export interface RegistryEntry {
   render: () => React.ReactNode;
 }
 
-export const CATEGORY_ORDER = ["Primitives", "Layout & State", "Member"];
+export const CATEGORY_ORDER = [
+  "Primitives",
+  "Layout & State",
+  "Member",
+  "Data",
+];
 
 /** Small helpers to keep example blocks tidy. */
 function Row({ children }: { children: React.ReactNode }) {
@@ -52,6 +62,38 @@ function MemberPickerDemo() {
         onChange={setValue}
       />
     </div>
+  );
+}
+
+function DataTableDemo() {
+  const columns: Column<Member>[] = [
+    {
+      key: "member",
+      header: "Member",
+      cell: (m) => <MemberChip member={m} size="sm" />,
+      sortValue: (m) => m.ign.toLowerCase(),
+    },
+    {
+      key: "rank",
+      header: "Rank",
+      cell: (m) => <RankBadge rank={m.guildRank} guildmaster={m.isGuildmaster} />,
+      sortValue: (m) => m.guildRank,
+    },
+    {
+      key: "power",
+      header: "Power",
+      align: "right",
+      cell: (m) => <Metric value={m.power} />,
+      sortValue: (m) => m.power,
+    },
+  ];
+  return (
+    <DataTable
+      columns={columns}
+      rows={MOCK_MEMBERS.slice(0, 6)}
+      getRowId={(m) => m.id}
+      initialSort={{ key: "power", dir: "desc" }}
+    />
   );
 }
 
@@ -345,6 +387,73 @@ export const REGISTRY: RegistryEntry[] = [
     category: "Member",
     description: "Combobox over the roster; supports exclude + filter.",
     render: () => <MemberPickerDemo />,
+  },
+
+  // ---- Data ----
+  {
+    id: "metric",
+    name: "Metric",
+    category: "Data",
+    description: "The single number renderer — compact, full precision on hover.",
+    render: () => (
+      <div className="space-y-1 text-text">
+        <div>
+          <Metric value={1_880_000_000_000} /> ·{" "}
+          <Metric value={421_300_000_000} /> · <Metric value={102_400_000} /> ·{" "}
+          <Metric value={9_600} />
+        </div>
+        <div>
+          <Metric value={0.734} format="percent" /> ·{" "}
+          <Metric value={2_780_000_000} format="compact" /> power
+        </div>
+      </div>
+    ),
+  },
+  {
+    id: "stat-tile",
+    name: "StatTile",
+    category: "Data",
+    description: "Dashboard/KPI tile; value + optional unit, foot, accent, spark.",
+    render: () => (
+      <div className="grid max-w-2xl grid-cols-2 gap-3 sm:grid-cols-3">
+        <StatTile label="Members" value={<Metric value={12} format="full" />} />
+        <StatTile
+          label="Avg power"
+          value={<Metric value={1_540_000_000} />}
+          accent="violet"
+          foot="across 12 members"
+        />
+        <StatTile
+          label="Sanctum EXP"
+          value={<Metric value={5700} format="full" />}
+          unit="/h"
+          accent="desert"
+        />
+      </div>
+    ),
+  },
+  {
+    id: "delta-indicator",
+    name: "DeltaIndicator",
+    category: "Data",
+    description: "▲/▼ change; `inverted` for metrics where lower is better.",
+    render: () => (
+      <div className="flex flex-wrap items-center gap-4">
+        <DeltaIndicator value={12_000_000} direction="up" />
+        <DeltaIndicator value={3_400_000} direction="down" />
+        <DeltaIndicator value={0} direction="flat" />
+        <span className="text-xs text-text-3">rank (inverted):</span>
+        <DeltaIndicator value={2} direction="up" inverted format="full" />
+        <DeltaIndicator value={1} direction="down" inverted format="full" />
+      </div>
+    ),
+  },
+  {
+    id: "data-table",
+    name: "DataTable",
+    category: "Data",
+    description: "Sortable table — click a header. Sticky header, scrolls x.",
+    render: () => <DataTableDemo />,
   },
 ];
 
