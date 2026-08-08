@@ -9,47 +9,68 @@ import { MemberChip } from "@/components/domain/member/member-chip";
 import { ContributionScore } from "@/components/domain/kpi/contribution-score";
 import { StreakBadge } from "@/components/domain/kpi/streak-badge";
 import { TimezoneCoverage } from "@/components/domain/kpi/timezone-coverage";
+import { contributionScore, participationRate, streak } from "@/lib/metrics";
+import type { ContributionEntry } from "@/lib/game/event";
 import {
-  contributionScore,
-  participationRate,
-  streak,
-} from "@/lib/metrics";
-import { MOCK_MEMBERS } from "@/lib/mock/members";
-import { MOCK_CONTRIBUTIONS } from "@/lib/mock/events";
-import {
-  AVG_POWER_TREND,
-  DONATIONS_TREND,
-  KILLS_TREND,
-  MOCK_PARTICIPATION_HISTORY,
-  ROSTER_SIZE_TREND,
-  SANDSTORM_POINTS_TREND,
-  SANDSTORM_RECORD,
-  TREND_WEEKS,
-} from "@/lib/mock/trends";
+  getContributionsMap,
+  getEvents,
+  getMembers,
+  getWeeklySnapshots,
+} from "@/lib/data/queries";
 
 export const metadata = { title: "Trends — VOID" };
+export const dynamic = "force-dynamic";
+
+// Season sandstorm record — not yet modelled as a table; a single aggregate.
+const SANDSTORM_RECORD = { wins: 6, losses: 2 };
 
 /** Share of contribution boards where the member finished top-3. */
-function eventResults(memberId: string): number {
-  const ids = Object.keys(MOCK_CONTRIBUTIONS);
+function eventResults(
+  memberId: string,
+  contribMap: Record<string, ContributionEntry[]>,
+): number {
+  const ids = Object.keys(contribMap);
   if (ids.length === 0) return 0;
   let top3 = 0;
   for (const id of ids) {
-    const sorted = [...MOCK_CONTRIBUTIONS[id]].sort((a, b) => b.value - a.value);
-    const idx = sorted.findIndex((e) => e.memberId === memberId);
+    const idx = [...contribMap[id]]
+      .sort((a, b) => b.value - a.value)
+      .findIndex((e) => e.memberId === memberId);
     if (idx >= 0 && idx < 3) top3 += 1;
   }
   return top3 / ids.length;
 }
 
-export default function TrendsPage() {
-  const roster = MOCK_MEMBERS;
-  const maxKills = Math.max(...roster.map((m) => m.kills));
-  const maxDonations = Math.max(...roster.map((m) => m.donations));
+export default async function TrendsPage() {
+  const [roster, contribMap, events, snapshots] = await Promise.all([
+    getMembers(),
+    getContributionsMap(),
+    getEvents(),
+    getWeeklySnapshots(),
+  ]);
+
+  // Weekly series from the snapshot table.
+  const weeks = snapshots.map((s) => s.week);
+  const donationsTrend = snapshots.map((s) => s.donations);
+  const killsTrend = snapshots.map((s) => s.kills);
+  const rosterTrend = snapshots.map((s) => s.rosterSize);
+  const powerTrend = snapshots.map((s) => s.avgPower);
+  const sandstormTrend = snapshots.map((s) => s.sandstormPoints);
+
+  // Participation history = did the member contribute to each board event
+  // (ordered oldest→newest), derived from the contribution boards.
+  const boardEvents = events.filter((e) => contribMap[e.id]);
+  const historyFor = (memberId: string) =>
+    boardEvents.map((e) =>
+      (contribMap[e.id] ?? []).some((c) => c.memberId === memberId),
+    );
+
+  const maxKills = Math.max(...roster.map((m) => m.kills), 1);
+  const maxDonations = Math.max(...roster.map((m) => m.donations), 1);
 
   const scored = roster
     .map((member) => {
-      const history = MOCK_PARTICIPATION_HISTORY[member.id] ?? [];
+      const history = historyFor(member.id);
       const pr = participationRate(history);
       const st = streak(history);
       const { score, breakdown } = contributionScore(
@@ -57,7 +78,7 @@ export default function TrendsPage() {
           participationRate: pr,
           kills: member.kills,
           donations: member.donations,
-          eventResults: eventResults(member.id),
+          eventResults: eventResults(member.id, contribMap),
         },
         { kills: maxKills, donations: maxDonations },
       );
@@ -85,18 +106,18 @@ export default function TrendsPage() {
           label="Participation"
           value={<Metric value={avgParticipation} format="percent" />}
           accent="good"
-          foot="guild avg, last 8 events"
+          foot={`guild avg, last ${boardEvents.length} events`}
         />
         <StatTile
           label="Roster size"
-          value={<Metric value={ROSTER_SIZE_TREND.at(-1)!} format="full" />}
-          spark={<Sparkline data={ROSTER_SIZE_TREND} />}
+          value={<Metric value={rosterTrend.at(-1) ?? 0} format="full" />}
+          spark={<Sparkline data={rosterTrend} />}
         />
         <StatTile
           label="Avg power"
-          value={<Metric value={AVG_POWER_TREND.at(-1)!} />}
+          value={<Metric value={powerTrend.at(-1) ?? 0} />}
           accent="violet"
-          spark={<Sparkline data={AVG_POWER_TREND} />}
+          spark={<Sparkline data={powerTrend} />}
         />
         <StatTile
           label="Sandstorm win %"
@@ -109,19 +130,25 @@ export default function TrendsPage() {
         <Card>
           <CardHead>
             <CardTitle>Donations / week</CardTitle>
-            <Metric value={DONATIONS_TREND.at(-1)!} className="text-sm text-text-2" />
+            <Metric
+              value={donationsTrend.at(-1) ?? 0}
+              className="text-sm text-text-2"
+            />
           </CardHead>
           <CardBody>
-            <AreaChart data={DONATIONS_TREND} labels={TREND_WEEKS} />
+            <AreaChart data={donationsTrend} labels={weeks} />
           </CardBody>
         </Card>
         <Card>
           <CardHead>
             <CardTitle>Kills / week</CardTitle>
-            <Metric value={KILLS_TREND.at(-1)!} className="text-sm text-text-2" />
+            <Metric
+              value={killsTrend.at(-1) ?? 0}
+              className="text-sm text-text-2"
+            />
           </CardHead>
           <CardBody>
-            <AreaChart data={KILLS_TREND} labels={TREND_WEEKS} />
+            <AreaChart data={killsTrend} labels={weeks} />
           </CardBody>
         </Card>
       </div>
@@ -141,8 +168,8 @@ export default function TrendsPage() {
           </CardHead>
           <CardBody>
             <BarSeries
-              data={SANDSTORM_POINTS_TREND.map((v, i) => ({
-                label: TREND_WEEKS[i],
+              data={sandstormTrend.map((v, i) => ({
+                label: weeks[i],
                 value: v,
               }))}
             />
@@ -157,7 +184,10 @@ export default function TrendsPage() {
             <Card>
               <CardHead>
                 <CardTitle>Top contributor</CardTitle>
-                <StreakBadge count={top.streak.count} active={top.streak.active} />
+                <StreakBadge
+                  count={top.streak.count}
+                  active={top.streak.active}
+                />
               </CardHead>
               <CardBody className="space-y-3">
                 <MemberChip member={top.member} showRank />
@@ -181,7 +211,9 @@ export default function TrendsPage() {
                   className="flex items-center gap-3 rounded-md px-2 py-1.5 hover:bg-surface-2/50"
                 >
                   <span
-                    className={cnRank(i)}
+                    className={`w-5 text-right font-mono text-xs tabular-nums ${
+                      i < 3 ? "text-text" : "text-text-3"
+                    }`}
                   >
                     {i + 1}
                   </span>
@@ -206,10 +238,4 @@ export default function TrendsPage() {
       </section>
     </div>
   );
-}
-
-function cnRank(i: number): string {
-  return `w-5 text-right font-mono text-xs tabular-nums ${
-    i < 3 ? "text-text" : "text-text-3"
-  }`;
 }

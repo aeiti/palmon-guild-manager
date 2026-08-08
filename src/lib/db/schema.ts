@@ -248,6 +248,21 @@ export const guildClashHistory = pgTable("guild_clash_history", {
   capturedAt: timestamp({ mode: "date" }).defaultNow(),
 });
 
+/** Guild-wide weekly snapshot — powers the Trends time-series charts. */
+export const guildWeeklySnapshot = pgTable("guild_weekly_snapshot", {
+  id: text()
+    .primaryKey()
+    .$defaultFn(() => crypto.randomUUID()),
+  week: text().notNull(), // "W1"
+  weekIndex: integer().notNull(),
+  donations: bigint({ mode: "number" }).default(0),
+  kills: bigint({ mode: "number" }).default(0),
+  rosterSize: integer().default(0),
+  avgPower: bigint({ mode: "number" }).default(0),
+  sandstormPoints: bigint({ mode: "number" }).default(0),
+  capturedAt: timestamp({ mode: "date" }).defaultNow(),
+});
+
 export const auditLog = pgTable("audit_log", {
   id: text()
     .primaryKey()

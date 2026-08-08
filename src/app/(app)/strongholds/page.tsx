@@ -8,13 +8,13 @@ import {
   computeBuffTotals,
   totalExpPerHour,
 } from "@/lib/game/stronghold";
-import { MOCK_STRONGHOLDS } from "@/lib/mock/strongholds";
-import { MOCK_MEMBERS } from "@/lib/mock/members";
+import { getMembers, getStrongholds } from "@/lib/data/queries";
 
 export const metadata = { title: "Strongholds — VOID" };
+export const dynamic = "force-dynamic";
 
-export default function StrongholdsPage() {
-  const all = MOCK_STRONGHOLDS;
+export default async function StrongholdsPage() {
+  const [all, members] = await Promise.all([getStrongholds(), getMembers()]);
   const sanctums = all.filter((s) => s.category === "sanctum");
   const ruins = all.filter((s) => s.category === "desertRuin");
 
@@ -76,7 +76,7 @@ export default function StrongholdsPage() {
             <StrongholdCard
               key={s.id}
               stronghold={s}
-              members={MOCK_MEMBERS}
+              members={members}
               canEdit
             />
           ))}
@@ -90,7 +90,7 @@ export default function StrongholdsPage() {
             <StrongholdCard
               key={s.id}
               stronghold={s}
-              members={MOCK_MEMBERS}
+              members={members}
             />
           ))}
         </div>

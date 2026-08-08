@@ -8,13 +8,13 @@ import {
   type MatrixEvent,
 } from "@/components/domain/event/participation-matrix";
 import {
-  MOCK_CONTRIBUTIONS,
-  MOCK_EVENTS,
-  getContribution,
-} from "@/lib/mock/events";
-import { MOCK_MEMBERS } from "@/lib/mock/members";
+  getContributionsMap,
+  getEvents,
+  getMembers,
+} from "@/lib/data/queries";
 
 export const metadata = { title: "Events — VOID" };
+export const dynamic = "force-dynamic";
 
 const MATRIX_EVENTS: MatrixEvent[] = [
   { id: "e-hunt", type: "guildHunt" },
@@ -23,7 +23,15 @@ const MATRIX_EVENTS: MatrixEvent[] = [
   { id: "e-pallantis", type: "pallantis" },
 ];
 
-export default function EventsPage() {
+export default async function EventsPage() {
+  const [events, contribMap, members] = await Promise.all([
+    getEvents(),
+    getContributionsMap(),
+    getMembers(),
+  ]);
+  const getValue = (eventId: string, memberId: string) =>
+    contribMap[eventId]?.find((e) => e.memberId === memberId)?.value;
+
   return (
     <div className="space-y-6">
       <PageHeader
@@ -35,8 +43,8 @@ export default function EventsPage() {
       <section className="space-y-3">
         <SectionTitle>This week</SectionTitle>
         <div className="grid gap-3 md:grid-cols-2 xl:grid-cols-3">
-          {MOCK_EVENTS.map((e) => (
-            <EventCard key={e.id} event={e} members={MOCK_MEMBERS} />
+          {events.map((e) => (
+            <EventCard key={e.id} event={e} members={members} />
           ))}
         </div>
       </section>
@@ -49,8 +57,8 @@ export default function EventsPage() {
           </CardHead>
           <CardBody>
             <ContributionBoard
-              entries={MOCK_CONTRIBUTIONS["e-hunt"]}
-              members={MOCK_MEMBERS}
+              entries={contribMap["e-hunt"] ?? []}
+              members={members}
               metric="damage"
             />
           </CardBody>
@@ -61,8 +69,8 @@ export default function EventsPage() {
           </CardHead>
           <CardBody>
             <ContributionBoard
-              entries={MOCK_CONTRIBUTIONS["e-sandstorm"]}
-              members={MOCK_MEMBERS}
+              entries={contribMap["e-sandstorm"] ?? []}
+              members={members}
               metric="personalPoints"
             />
           </CardBody>
@@ -76,9 +84,9 @@ export default function EventsPage() {
           didn&apos;t show up.
         </p>
         <ParticipationMatrix
-          members={MOCK_MEMBERS}
+          members={members}
           events={MATRIX_EVENTS}
-          getValue={getContribution}
+          getValue={getValue}
         />
       </section>
     </div>

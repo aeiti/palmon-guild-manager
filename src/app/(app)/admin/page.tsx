@@ -2,13 +2,15 @@ import { PageHeader, SectionTitle } from "@/components/layout/page-header";
 import { Card, CardBody, CardHead, CardTitle } from "@/components/ui/card";
 import { WarningItem } from "@/components/domain/data/warning-item";
 import { AppRoleBadge } from "@/components/domain/member/app-role-badge";
-import { MOCK_ROLE_MAP, MOCK_USERS } from "@/lib/mock/users";
-import { MOCK_MEMBERS } from "@/lib/mock/members";
+import { MOCK_ROLE_MAP } from "@/lib/mock/users";
+import { getAppUsers } from "@/lib/data/queries";
 import { AdminUsersTable } from "./admin-users-table";
 
 export const metadata = { title: "Admin — VOID" };
+export const dynamic = "force-dynamic";
 
-export default function AdminPage() {
+export default async function AdminPage() {
+  const { users, members } = await getAppUsers();
   return (
     <div className="space-y-6">
       <PageHeader
@@ -25,7 +27,7 @@ export default function AdminPage() {
 
       <section className="space-y-3">
         <SectionTitle>Users</SectionTitle>
-        <AdminUsersTable users={MOCK_USERS} members={MOCK_MEMBERS} />
+        <AdminUsersTable users={users} members={members} />
       </section>
 
       <section className="space-y-3">

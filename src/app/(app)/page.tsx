@@ -20,11 +20,10 @@ import {
 } from "@/lib/game/stronghold";
 import { activityFromBucket } from "@/lib/game/last-seen";
 import type { GuildRank } from "@/lib/game/types";
-import { MOCK_MEMBERS } from "@/lib/mock/members";
-import { MOCK_STRONGHOLDS } from "@/lib/mock/strongholds";
-import { MOCK_UPCOMING_EVENTS } from "@/lib/mock/events";
+import { getEvents, getMembers, getStrongholds } from "@/lib/data/queries";
 
 export const metadata = { title: "Dashboard — VOID" };
+export const dynamic = "force-dynamic";
 
 const RANK_COLOR: Record<GuildRank, string> = {
   5: "bg-rank-5",
@@ -85,14 +84,21 @@ function buildWarnings(strongholds: Stronghold[]): Warning[] {
   return out;
 }
 
-export default function DashboardPage() {
-  const members = MOCK_MEMBERS;
+export default async function DashboardPage() {
+  const [members, strongholds, allEvents] = await Promise.all([
+    getMembers(),
+    getStrongholds(),
+    getEvents(),
+  ]);
+  const upcoming = allEvents
+    .filter((e) => e.status === "upcoming")
+    .slice(0, 4);
   const total = members.length;
   const active = members.filter(
     (m) => activityFromBucket(m.lastSeen) === "active",
   ).length;
   const avgPower = members.reduce((s, m) => s + m.power, 0) / (total || 1);
-  const totalExp = totalExpPerHour(MOCK_STRONGHOLDS);
+  const totalExp = totalExpPerHour(strongholds);
 
   const rankSegments: DistributionSegment[] = ([5, 4, 3, 2, 1] as GuildRank[]).map(
     (r) => ({
@@ -103,7 +109,7 @@ export default function DashboardPage() {
     }),
   );
 
-  const warnings = buildWarnings(MOCK_STRONGHOLDS);
+  const warnings = buildWarnings(strongholds);
   const topDonors = [...members]
     .sort((a, b) => b.donations - a.donations)
     .slice(0, 4);
@@ -165,7 +171,7 @@ export default function DashboardPage() {
               </Link>
             </CardHead>
             <CardBody>
-              <BuffStack strongholds={MOCK_STRONGHOLDS} />
+              <BuffStack strongholds={strongholds} />
             </CardBody>
           </Card>
 
@@ -228,7 +234,7 @@ export default function DashboardPage() {
               </Link>
             </CardHead>
             <CardBody className="space-y-2">
-              {MOCK_UPCOMING_EVENTS.map((e) => (
+              {upcoming.map((e) => (
                 <div
                   key={e.id}
                   className="flex items-center justify-between gap-3 border-b border-border/60 pb-2 last:border-0 last:pb-0"

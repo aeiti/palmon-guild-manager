@@ -3,13 +3,14 @@ import { Button } from "@/components/ui/button";
 import { StatTile } from "@/components/domain/data/stat-tile";
 import { Metric } from "@/components/domain/data/metric";
 import { activityFromBucket } from "@/lib/game/last-seen";
-import { MOCK_MEMBERS } from "@/lib/mock/members";
+import { getMembers } from "@/lib/data/queries";
 import { MembersTable } from "./members-table";
 
 export const metadata = { title: "Members — VOID" };
+export const dynamic = "force-dynamic";
 
-export default function MembersPage() {
-  const members = MOCK_MEMBERS;
+export default async function MembersPage() {
+  const members = await getMembers();
   const total = members.length;
   const guildmasters = members.filter((m) => m.isGuildmaster).length;
   const active = members.filter(
