@@ -3,12 +3,22 @@ export type RoleSource = "discord" | "env" | "pinned";
 
 const RANK: Record<AppRole, number> = { admin: 3, officer: 2, member: 1 };
 
-/** ADMIN_DISCORD_IDS env → always Admin (failsafe, can't lock yourself out). */
+/**
+ * Built-in Admin allowlist, merged with ADMIN_DISCORD_IDS. Kept in code so
+ * guild leads keep Admin even if the env var is unset or gets overwritten.
+ */
+const BUILTIN_ADMIN_IDS = [
+  "1290714264780275827", // Kitsune
+  "990665127537831946", // Lprdgdss
+];
+
+/** Built-ins + ADMIN_DISCORD_IDS env → always Admin (failsafe, can't lock out). */
 function adminIds(): string[] {
-  return (process.env.ADMIN_DISCORD_IDS ?? "")
+  const fromEnv = (process.env.ADMIN_DISCORD_IDS ?? "")
     .split(",")
     .map((s) => s.trim())
     .filter(Boolean);
+  return [...new Set([...BUILTIN_ADMIN_IDS, ...fromEnv])];
 }
 
 /** DISCORD_ROLE_MAP env is JSON: { "<discordRoleId>": "admin|officer|member" }. */
