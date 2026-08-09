@@ -96,6 +96,7 @@ export function MemberEditDialog({
 
   const [form, setForm] = React.useState({
     ign: member.ign,
+    discordId: member.discordId ?? "",
     guildRank: member.guildRank,
     isGuildmaster: member.isGuildmaster,
     rosterStatus: member.rosterStatus,
@@ -118,6 +119,7 @@ export function MemberEditDialog({
     setError(null);
     const patch: MemberPatch = {
       ign: form.ign,
+      discordId: form.discordId.trim() || null,
       guildRank: form.guildRank,
       isGuildmaster: form.isGuildmaster,
       rosterStatus: form.rosterStatus,
@@ -153,6 +155,14 @@ export function MemberEditDialog({
             <Input
               value={form.ign}
               onChange={(e) => set("ign", e.target.value)}
+            />
+          </Field>
+          <Field label="Discord ID">
+            <Input
+              value={form.discordId}
+              onChange={(e) => set("discordId", e.target.value)}
+              placeholder="e.g. 1290714264780275827"
+              inputMode="numeric"
             />
           </Field>
           <Field label="Rank">

@@ -13,13 +13,13 @@ export const dynamic = "force-dynamic";
 
 export default async function AdminPage() {
   const role = await currentRole();
-  if (role !== "admin") {
+  if (role !== "admin" && role !== "officer") {
     return (
       <div className="space-y-6">
         <PageHeader eyebrow="Access control" title="Admin" />
         <ErrorState
-          title="Admins only"
-          detail="You need the Admin app role to manage users and roles."
+          title="Officers only"
+          detail="You need the Officer or Admin app role to manage users and roles."
         />
       </div>
     );
@@ -35,13 +35,13 @@ export default async function AdminPage() {
 
       <WarningItem
         severity="info"
-        title="Role precedence: ENV allowlist → Discord role map → manual pin"
-        detail="ENV-allowlisted users are always Admin (failsafe). Otherwise the Discord map applies, unless an officer pins an override. Changes here are local until auth + DB are wired."
+        title="Role precedence: ENV allowlist → manual pin → Discord role map"
+        detail="ENV-allowlisted users are always Admin (failsafe, locked). Otherwise a manual pin here wins, else the Discord role map applies. A pin takes effect at the user's next login. Officers can assign member/officer; only Admins can grant the Admin role."
       />
 
       <section className="space-y-3">
         <SectionTitle>Users</SectionTitle>
-        <AdminUsersTable users={users} members={members} />
+        <AdminUsersTable users={users} members={members} viewerRole={role} />
       </section>
 
       <section className="space-y-3">

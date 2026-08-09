@@ -23,11 +23,14 @@ const cap = (s: string) => s[0].toUpperCase() + s.slice(1);
 export function AdminUsersTable({
   users,
   members,
+  viewerRole,
 }: {
   users: AppUser[];
   members: Member[];
+  viewerRole: AppRole;
 }) {
   const router = useRouter();
+  const isAdmin = viewerRole === "admin";
   const byId = new Map(members.map((m) => [m.id, m]));
   const [pending, setPending] = React.useState<string | null>(null);
   const [error, setError] = React.useState<string | null>(null);
@@ -67,6 +70,9 @@ export function AdminUsersTable({
               const m = byId.get(u.memberId);
               if (!m) return null;
               const envLocked = u.source === "env";
+              // Officers can't create or demote an Admin (server re-checks too).
+              const adminLocked = !isAdmin && u.role === "admin";
+              const locked = envLocked || adminLocked;
               const busy = pending === u.id;
               return (
                 <tr
@@ -88,7 +94,7 @@ export function AdminUsersTable({
                   <td className="px-3 py-2">
                     <select
                       value={u.role}
-                      disabled={envLocked || busy}
+                      disabled={locked || busy}
                       onChange={(e) =>
                         change(u.id, e.target.value as AppRole, true)
                       }
@@ -96,7 +102,7 @@ export function AdminUsersTable({
                       className="rounded-md border border-border-2 bg-surface px-2 py-1 text-xs text-text outline-none focus-visible:border-violet/60 disabled:opacity-50"
                     >
                       {ROLES.map((r) => (
-                        <option key={r} value={r}>
+                        <option key={r} value={r} disabled={r === "admin" && !isAdmin}>
                           {cap(r)}
                         </option>
                       ))}
@@ -109,6 +115,13 @@ export function AdminUsersTable({
                         className="font-mono text-[0.6rem] uppercase text-text-3"
                       >
                         Locked
+                      </span>
+                    ) : adminLocked ? (
+                      <span
+                        title="Only admins can change an Admin's role"
+                        className="font-mono text-[0.6rem] uppercase text-text-3"
+                      >
+                        Admin
                       </span>
                     ) : u.source === "pinned" ? (
                       <button

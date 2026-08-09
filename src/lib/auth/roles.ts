@@ -32,14 +32,16 @@ function roleMap(): Record<string, AppRole> {
 
 /**
  * App role from Discord identity + roles (PLAN §3). Precedence: ENV allowlist →
- * Discord role map → default member. A DB-level pinned override (user.rolePinned)
- * takes precedence over this and is applied by the caller.
+ * DB pin (an Admin set it on the Admin page) → Discord role map → default
+ * member. The pin is read from the DB by the caller and passed in.
  */
 export function resolveAppRole(
   discordId: string,
   roleIds: string[],
+  pinned?: { role: AppRole } | null,
 ): { role: AppRole; source: RoleSource } {
   if (adminIds().includes(discordId)) return { role: "admin", source: "env" };
+  if (pinned) return { role: pinned.role, source: "pinned" };
 
   const map = roleMap();
   let best: AppRole = "member";
