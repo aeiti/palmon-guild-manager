@@ -179,7 +179,6 @@ export const strongholds = pgTable("stronghold", {
   deathRate: integer(),
   guardianId: text(), // member id (app-enforced; avoids self-FK)
   governorIds: jsonb().$type<(string | null)[]>().default([]),
-  sentryIds: jsonb().$type<(string | null)[]>().default([]),
   opensAt: timestamp({ mode: "date" }),
   closesAt: timestamp({ mode: "date" }),
   notes: text(),

@@ -65,7 +65,6 @@ function toStronghold(r: StrongholdRow): Stronghold {
     deathRate: r.deathRate ?? undefined,
     guardianId: r.guardianId ?? null,
     governorIds: (r.governorIds ?? []) as (string | null)[],
-    sentryIds: (r.sentryIds ?? []) as (string | null)[],
     opensAt: r.opensAt?.toISOString(),
     closesAt: r.closesAt?.toISOString(),
     notes: r.notes ?? undefined,

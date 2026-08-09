@@ -38,7 +38,6 @@ export interface Stronghold {
   deathRate?: number; // sanctum, percent
   guardianId?: string | null; // sanctum
   governorIds?: (string | null)[]; // sanctum; length = capacity for level
-  sentryIds?: (string | null)[]; // sanctum; 0..5
   opensAt?: string; // ISO
   closesAt?: string; // ISO
   notes?: string;

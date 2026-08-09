@@ -107,12 +107,11 @@ each is that a rule lives in **one** place.
 
 | Component | Signature | Notes |
 | --- | --- | --- |
-| `RoleSlot` | `{ role: 'guardian'\|'governor'\|'sentry', member?, locked?, canEdit }` | Three states: **filled**, **empty** (dashed red, "+ Assign"), **locked** (greyed, "locked — L4+") for governor slots the sanctum's level doesn't unlock yet. |
-| `SentryTrack` | `{ filled: 0..5 }` | Five dots. Colour by fill: 0 red, 1–2 amber, 3+ green. |
+| `RoleSlot` | `{ role: 'guardian'\|'governor', member?, locked?, canEdit }` | Three states: **filled**, **empty** (dashed red, "+ Assign"), **locked** (greyed, "locked — L4+") for governor slots the sanctum's level doesn't unlock yet. |
 | `BuffChip` | `{ type, value }` | Always desert amber. `value: 0` renders in red — an uncovered category is information, not absence. |
 | `BuffStack` | `{ strongholds }` | **Computes** the additive totals and surfaces zero-coverage gaps. Never takes pre-summed values. |
 | `ExpRate` | `{ perHour }` | `9,600/h`, tabular. |
-| `StrongholdCard` | `{ stronghold, canEdit }` | Sanctum variant: level badge, buffs, role slots, EXP/h, sentries, death rate, opens-in. Ruin variant: level, EXP/h, coords only — **no role or buff affordances at all**. |
+| `StrongholdCard` | `{ stronghold, canEdit }` | Sanctum variant: level badge, buffs, role slots, EXP/h, death rate, opens-in. Ruin variant: level, EXP/h, coords only — **no role or buff affordances at all**. |
 | `OccupationWindow` | `{ opensAt, closesAt }` | Countdown + open/closed state. |
 | `Coords` | `{ x, y }` | `X:485 Y:602`, mono. |
 

@@ -10,7 +10,6 @@ import { Coords } from "./coords";
 import { ExpRate } from "./exp-rate";
 import { BuffChip } from "./buff-chip";
 import { RoleSlot } from "./role-slot";
-import { SentryTrack } from "./sentry-track";
 import { OccupationWindow } from "./occupation-window";
 
 function LevelBadge({ level }: { level: number }) {
@@ -23,7 +22,7 @@ function LevelBadge({ level }: { level: number }) {
 
 /**
  * Stronghold card (docs/components.md §3.2). Sanctum variant: level, buffs,
- * role slots, sentries, EXP/h, death rate, occupation window. Ruin variant:
+ * role slots, EXP/h, death rate, occupation window. Ruin variant:
  * level, EXP/h, coords only — no role or buff affordances at all.
  */
 export function StrongholdCard({
@@ -62,7 +61,6 @@ export function StrongholdCard({
   const buffs = s.sanctumType ? sanctumBuffs(s.sanctumType, s.level) : [];
   const capacity = governorCapacity(s.level);
   const governors = s.governorIds ?? [];
-  const filledSentries = (s.sentryIds ?? []).filter(Boolean).length;
 
   return (
     <Card className={className}>
@@ -106,19 +104,13 @@ export function StrongholdCard({
           ))}
         </div>
 
-        <div className="flex items-center justify-between border-t border-border pt-2">
-          <span className="inline-flex items-center gap-2">
-            <span className="font-mono text-[0.6rem] uppercase tracking-wide text-text-3">
-              Sentries
-            </span>
-            <SentryTrack filled={filledSentries} />
-          </span>
-          {typeof s.deathRate === "number" ? (
+        {typeof s.deathRate === "number" ? (
+          <div className="flex items-center justify-end border-t border-border pt-2">
             <span className="font-mono text-xs tabular-nums text-text-3">
               Death {s.deathRate}%
             </span>
-          ) : null}
-        </div>
+          </div>
+        ) : null}
 
         {s.opensAt && s.closesAt ? (
           <div className="border-t border-border pt-2">

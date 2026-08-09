@@ -83,7 +83,6 @@ async function main() {
       deathRate: s.deathRate ?? null,
       guardianId: s.guardianId ?? null,
       governorIds: s.governorIds ?? [],
-      sentryIds: s.sentryIds ?? [],
       opensAt: s.opensAt ? new Date(s.opensAt) : null,
       closesAt: s.closesAt ? new Date(s.closesAt) : null,
       notes: s.notes ?? null,

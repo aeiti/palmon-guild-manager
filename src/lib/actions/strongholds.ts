@@ -14,7 +14,6 @@ export interface StrongholdPatch {
   coordY?: number;
   guardianId?: string | null;
   governorIds?: (string | null)[];
-  sentryIds?: (string | null)[];
   opensAt?: string | null;
   closesAt?: string | null;
   notes?: string | null;

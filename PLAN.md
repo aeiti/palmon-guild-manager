@@ -117,7 +117,7 @@ Three app roles, separate from in-game rank:
 
 - **Dashboard** — member count & rank distribution (R5/R4/R3/R2/R1), upcoming
   events, **live totals** (desert EXP/h + the guild buff stack), coverage
-  warnings (empty Guardian/Governor/Sentry slots, buildings about to open),
+  warnings (empty Guardian/Governor slots, buildings about to open),
   and participation snapshots.
 - **Members** — roster with R1–R5; members self-edit own profile, officers edit
   all; Discord auto-link; filter/sort/search; JSON export.
@@ -190,7 +190,6 @@ Stronghold   { id, category (sanctum|desertRuin), buildingType, level,
                buffs[{ type, value }],
                guardianId,           ← sanctum only
                governorIds[],        ← capacity scales with level
-               sentryIds[],          ← 0..5, sanctum only
                opensAt, closesAt,    ← occupation window
                notes }
 ```
