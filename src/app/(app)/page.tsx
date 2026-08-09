@@ -62,13 +62,6 @@ function buildWarnings(strongholds: Stronghold[]): Warning[] {
         href: "/strongholds",
       });
     }
-    if ((s.sentryIds ?? []).filter(Boolean).length === 0) {
-      out.push({
-        severity: "warning",
-        title: `No sentries — ${s.name}`,
-        href: "/strongholds",
-      });
-    }
     if (s.opensAt) {
       const o = new Date(s.opensAt).getTime();
       if (o > now && o - now < 3 * 3_600_000) {

@@ -49,7 +49,6 @@ import type { EventType } from "@/lib/game/event";
 import { Coords } from "@/components/domain/stronghold/coords";
 import { ExpRate } from "@/components/domain/stronghold/exp-rate";
 import { BuffChip } from "@/components/domain/stronghold/buff-chip";
-import { SentryTrack } from "@/components/domain/stronghold/sentry-track";
 import { RoleSlot } from "@/components/domain/stronghold/role-slot";
 import { OccupationWindow } from "@/components/domain/stronghold/occupation-window";
 import { BuffStack } from "@/components/domain/stronghold/buff-stack";
@@ -665,19 +664,6 @@ export const REGISTRY: RegistryEntry[] = [
         <BuffChip type="harvesting" value={70} />
         <BuffChip type="lumber" value={0} />
       </Row>
-    ),
-  },
-  {
-    id: "sentry-track",
-    name: "SentryTrack",
-    category: "Stronghold",
-    description: "0–5 fill; 0 red, 1–2 amber, 3+ green.",
-    render: () => (
-      <div className="space-y-2">
-        <SentryTrack filled={0} />
-        <SentryTrack filled={2} />
-        <SentryTrack filled={4} />
-      </div>
     ),
   },
   {

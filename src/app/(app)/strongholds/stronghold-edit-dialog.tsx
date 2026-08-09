@@ -64,21 +64,17 @@ export function StrongholdEditDialog({
     deathRate: s.deathRate ?? 20,
     guardianId: s.guardianId ?? null,
     governorIds: [s.governorIds?.[0] ?? null, s.governorIds?.[1] ?? null],
-    sentryIds: Array.from({ length: 5 }, (_, i) => s.sentryIds?.[i] ?? null),
     opensAt: toLocalInput(s.opensAt),
     closesAt: toLocalInput(s.closesAt),
   });
 
   const set = <K extends keyof typeof form>(k: K, v: (typeof form)[K]) =>
     setForm((f) => ({ ...f, [k]: v }));
-  const setArr = (
-    key: "governorIds" | "sentryIds",
-    i: number,
-    v: string | null,
-  ) => setForm((f) => ({ ...f, [key]: f[key].map((x, j) => (j === i ? v : x)) }));
+  const setArr = (key: "governorIds", i: number, v: string | null) =>
+    setForm((f) => ({ ...f, [key]: f[key].map((x, j) => (j === i ? v : x)) }));
 
   // Exclude members already holding another role on this building.
-  const held = [form.guardianId, ...form.governorIds, ...form.sentryIds].filter(
+  const held = [form.guardianId, ...form.governorIds].filter(
     Boolean,
   ) as string[];
 
@@ -96,7 +92,6 @@ export function StrongholdEditDialog({
           ? {
               guardianId: form.guardianId,
               governorIds: form.governorIds,
-              sentryIds: form.sentryIds,
               opensAt: form.opensAt
                 ? new Date(form.opensAt).toISOString()
                 : null,
@@ -184,19 +179,6 @@ export function StrongholdEditDialog({
                   />
                 </Field>
               ))}
-              <div className="grid grid-cols-2 gap-2">
-                {[0, 1, 2, 3, 4].map((i) => (
-                  <Field key={i} label={`Sentry ${i + 1}`}>
-                    <MemberPicker
-                      members={members}
-                      value={form.sentryIds[i]}
-                      onChange={(v) => setArr("sentryIds", i, v)}
-                      exclude={held.filter((id) => id !== form.sentryIds[i])}
-                      placeholder="Assign…"
-                    />
-                  </Field>
-                ))}
-              </div>
               <div className="grid grid-cols-2 gap-3">
                 <Field label="Opens at">
                   <Input

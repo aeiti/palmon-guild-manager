@@ -3,12 +3,11 @@ import { cn } from "@/lib/utils";
 import type { Member } from "@/lib/game/types";
 import { MemberChip } from "@/components/domain/member/member-chip";
 
-export type StrongholdRole = "guardian" | "governor" | "sentry";
+export type StrongholdRole = "guardian" | "governor";
 
 const ROLE_LABEL: Record<StrongholdRole, string> = {
   guardian: "Guardian",
   governor: "Governor",
-  sentry: "Sentry",
 };
 
 /**
