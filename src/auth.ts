@@ -9,7 +9,8 @@ import {
   verificationTokens,
 } from "@/lib/db/schema";
 import { fetchGuildMember, voidGuildId } from "@/lib/auth/discord";
-import { resolveAppRole, type AppRole } from "@/lib/auth/roles";
+import { resolveAppRole, type AppRole, type RoleSource } from "@/lib/auth/roles";
+import { resolveIdentity } from "@/lib/auth/identity";
 
 /**
  * Auth.js v5 (PLAN §3). Login is Discord OAuth, gated to membership in VOID's
@@ -39,8 +40,9 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
       const member = await fetchGuildMember(account.access_token, voidGuildId());
       return member !== null;
     },
-    // Resolve app role from Discord roles at login (re-read on each sign-in).
-    async jwt({ token, account, profile }) {
+    // Resolve app role at login (re-read on each sign-in). Also persists the
+    // Discord id + links the roster member, and honours an Admin-page pin.
+    async jwt({ token, account, profile, user }) {
       if (account?.access_token) {
         const member = await fetchGuildMember(
           account.access_token,
@@ -49,7 +51,21 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
         const discordId = String(
           (profile as { id?: string } | undefined)?.id ?? token.sub ?? "",
         );
-        const { role, source } = resolveAppRole(discordId, member?.roles ?? []);
+        const userId =
+          (user as { id?: string } | undefined)?.id ?? token.sub ?? "";
+        const roleIds = member?.roles ?? [];
+
+        let role: AppRole = "member";
+        let source: RoleSource = "discord";
+        try {
+          ({ role, source } = await resolveIdentity(userId, discordId, roleIds));
+        } catch (e) {
+          // Never block login on a persistence hiccup — fall back to a pure
+          // compute (env allowlist → Discord map → member).
+          ({ role, source } = resolveAppRole(discordId, roleIds));
+          console.error("resolveIdentity failed; using computed role", e);
+        }
+
         token.discordId = discordId;
         token.appRole = role;
         token.roleSource = source;
