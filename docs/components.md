@@ -8,6 +8,13 @@ Baseline: **Tailwind + shadcn/ui**. shadcn gives us unstyled-but-accessible
 primitives we own the source of, so we restyle them once against our tokens
 instead of fighting a theme. Domain components (§3) are ours.
 
+> **Build status:** everything here is built (most of it previewable at `/library`),
+> except **`ServerClock`** and **`Countdown`** (§3.3 — the app shell carries a
+> minimal stand-in clock), **`Leaderboard`** (§3.5), and the whole §3.7
+> permissions set (**`useCan`**, **`PermissionGate`**, **`EditableField`**, and
+> `lib/permissions.ts`). Permissions are currently enforced server-side by
+> `requireOfficer` / `requireAdmin` in `src/lib/auth/guard.ts`.
+
 ---
 
 ## 1. Foundations
@@ -184,11 +191,11 @@ lives in exactly one place; the arithmetic behind them lives in `lib/metrics.ts`
 ```
 components/
   ui/          shadcn primitives (owned, restyled)
-  domain/      §3 — member/, stronghold/, event/, time/, data/
+  domain/      §3 — member/, stronghold/, event/, time/, data/, kpi/
   layout/      AppShell, PageHeader, nav
 lib/
   format.ts    number/time formatting — the ONLY place
-  permissions.ts
+  permissions.ts   (not built yet — see §3.7)
   metrics.ts   KPI arithmetic — contribution weights, streak calc, coverage bins
   game/        EXP tables, buff scaling, bucket→status maps
 ```
