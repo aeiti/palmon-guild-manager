@@ -1,7 +1,7 @@
 export type AppRole = "admin" | "officer" | "member";
 export type RoleSource = "discord" | "env" | "pinned";
 
-const RANK: Record<AppRole, number> = { admin: 3, officer: 2, member: 1 };
+export const RANK: Record<AppRole, number> = { admin: 3, officer: 2, member: 1 };
 
 /**
  * Built-in Admin allowlist, merged with ADMIN_DISCORD_IDS. Kept in code so
@@ -13,7 +13,7 @@ const BUILTIN_ADMIN_IDS = [
 ];
 
 /** Built-ins + ADMIN_DISCORD_IDS env → always Admin (failsafe, can't lock out). */
-function adminIds(): string[] {
+export function adminIds(): string[] {
   const fromEnv = (process.env.ADMIN_DISCORD_IDS ?? "")
     .split(",")
     .map((s) => s.trim())
@@ -22,7 +22,7 @@ function adminIds(): string[] {
 }
 
 /** DISCORD_ROLE_MAP env is JSON: { "<discordRoleId>": "admin|officer|member" }. */
-function roleMap(): Record<string, AppRole> {
+export function roleMap(): Record<string, AppRole> {
   try {
     return JSON.parse(process.env.DISCORD_ROLE_MAP ?? "{}");
   } catch {

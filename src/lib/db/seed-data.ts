@@ -11,7 +11,7 @@ import type { ContributionEntry, GuildEvent } from "@/lib/game/event";
  */
 const OBSERVED = "2026-08-08T01:00:00Z";
 
-function bucket(code: string): LastSeenBucket {
+export function bucket(code: string): LastSeenBucket {
   if (code === "on") return { kind: "online" };
   if (code === "1d" || code === "2d")
     return { kind: "days", n: code === "1d" ? 1 : 2 };
