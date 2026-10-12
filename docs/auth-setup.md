@@ -11,13 +11,18 @@ values supplied yourself.
 1. Create a project at [neon.tech](https://neon.tech) and copy the **pooled**
    connection string.
 2. Put it in `.env` as `DATABASE_URL` (copy `.env.example` → `.env` first).
-3. Push the schema:
+3. Create the schema by applying the committed migrations in `drizzle/`:
    ```bash
-   npm run db:push
+   npm run db:migrate
    ```
-   No migration files are committed (`drizzle/` doesn't exist yet), so
-   `db:push` is the working path. `db:generate` + `db:migrate` would start a
-   versioned history from scratch.
+   After changing `src/lib/db/schema.ts`, run `npm run db:generate` to write
+   the next migration and commit it alongside the schema change.
+
+   **Production is the exception.** Its schema was created with `db:push`
+   before `drizzle/0000_init.sql` existed, so it has no record of that
+   migration having run, and `db:migrate` would fail trying to re-create
+   tables that already exist. Until production is baselined (the initial
+   migration marked as applied), keep using `npm run db:push` there.
 4. Optional: `npm run db:seed` loads the real VOID roster. It **deletes** the
    existing members, events, strongholds, participation **and `user` rows**
    first (losing role pins and account links) — never point it at production.
