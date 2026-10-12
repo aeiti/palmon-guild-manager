@@ -18,11 +18,18 @@ values supplied yourself.
    After changing `src/lib/db/schema.ts`, run `npm run db:generate` to write
    the next migration and commit it alongside the schema change.
 
-   **Production is the exception.** Its schema was created with `db:push`
-   before `drizzle/0000_init.sql` existed, so it has no record of that
-   migration having run, and `db:migrate` would fail trying to re-create
-   tables that already exist. Until production is baselined (the initial
-   migration marked as applied), keep using `npm run db:push` there.
+   Every environment, production included, is on migrations. Production and
+   the Neon `dev` branch were created with `db:push` and were baselined on
+   2026-10-12: `0000_init` is recorded as applied in
+   `drizzle.__drizzle_migrations`. Don't use `db:push` against them any more,
+   because it changes the schema without recording a migration.
+
+   Migrations don't run on deploy. Apply a new one to production by hand,
+   passing its connection string for that one command so `.env` can keep
+   pointing at `dev`:
+   ```bash
+   DATABASE_URL='<production url>' npm run db:migrate
+   ```
 4. Optional: `npm run db:seed` loads the real VOID roster. It **deletes** the
    existing members, events, strongholds, participation **and `user` rows**
    first (losing role pins and account links) — never point it at production.
