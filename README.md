@@ -71,13 +71,13 @@ Requires Node and a Postgres connection string, from Neon or anywhere else.
 ```sh
 npm install
 cp .env.example .env          # AUTH_SECRET, Discord OAuth credentials, DATABASE_URL
-npm run db:push               # create the schema (no migration files are committed)
+npm run db:migrate            # create the schema from the migrations in drizzle/
 npm run db:seed               # optional and destructive: wipes and reloads seed data
 npm run dev
 ```
 
 Other commands: `npm test` runs the unit tests, `npm run lint` runs ESLint,
-`npm run db:generate` and `npm run db:migrate` start versioned migrations, and
+`npm run db:generate` writes a migration after a schema change, and
 `npm run db:studio` opens a browser for the data. Every page except `/signin`
 needs a working Discord login, so local runs need real OAuth credentials and
 `VOID_GUILD_ID`.
