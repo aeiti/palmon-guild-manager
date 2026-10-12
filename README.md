@@ -30,8 +30,10 @@ middleware, and `/signin` is the only publicly reachable page.
 - **Events**: event scheduling and participation
 - **Trends**: history views built from the append-only tables
 - **Admin**: signed-in users and app-role assignment (pin or reset)
-- **Library** (`/library`, not in the nav): gallery of the shared UI components on
-  mock data, with a preview page per component
+
+Separately, `/library` is a developer-facing component gallery rather than an
+application screen. It sits outside the `(app)` group and the nav, renders the
+shared UI components on mock data, and has a preview page per component.
 
 ## Design notes
 
