@@ -3,6 +3,11 @@
 Extracted from in-game screenshots (`docs/screenshots/`) plus user-provided
 intel. This is the source of truth for the app's data models and event fields.
 
+> **Now maintained upstream:** these facts were consolidated into the separate
+> `aeiti/palmon-data` library, where every record carries a provenance status,
+> source and date. Corrections land there first and reach this repo only via a
+> follow-up PR — check the library before changing a value here.
+
 > **Confidence key:** ✅ verified from a screenshot · 📋 user-provided /
 > attested · ❓ still unknown.
 

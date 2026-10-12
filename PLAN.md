@@ -3,16 +3,20 @@
 A guild management website for the **Palmon: Survival** guild **VOID**. Tracks
 members, events, and strongholds, with Discord-based login and trend history.
 
-> Status: **planning + UI mockup review, pre-build.** This document is the
-> living reference spec. Build begins on explicit go-ahead.
+> Status: **live in production** (Vercel + Neon, Discord login, in-app
+> editing). This document is the living reference spec; where the build
+> deliberately differs or hasn't caught up, it's flagged inline as
+> **Built:** / **Not built yet:**.
 >
 > UI mockup: [`mockups/void-mockup.html`](mockups/void-mockup.html) — open in a
 > browser to click through Dashboard / Members / Strongholds / Events / Trends /
 > Admin (sample data, design direction locked to a dark "survival HUD").
 >
 > Game mechanics: [`docs/game-data.md`](docs/game-data.md) — extracted from
-> in-game screenshots. **That document is authoritative** where it and this
-> plan disagree.
+> in-game screenshots, and authoritative where it and this plan disagree. The
+> game facts it holds are now maintained with provenance in the separate
+> `aeiti/palmon-data` library; corrections land there first and need a
+> follow-up PR here.
 >
 > UI vocabulary: [`docs/components.md`](docs/components.md) — the component
 > spec every screen is built from.
@@ -77,12 +81,15 @@ Three app roles, separate from in-game rank:
 - On each login we read the user's roles **within VOID's server** (needs the
   `guilds.members.read` scope) and map Discord role IDs → app roles via a
   configurable role map.
-- **Precedence:**
-  1. `ADMIN_DISCORD_IDS` env → always Admin (failsafe, can't lock yourself out).
-  2. Discord role map → the normal path.
-  3. Optional **manual pinned override** in the admin page (ignores Discord for
+- **Precedence** (`resolveAppRole`, `src/lib/auth/roles.ts`):
+  1. Admin allowlist → always Admin (failsafe, can't lock yourself out). Two
+     guild-lead ids are built into the code; `ADMIN_DISCORD_IDS` adds more.
+  2. **Manual pinned override** set on the admin page (ignores Discord for
      that user). Off by default.
-- Role changes reflect **at next login** (that's when Discord is re-read).
+  3. Discord role map → the normal path.
+  4. Default `member`.
+- Role changes — Discord-side or a pin — reflect **at next login** (roles are
+  resolved only at sign-in).
 
 ### In-game guild rank (separate concept)
 - In-game rank is **R1 → R5** (R5 highest), stored as a roster field.
@@ -95,7 +102,8 @@ Three app roles, separate from in-game rank:
     dashboard highlight, no extra permissions beyond Officer).
 - In-game rank and app permission are **independent axes that do diverge in
   practice**: the site owner (`aeiti`) is **R4 in game but Admin in the app**,
-  while the R5 guildmaster (`Kitsune`) holds Officer permissions. The UI must
+  while the R5 guildmaster (`Kitsune`) would map to Officer by rank — and is in
+  fact on the built-in Admin allowlist. The UI must
   never style app role and in-game rank alike — see
   [`docs/components.md`](docs/components.md) §5.4.
 
@@ -106,7 +114,9 @@ Three app roles, separate from in-game rank:
 | Online windows, timezone, sandstorm pref, power, level, notes | ✅ edit own   | ✅ edit anyone  |
 | In-game rank (R1–R5), status (Active/LOA/Inactive)          | ❌ view only  | ✅              |
 | Strongholds, events, participation                          | ❌            | ✅              |
-| App roles (promote to Officer/Admin)                        | ❌            | Admin only      |
+| Discord ID (roster ↔ account link)                          | ❌            | ✅              |
+| App roles — member ↔ officer                                 | ❌            | ✅              |
+| App roles — grant/change/remove Admin                        | ❌            | Admin only      |
 
 ---
 
@@ -121,10 +131,13 @@ Three app roles, separate from in-game rank:
   and participation snapshots.
 - **Members** — roster with R1–R5; members self-edit own profile, officers edit
   all; Discord auto-link; filter/sort/search; JSON export.
+  **Built:** officer editing + Discord auto-link. **Not built yet:** member
+  self-edit, and the Export JSON button is a placeholder with no action.
 - **Strongholds** — two categories, **6 each**:
   - **Sanctums** — level 1–6, type (Goldglade / Woodsong / Steelstory /
     Craftsman Chancel / Scholar Sacrarium), **Guardian ×1 + Governors
-    (capacity scales with level) + Sentries 0–5**, buffs, EXP/h, X/Y coords,
+    (capacity scales with level)** (Sentries exist in game but aren't
+    tracked), buffs, EXP/h, X/Y coords,
     occupier, death rate, **open/close window countdown**.
   - **Desert Ruins** — level 1–3, EXP/h, coords. No roles, no buffs.
   - Derived: **total EXP/h** and the **stacked buff totals**, plus gap
@@ -136,7 +149,10 @@ Three app roles, separate from in-game rank:
   **participation matrix**. (Sanctum control/uptime dropped — not important.)
 - **Admin** — user list + role assignment/pinning; role-map config.
 - **Settings / Data** — game server timezone (**UTC−2**) shown alongside each
-  viewer's local time; JSON export backup.
+  viewer's local time; JSON export backup. **Not built yet** as a screen; the
+  server/local clock pair lives in the app shell.
+- **Library** (`/library`, built, outside the main nav) — gallery of the
+  [`docs/components.md`](docs/components.md) components on mock data.
 
 ---
 
@@ -194,6 +210,9 @@ Stronghold   { id, category (sanctum|desertRuin), buildingType, level,
                notes }
 ```
 
+Strongholds no longer track Sentries — the slot was dropped from the schema
+and UI as unused (the game still has them; see the terminology table).
+
 **Derived, not stored:** total EXP/h, stacked buff totals, and buff-coverage
 gaps — all computed from the Stronghold rows so they can't drift.
 
@@ -209,11 +228,18 @@ GuildClashHistory       — season rank & tier per week
 AuditLog                — who changed what
 ```
 
+**Built:** all of these tables exist in the schema, plus a
+`guild_weekly_snapshot` that feeds Trends. **Not built yet:** nothing appends to
+them at runtime — the in-app editors update current-state rows in place, and
+only `guild_weekly_snapshot` is populated (by the seed). Trends history starts
+accruing once the write paths log to these tables.
+
 ### Member ↔ login linking
 - `users` (auth identity + app role) and `Member` (roster data) are **separate
   tables linked by `discordId`**.
-- On login: match `Member` by `discordId`; if none, **auto-create** one (seeded
-  with Discord name/avatar, blank game fields).
+- On login: match `Member` by `discordId` and link it (`members.userId`).
+  **Not built yet:** if none matches, auto-create one (seeded with Discord
+  name/avatar, blank game fields) — today the account simply stays unlinked.
 - Officers can **pre-create** roster rows (with a `discordId`) for recruits;
   the row links automatically when that person first logs in.
 
@@ -288,6 +314,7 @@ Deferred: new-vs-churned per week, rank-movement log (schema supports them via
 8. **Admin** (user/role management).
 
 History tables land alongside their module so trends accrue from day one.
+(**Done** for steps 1–8; history write paths are still outstanding — see §5.)
 
 ---
 
@@ -302,20 +329,11 @@ History tables land alongside their module so trends accrue from day one.
 
 ---
 
-## 8. Go-live inputs (needed before deploy)
+## 8. Go-live — done
 
-The auth + DB layer is **written and dormant** — see
-[`docs/auth-setup.md`](docs/auth-setup.md) for the step-by-step activation.
-Supply these (into `.env`, copied from `.env.example`):
-
-- Discord application: client ID, client secret, redirect URL.
-- VOID Discord **server (guild) ID**.
-- Discord **role IDs** for R4/R5 (Officer) and any Admin role, for the role map.
-- Neon database URL.
-- Auth.js secret.
-- Your **admin Discord ID** (`ADMIN_DISCORD_IDS`).
-
-Then `npm run db:push` and rename `middleware.ts.example` → `middleware.ts`.
+Live on Vercel with production secrets in the Vercel project env and route
+gating active. [`docs/auth-setup.md`](docs/auth-setup.md) covers the env vars
+and setup steps for a fresh environment or a local run.
 
 ---
 
